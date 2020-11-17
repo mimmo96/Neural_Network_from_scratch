@@ -1,12 +1,18 @@
 import numpy as np
-import matplotlib.pyplot as plt 
-import math 
+import math
+
 
 def sigmoid(x):
-    s=1/(1+np.exp(-x))
-    return s
+    return np.divide(1, (1 +np.exp(-x)))
 
-def der_loss(output_layer,output_expected):
-    val=(output_layer-output_expected)
-    return np.dot(2,val)
 
+def derivate_sigmoid(x):
+    sig = sigmoid(x)
+    return np.dot(sig, np.subtract(1, sig))
+
+
+def output_nn(struct_layers, x_input):
+    for layer in struct_layers:
+        layer.x = x_input
+        x_input = layer.output()
+    return x_input
