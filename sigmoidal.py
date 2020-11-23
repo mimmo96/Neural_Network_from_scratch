@@ -25,16 +25,18 @@ def c(Di, Do, Dc):
     return 0
 
 
-
 def output_nn(struct_layers, x_input):
-    i = 0
+    i = np.size(struct_layers)-1
     for layer in struct_layers:
         layer.x = x_input
         #print("input layer ", i, ":", layer.x)
         #print("matrice peso layer ", i, ":")
         #print(layer.w_matrix)
-        x_input = layer.output()
-        i = i + 1
+        if i != 0:
+            x_input = np.append(layer.output(),1)
+        else:
+            x_input = layer.output()
+        i = i - 1
     return x_input
 
 
@@ -57,7 +59,7 @@ def backprogation(struct_layers, num_epoch, learning_rate, x_input, output_expec
                     gradiente = np.dot(layer.x, delta[j])
                     product = np.dot(learning_rate, gradiente)
                     layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], product)
-
+                
                 print(np.subtract(output_expected, output_NN))
             else:
                 for j in range(layer.nj):
@@ -72,5 +74,4 @@ def backprogation(struct_layers, num_epoch, learning_rate, x_input, output_expec
                     layer.w_matrix[:,j] = np.add(layer.w_matrix[:, j], product)
 
             delta_out = delta
-
     print(output_NN , output_expected)
