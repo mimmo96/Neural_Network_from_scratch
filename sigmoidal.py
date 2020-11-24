@@ -19,11 +19,15 @@ def der_loss(output_layer, output_expected):
     val = (output_expected - output_layer)
     return np.dot(2, val)
 
-
 # funzione costo layer
 def c(Di, Do, Dc):
     return 0
 
+def output_lastlayer(x_input,layer):
+    output=np.zeros(layer.nj)
+    for nj in range(layer.nj):
+        output[nj]=layer.net(nj)
+    return output
 
 def output_nn(struct_layers, x_input):
     i = np.size(struct_layers)-1
@@ -35,7 +39,7 @@ def output_nn(struct_layers, x_input):
         if i != 0:
             x_input = np.append(layer.output(),1)
         else:
-            x_input = layer.output()
+            x_input = output_lastlayer(x_input,layer)
         i = i - 1
     return x_input
 
@@ -60,7 +64,7 @@ def backprogation(struct_layers, num_epoch, learning_rate, x_input, output_expec
                     product = np.dot(learning_rate, gradiente)
                     layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], product)
                 
-                print(np.subtract(output_expected, output_NN))
+                #print(np.subtract(output_expected, output_NN))
             else:
                 for j in range(layer.nj):
                     der_net = derivate_sigmoid(layer.net(j))
@@ -74,4 +78,5 @@ def backprogation(struct_layers, num_epoch, learning_rate, x_input, output_expec
                     layer.w_matrix[:,j] = np.add(layer.w_matrix[:, j], product)
 
             delta_out = delta
+    print(np.subtract(output_expected, output_NN))
     print(output_NN , output_expected)
