@@ -8,14 +8,14 @@ import Layer
 
 layer=2
 learning_rate=0.1
-output_expected=[0.2,0.5]
-num_epoch=100
+output_expected=[2]
+num_epoch=1000
 filename = "dati.csv"
 input_value=leggifile.leggi(filename)
 #creo la nuova struttura che conterrà i layer
 struct_layers = np.empty(layer,Layer.Layer)
 nj= 20#np.random.randint(1,5)
-nj_next= 2#np.random.randint(1,5)
+nj_next= 1#np.random.randint(1,5)
 newInput=input_value[0]
 newInput=np.append(newInput,1)
 dim_input=np.size(newInput)
