@@ -1,6 +1,6 @@
-import normalized_initialization as norm_init
+from function import init_w
 import numpy as np
-import sigmoidal as sig
+import function as sig
 
 class Layer:
     #x numero di input 
@@ -10,7 +10,9 @@ class Layer:
     def __init__(self, x, nj, nj_plus, dim_matrix):
         self.nj = nj
         self.x = np.array(x)
-        self.w_matrix = norm_init.init_w(nj, nj_plus, dim_matrix)
+        self.w_matrix = init_w(nj, nj_plus, dim_matrix)
+        self.Delta_w_old = self.w_matrix
+
 
     def net(self, net_i):
         return np.dot(self.w_matrix[:, net_i], self.x)
