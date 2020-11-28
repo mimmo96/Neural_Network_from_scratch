@@ -8,8 +8,8 @@ import Layer
 import Bp
 layer=3
 learning_rate=0.1
-output_expected=[2]
-num_epoch=1000
+output_expected=[20]
+num_epoch=100
 filename = "dati.csv"
 input_value=leggifile.leggi(filename)
 #creo la nuova struttura che conterrà i layer

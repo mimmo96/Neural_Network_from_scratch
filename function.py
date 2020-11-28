@@ -13,7 +13,7 @@ def init_w(nj, nj_plus, dim_matrix):
 
 # funzione sigmoidale
 def sigmoid(x):
-    return np.divide(1, (1 + np.exp(-x)))
+    return np.divide(1, np.add(1, np.exp(-x)))
 
 
 # derivata funzione sigmoidale
