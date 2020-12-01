@@ -12,7 +12,8 @@ def ThreadPool(num_righe):
    executor = ThreadPoolExecutor(10)
    output = np.empty(10, concurrent.futures.Future)
    out = np.empty(num_righe, int)
-   for i in range(num_righe-10):
+   i = 0
+   while i < (num_righe - 9):
         #output[i] = executor.submit(output_nn, struct_layers, matrix_input[i,:])
         for j in range(10):
             output[j] = executor.submit(task, i)
