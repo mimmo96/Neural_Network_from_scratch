@@ -2,9 +2,7 @@ import numpy as np
 import csv
 import argparse
 
-
 parser = argparse.ArgumentParser(description='Process some integers.')
-
 
 def leggi(filename):
 
@@ -12,19 +10,18 @@ def leggi(filename):
         data = list(csv.reader(csvfile))
 
     #numero di valori in input
-    dim=len(data)
-
+    righe = len(data)
+    colonne = len(data[0])
     #array che conterra [#input][#array di valori interi]
-    arrayinput=[]
+    matriceinput=np.zeros([righe, colonne])
 
     #scandisco le righe e salvo i valori in un array
-    i=0
-    while i<dim:
-        array=np.array(data[i],dtype="int")
-        arrayinput.append(array)
-        i=i+1
+    for i in range(righe):
+        array = np.array(data[i], dtype="float")
+        for j in range(colonne):
+                matriceinput[i,j] = array[j]
 
-    return arrayinput
+    return matriceinput
 
 
 
