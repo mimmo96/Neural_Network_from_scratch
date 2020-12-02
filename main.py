@@ -25,7 +25,7 @@ num_righe, num_colonne = matriceinput.shape;
 output_expected = [matriceinput[0][num_colonne - 2], matriceinput[0][num_colonne - 1]]
 dim_input=np.size(newInput) - np.size(output_expected)
 x = np.zeros(dim_input)
-#print(output_expected)
+print(output_expected)
 nj= [num_righe, 5, np.size(output_expected), 1] #np.random.randint(1,5)
 
 for i in range(np.size(struct_layers)):

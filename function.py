@@ -36,17 +36,16 @@ def c(Di, Do, Dc):
 def output_lastlayer(x_input,layer):
     output=np.zeros(layer.nj)
     for nj in range(layer.nj):
-        output[nj]=layer.net(nj)
+        output[nj]=layer.net(nj, x_input)
     return output
 
 
 def output_nn(struct_layers, x_input):
     i = np.size(struct_layers)-1
     for layer in struct_layers:
-
+        x_input = np.append(x_input, 1)
         #hidden layer
         if i != 0:
-            x_input = np.append(x_input, 1)
             x_input = layer.output(x_input)
         #output layer
         else:
@@ -67,6 +66,6 @@ def normalize_input(x):
             min = tmp
     for i in range(size_x):
         x[i] = np.divide(np.subtract(x[i],min), np.subtract(max, min))
-    return  x
+    return x
 
 

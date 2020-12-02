@@ -46,12 +46,12 @@ def DeltaW_new(Dw_new,D_w_old, it):
     return Dw_new
 
 
-def minbetch(struct_layers, epochs, learning_rate, matrix_input, num_input, batch_size):
+def minbetch(struct_layers, epochs, learning_rate, matrix_in_out, num_input, batch_size):
     last_layer = np.size(struct_layers) - 1
     num_output_layer = struct_layers[last_layer].nj
     output = np.zeros([batch_size, num_output_layer])
-    for i in range(epochs):
-        index_matrix = np.random.uniform(0, num_input - batch_size) 
-        num_righe, num_colonne = matrix_input.shape
-        ThreadPool(struct_layers, matrix_input[:, 0:(num_colonne-2)], index_matrix, batch_size,output)
-        #print(output)   
+    #for i in range(epochs):
+    index_matrix = np.random.uniform(0, num_input - batch_size)
+    num_righe, num_colonne = matrix_in_out.shape
+    ThreadPool(struct_layers, matrix_in_out[:, 0:(num_colonne-2)], index_matrix, batch_size,output)
+    print(output)
