@@ -43,12 +43,11 @@ def output_lastlayer(x_input,layer):
 def output_nn(struct_layers, x_input):
     i = np.size(struct_layers)-1
     for layer in struct_layers:
-        layer.x = x_input
-        #print("input layer ", i, ":", layer.x)
-        #print("matrice peso layer ", i, ":")
-        #print(layer.w_matrix)
+
+        #hidden layer
         if i != 0:
-            x_input = np.append(layer.output(),1)
+            x_input = np.append(layer.output(x_input),1)
+        #output layer
         else:
             x_input = output_lastlayer(x_input,layer)
         i = i - 1

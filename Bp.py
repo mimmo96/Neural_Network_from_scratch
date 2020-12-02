@@ -1,5 +1,6 @@
 import numpy as np
 from function import output_nn, der_loss, derivate_sigmoid
+from ThreadPool import ThreadPool
 alfa = 0.9
 #v_lambda = 0.01
 
@@ -46,7 +47,11 @@ def DeltaW_new(Dw_new,D_w_old, it):
 
 
 def minbetch(struct_layers, epochs, learning_rate, matrix_input, num_input, batch_size):
+    last_layer = np.size(struct_layers) - 1
+    num_output_layer = struct_layers[last_layer].nj
+    output = np.zeros([batch_size, num_output_layer])
     for i in range(epochs):
-        index_matrix = np.random.uniform(0, num_input - batch_size)
-        ThreadPool.ThreadPool(struct_layers, matrix_input)
-        
+        index_matrix = np.random.uniform(0, num_input - batch_size) 
+        num_righe, num_colonne = matrix_input.shape
+        ThreadPool(struct_layers, matrix_input[:, 0:(num_colonne-2)], index_matrix, batch_size,output)
+        #print(output)   
