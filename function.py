@@ -46,7 +46,8 @@ def output_nn(struct_layers, x_input):
 
         #hidden layer
         if i != 0:
-            x_input = np.append(layer.output(x_input),1)
+            x_input = np.append(x_input, 1)
+            x_input = layer.output(x_input)
         #output layer
         else:
             x_input = output_lastlayer(x_input,layer)

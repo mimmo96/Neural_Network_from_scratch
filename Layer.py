@@ -15,6 +15,7 @@ class Layer:
 
 
     def net(self, net_i, x_input):
+        print("matrice: ", self.w_matrix[:, net_i], "input:", x_input)
         print("prodotto net ", np.dot(self.w_matrix[:, net_i], x_input))
         return np.dot(self.w_matrix[:, net_i], x_input)
     def output(self,x_input):
