@@ -22,10 +22,3 @@ def leggi(filename):
                 matriceinput[i,j] = array[j]
 
     return matriceinput
-
-
-
-
-    
-
-    
