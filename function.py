@@ -21,11 +21,16 @@ def derivate_sigmoid(x):
     sig = sigmoid(x)
     return np.dot(sig, np.subtract(1, sig))
 
+def derivate_sigmoid_2(x):
+    for net in x:
+        sig = sigmoid(net)
+        return np.dot(sig, np.subtract(1, sig))
+
 
 # derivata loss
 def der_loss(output_layer, output_expected):
-    val = (output_expected - output_layer)
-    return np.dot(2, val)
+    val = np.subtract(output_expected,output_layer)
+    return val
 
 
 # funzione costo layer
@@ -40,10 +45,11 @@ def output_lastlayer(x_input,layer):
     return output
 
 
-def output_nn(struct_layers, x_input):
+def output_nn(struct_layers, x_input, row_input_layer):
     i = np.size(struct_layers)-1
     for layer in struct_layers:
         x_input = np.append(x_input, 1)
+        layer.x[row_input_layer] = x_input  
         #hidden layer
         if i != 0:
             x_input = layer.output(x_input)
@@ -67,5 +73,3 @@ def normalize_input(x):
     for i in range(size_x):
         x[i] = np.divide(np.subtract(x[i],min), np.subtract(max, min))
     return x
-
-

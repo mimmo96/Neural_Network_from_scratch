@@ -6,11 +6,11 @@ class Layer:
     #x numero di input 
     # #nj=numero di nodi
     #nj_plus nodi livello successivo
-    #dim_matrix dimensione matrice pesi
-    def __init__(self, x, nj, nj_plus, dim_matrix):
+
+    def __init__(self, nj,nj_prec, nj_plus,batch_size):
         self.nj = nj
-        #self.x = np.array(x)
-        self.w_matrix = init_w(nj, nj_plus, dim_matrix)
+        self.x = np.empty([batch_size,nj_prec +1],float)
+        self.w_matrix = init_w(nj, nj_plus, [nj_prec+1,nj])
         self.Delta_w_old = self.w_matrix
 
 
@@ -19,10 +19,12 @@ class Layer:
          #   print(net_i, x_input, self.w_matrix[:, net_i])
         return np.dot(self.w_matrix[:, net_i], x_input)
 
+    def net_matrix(self, nodo_i):
+        return np.dot(self.x, self.w_matrix[:, nodo_i])
 
     def output(self,x_input):
         out = np.empty(self.nj)
-        i = 0
+        #i = 0
         for i in range(self.nj):
             net_i = self.net(i, x_input)
             out[i] = sig.sigmoid(net_i)
