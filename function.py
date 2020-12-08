@@ -15,21 +15,23 @@ def init_w(nj, nj_plus, dim_matrix):
 def sigmoid(x):
     return np.divide(1, np.add(1, np.exp(-x)))
 
-
 # derivata funzione sigmoidale
 def derivate_sigmoid(x):
     sig = sigmoid(x)
     return np.dot(sig, np.subtract(1, sig))
 
 def derivate_sigmoid_2(x):
+    sig=np.empty(np.size(x))
+    i=0
     for net in x:
-        sig = sigmoid(net)
-        return np.dot(sig, np.subtract(1, sig))
-
+        sig[i] = sigmoid(net)
+        i=i+1
+    return sig
 
 # derivata loss
 def der_loss(output_layer, output_expected):
     val = np.subtract(output_expected,output_layer)
+    val=np.dot(2,val)
     return val
 
 
@@ -44,12 +46,11 @@ def output_lastlayer(x_input,layer):
         output[nj]=layer.net(nj, x_input)
     return output
 
-
 def output_nn(struct_layers, x_input, row_input_layer):
     i = np.size(struct_layers)-1
     for layer in struct_layers:
         x_input = np.append(x_input, 1)
-        layer.x[row_input_layer] = x_input  
+        layer.x[row_input_layer,:] = x_input  
         #hidden layer
         if i != 0:
             x_input = layer.output(x_input)
