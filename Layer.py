@@ -11,8 +11,7 @@ class Layer:
         self.nj = nj
         self.x = np.empty([batch_size,nj_prec +1],float)
         self.w_matrix = init_w(nj, nj_plus, [nj_prec+1,nj])
-        self.Delta_w_old = self.w_matrix
-
+        self.Delta_w_old = np.zeros(self.w_matrix.shape)
 
     def net(self, net_i, x_input):
         #if np.size(x_input) != np.size(self.w_matrix[:, net_i]):

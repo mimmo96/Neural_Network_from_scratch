@@ -68,7 +68,7 @@ def normalize_input(x):
 
     x_input = (x_input - min)/(max -min)
     x[:, 0:(colonne-2)] = x_input
-    print(x)
+   # print(x)
     return x
     """size_x = len(x)
     for i in range(size_x):

@@ -1,27 +1,20 @@
-for i in range(np.size(struct_layers) - 1, -1, -1):
-    # restituisce l'oggetto layer i-esimo
-    layer = struct_layers[i]
-    
-    delta = np.empty([layer.nj,batch_size],float)
-    der_sig=np.empty(batch_size,float)
-
+     for i in range(np.size(struct_layers) - 1, -1, -1):
+        layer = struct_layers[i]
+    delta = np.zeros([layer.nj, batch_size], float)
     for j in range(0, layer.nj):
-        #outputlayer
-        if i == (np.size(struct_layers) - 1):
-            max_row = index_matrix+batch_size
-            delta[j,:] = der_loss(output_NN[index_matrix:max_row,j], 
-                                output_expected[index_matrix:max_row,j])
-        #hiddenlayer
-        else:
-            der_sig = derivate_sigmoid_2(layer.net_matrix(j))
-            #product è un vettore delta*pesi
-            product = delta_out.T.dot(struct_layers[i + 1].w_matrix[j, :])
-            for k in range(batch_size):
-                delta[j,k]=np.dot(product[k],der_sig[k])
-        
-        gradient = np.dot(delta[j,:],layer.x)
-        gradient = np.divide(gradient,batch_size)
-        Dw_new = np.dot(gradient, learning_rate)
-        #print("gradiente i:",i," j:",j," -> ",Dw_new)
+        Dw_new = np.zeros(layer.x[0,:].shape)
+        gradient = np.zeros(layer.x[0,:].shape)
+        for num_ex in range(batch_size):
+            if i == (np.size(struct_layers) - 1):
+                # delta=2*(y-o)
+                delta[j,num_ex] = np.subtract(output_NN[num_ex+index_matrix,j], 
+                            output_expected[num_ex+index_matrix,j])
+            #hidden layer
+            else:
+                der_sig = derivate_sigmoid(layer.net(j,layer.x[num_ex,:]))
+                delta[j, num_ex] = np.dot(delta_out[:, num_ex], (struct_layers[i + 1].w_matrix[j,:]))
+                delta[j, num_ex] = np.dot(delta[j, num_ex], der_sig)
+            gradient = gradient + np.dot(delta[j,num_ex], layer.x[num_ex,:])
+        Dw_new = np.dot(-gradient, learning_rate) / batch_size
         layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], Dw_new)
     delta_out = delta

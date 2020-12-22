@@ -26,17 +26,20 @@ def backprogation(struct_layers, learning_rate, index_matrix, batch_size, output
                 for k in range(batch_size):
                     delta[j,k]=np.dot(product[k],der_sig[k])
             delta[j,:] = delta[j,:] 
-            gradient = np.dot(delta[j,:],layer.x) + v_lambda*layer.w_matrix[:, j]*2
+            #regolarizzazione di thikonov
+            gradient = np.dot(delta[j,:],layer.x) - v_lambda*layer.w_matrix[:, j]*2
             gradient = np.divide(gradient,batch_size)
             Dw_new = np.dot(gradient, learning_rate)
-            #print("gradiente i:",i," j:",j," -> ",Dw_new)
+            #momentum
+            Dw_new = DeltaW_new(Dw_new, layer.Delta_w_old[:,j])
+            layer.Delta_w_old[:,j] = Dw_new
+            #update weights
             layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], Dw_new)
         delta_out = delta
 
-def DeltaW_new(Dw_new,D_w_old, it):
-    if it != 0:
-       return np.subtract(Dw_new, np.dot(alfa, D_w_old))
-    return Dw_new
+
+def DeltaW_new(Dw_new,D_w_old):
+    return np.add(Dw_new, np.dot(alfa, D_w_old))
 
 
 def minbetch(struct_layers, epochs, learning_rate, matrix_in_out, num_input, batch_size,output_expected):
@@ -52,3 +55,5 @@ def minbetch(struct_layers, epochs, learning_rate, matrix_in_out, num_input, bat
 
     ThreadPool(struct_layers, matrix_in_out[:, 0:(num_colonne - 2)], index_matrix, batch_size, output_NN)
     print(output_NN)
+    print("alfa: ", alfa)
+    print("errore: \n" ,np.abs(np.subtract(output_expected,output_NN)))
