@@ -61,9 +61,16 @@ def output_nn(struct_layers, x_input, row_input_layer):
     return x_input
 
 def normalize_input(x):
-    max = np.max(x[0])
-    min = np.min(x[0])
-    size_x = len(x)
+    colonne = x.shape[1]
+    x_input = x[:, 0:(colonne-2)]
+    max = x_input.max()
+    min = x_input.min()
+
+    x_input = (x_input - min)/(max -min)
+    x[:, 0:(colonne-2)] = x_input
+    print(x)
+    return x
+    """size_x = len(x)
     for i in range(size_x):
         tmp = np.max(x[i])
         if tmp > max:
@@ -73,4 +80,4 @@ def normalize_input(x):
             min = tmp
     for i in range(size_x):
         x[i] = np.divide(np.subtract(x[i],min), np.subtract(max, min))
-    return x
+    return x"""
