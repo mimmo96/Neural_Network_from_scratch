@@ -1,20 +1,27 @@
-     for i in range(np.size(struct_layers) - 1, -1, -1):
+
+
+
+    for i in range(np.size(struct_layers) - 1, -1, -1):
         layer = struct_layers[i]
-    delta = np.zeros([layer.nj, batch_size], float)
-    for j in range(0, layer.nj):
-        Dw_new = np.zeros(layer.x[0,:].shape)
-        gradient = np.zeros(layer.x[0,:].shape)
-        for num_ex in range(batch_size):
-            if i == (np.size(struct_layers) - 1):
-                # delta=2*(y-o)
-                delta[j,num_ex] = np.subtract(output_NN[num_ex+index_matrix,j], 
-                            output_expected[num_ex+index_matrix,j])
-            #hidden layer
-            else:
-                der_sig = derivate_sigmoid(layer.net(j,layer.x[num_ex,:]))
-                delta[j, num_ex] = np.dot(delta_out[:, num_ex], (struct_layers[i + 1].w_matrix[j,:]))
-                delta[j, num_ex] = np.dot(delta[j, num_ex], der_sig)
-            gradient = gradient + np.dot(delta[j,num_ex], layer.x[num_ex,:])
-        Dw_new = np.dot(-gradient, learning_rate) / batch_size
-        layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], Dw_new)
-    delta_out = delta
+        delta = np.zeros([layer.nj, batch_size], float)
+        for j in range(0, layer.nj):
+            Dw_new = np.zeros(layer.x[0,:].shape)
+            gradient = np.zeros(layer.x[0,:].shape)
+            for num_ex in range(batch_size):
+                if i == (np.size(struct_layers) - 1):
+                    # delta=2*(y-o)
+                    delta[j,num_ex] = np.subtract(output_NN[num_ex+index_matrix,j], 
+                                output_expected[num_ex+index_matrix,j])
+                #hidden layer
+                else:
+                    der_sig = derivate_sigmoid(layer.net(j,layer.x[num_ex,:]))
+                    delta[j, num_ex] = np.dot(delta_out[:, num_ex], (struct_layers[i + 1].w_matrix[j,:]))
+                    delta[j, num_ex] = np.dot(delta[j, num_ex], der_sig)
+                gradient = gradient + np.dot(delta[j,num_ex], layer.x[num_ex,:])
+            Dw_new = (np.dot(-gradient, learning_rate) / batch_size) - v_lambda*layer.w_matrix[:, j]*2
+            #momentum
+            Dw_new = DeltaW_new(Dw_new, layer.Delta_w_old[:,j], i, np.size(struct_layers) - 1)
+            layer.Delta_w_old[:,j] = Dw_new
+            layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], Dw_new)
+        delta_out = delta
+

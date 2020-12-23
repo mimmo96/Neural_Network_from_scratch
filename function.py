@@ -81,3 +81,4 @@ def normalize_input(x):
     for i in range(size_x):
         x[i] = np.divide(np.subtract(x[i],min), np.subtract(max, min))
     return x"""
+

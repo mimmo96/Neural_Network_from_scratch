@@ -9,18 +9,18 @@ import Bp
 
 layer=2
 learning_rate=0.01
-num_epoch=10000
+num_epoch=1000
 filename = "dati.csv"
 batch_size=3
-matriceinput=leggifile.leggi(filename)
+
 #creo la nuova struttura che conterrà i layer
 struct_layers = np.empty(layer,Layer.Layer)
+
+matriceinput= leggifile.leggi(filename) #np.random.rand(100, 20)*100 
 matriceinput = function.normalize_input(matriceinput)
 newInput=matriceinput[0]
-#print(matriceinput)
 num_righe, num_colonne = matriceinput.shape;
 output_expected = matriceinput[:, (num_colonne-2):(num_colonne)]
-#print(output_expected)
 dim_input=np.size(newInput) - 2
 nj= [dim_input,10,2,0] #np.random.randint(1,5)
 
