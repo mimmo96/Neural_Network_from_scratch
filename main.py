@@ -1,20 +1,16 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import csv
 import leggifile
-import normalized_initialization
 import function
-import Layer
-import Bp
+import neural_network
 
 layer=2
 learning_rate=0.01
 num_epoch=1000
 filename = "dati.csv"
 batch_size=3
-
-#creo la nuova struttura che conterrà i layer
-struct_layers = np.empty(layer,Layer.Layer)
+alfa = 0.9
+v_lambda = 0.01
 
 matriceinput= leggifile.leggi(filename) #np.random.rand(100, 20)*100 
 matriceinput = function.normalize_input(matriceinput)
@@ -24,9 +20,7 @@ output_expected = matriceinput[:, (num_colonne-2):(num_colonne)]
 dim_input=np.size(newInput) - 2
 nj= [dim_input,10,2,0] #np.random.randint(1,5)
 
-for i in range(1,np.size(struct_layers)+1):
-    struct_layers[i-1]=Layer.Layer(nj[i],nj[i-1],nj[i+1],batch_size)
+neural_network=neural_network.neural_network(dim_input,layer,nj,alfa,v_lambda,num_epoch,learning_rate,
+                                          matriceinput,num_righe,batch_size,output_expected)
 
-#print("--------------------------------------")
-#Bp.backprogation(struct_layers, num_epoch, learning_rate, newInput, output_expected)
-Bp.minbetch(struct_layers,num_epoch,learning_rate,matriceinput,num_righe,batch_size,output_expected)
+neural_network.mini_batch()
