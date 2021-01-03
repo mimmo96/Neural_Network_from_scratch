@@ -28,3 +28,6 @@ class Layer:
             net_i = self.net(i, x_input)
             out[i] = sig.sigmoid(net_i)
         return out
+    
+    def set_size_x(size_x):
+        self.x = np.empty(size_x,float)

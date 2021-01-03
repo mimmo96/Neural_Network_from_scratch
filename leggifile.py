@@ -22,3 +22,14 @@ def leggi(filename):
                 matriceinput[i,j] = array[j]
 
     return matriceinput
+
+def divide_exaples(matrix_input):
+    rows, columns = matrix_input.shape
+    training_size = rows // 2
+    validation_size = (rows - training_size) // 2
+    test_size = rows - training_size - validation_size
+
+    training = matrix_input[0:training_size, :]
+    validation = matrix_input[training_size:training_size+validation_size, :]
+    test = matrix_input[training_size+validation_size:, :]
+    return [training, validation, test]
