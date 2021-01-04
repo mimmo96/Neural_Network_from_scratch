@@ -14,6 +14,7 @@ class neural_network:
         self.learning_rate=learning_rate
         self.nj=nj
         #creo la nuova struttura che conterrà i layer
+        #CANCELLARE STRUCT_
         self.struct_layers = np.empty(numero_layer, Layer.Layer)
         self.numero_layer = numero_layer
         #self.last_layer = np.size(self.struct_layers) - 1
@@ -100,7 +101,7 @@ class neural_network:
 
     #return TRUE if this is the best model
     def validation(self,min_error_VL, errors_validation, validation_set_input, validation_set_output):
-        output_NN = np.zeros([validation_set_output.shape[0], 2])
+        output_NN = np.zeros(validation_set_output.shape)
         ThreadPool(self.struct_layers, validation_set_input, 0, validation_set_input.shape[0], output_NN)
         loss_validation = MSE(output_NN, validation_set_output, validation_set_output.shape[0])
         errors_validation.append(loss_validation)

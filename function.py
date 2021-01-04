@@ -8,7 +8,7 @@ def init_w(nj, nj_plus, dim_matrix):
     for i in range(dim_matrix[0]):
         for j in range(dim_matrix[1]):
             while abs(w[i,j]) < 0.0000001:
-                w[i, j] = np.random.uniform(-intervallo, intervallo)
+                w[i, j] = np.random.uniform(-0.5, 0.5)
     return w
 
 # funzione sigmoidale
@@ -89,7 +89,7 @@ def MSE(output, output_expected, example_cardinality):
 
 def input_matrix(matrix):
     #print(matrix[:, 0: matrix.shape[1] -2 ])
-    return matrix[:, 0: matrix.shape[1] -2 ]
+    return matrix[:, 0: matrix.shape[1] -1 ]
 def output_matrix(matrix):
     #print(matrix[:, matrix.shape[1] -2 : matrix.shape[1] ])
-    return matrix[:, matrix.shape[1] -2 : matrix.shape[1] ]
+    return matrix[:, matrix.shape[1] -1 : matrix.shape[1] ]
