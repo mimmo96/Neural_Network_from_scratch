@@ -5,12 +5,12 @@ import function
 import neural_network
 from Model_selection import model_selection
 layer=2
-learning_rate=0.01
+learning_rate=[0.01]
 num_epoch=1000
 filename = "dati.csv"
-batch_size=3
-alfa = 0.5
-v_lambda = 0
+batch_size=2
+alfa = [0.5]
+v_lambda = [0]
 
 '''INSERIRE VARIABILE GLOBALE PER DEFINIRE NUMERO DI OUTPUT'''
 
@@ -19,7 +19,7 @@ matriceinput = function.normalize_input(matriceinput)
 training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput)
 newInput=matriceinput[0]
 dim_input=np.size(newInput) - 1
-nj= [[dim_input,5,1,0], [dim_input,10,1,0] ] #np.random.randint(1,5)
+nj= [[dim_input,100,1,0], [dim_input,150,1,0] ] #np.random.randint(1,5)
 #CORREGGERE MATRICEINPUT CON TR_INPUT
 #training_set_output = training_set[:, 0:training_set.shape[1] -2 ]
 

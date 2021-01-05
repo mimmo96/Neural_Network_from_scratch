@@ -34,23 +34,18 @@ def der_loss(output_layer, output_expected):
     val=np.dot(2,val)
     return val
 
-
-# funzione costo layer
-def c(Di, Do, Dc):
-    return 0
-
-
 def output_lastlayer(x_input,layer):
     output=np.zeros(layer.nj)
     for nj in range(layer.nj):
         output[nj]=layer.net(nj, x_input)
     return output
 
-def output_nn(struct_layers, x_input, row_input_layer):
+def output_nn(struct_layers, x_input, row_input_layer, validation = False):
     i = np.size(struct_layers)-1
     for layer in struct_layers:
         x_input = np.append(x_input, 1)
-        layer.x[row_input_layer,:] = x_input  
+        if validation == False:
+            layer.x[row_input_layer,:] = x_input  
         #hidden layer
         if i != 0:
             x_input = layer.output(x_input)

@@ -17,48 +17,44 @@ class neural_network:
         #CANCELLARE STRUCT_
         self.struct_layers = np.empty(numero_layer, Layer.Layer)
         self.numero_layer = numero_layer
+        for i in range(1,self.numero_layer+1):
+            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],self.nj[i+1],0)
         #self.last_layer = np.size(self.struct_layers) - 1
         #self.nodes_output_layer = self.struct_layers[self.last_layer].nj
 
 
     def trainig(self, training_set, validation_set, batch_size, epochs):
         #inizializzo struct_layer
-        for i in range(1,self.numero_layer+1):
-            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],self.nj[i+1],batch_size)
-        
+        for layer in self.struct_layers:
+            layer.set_x(batch_size)
+
         training_set_output = output_matrix(training_set)
         training_set_input = input_matrix(training_set) 
         output_NN = np.zeros(training_set_output.shape)
 
-        validation_set_input = input_matrix(validation_set)
-        validation_set_output = output_matrix(validation_set)
-
-        best_w_validation=[self.struct_layers,10000]
-        min_error_VL = 10000000000000
+        best_min_err_validation = -1
         #punti per grafico 
         epo = []
         lo = []
         errors_validation = []
         for i in range(epochs):
-            index_matrix = 0#np.random.randint(0, (training_set_input.shape[0] - batch_size)+1 )
+            index_matrix = np.random.randint(0, (training_set_input.shape[0] - batch_size)+1 )
             ThreadPool(self.struct_layers, training_set_input, index_matrix, batch_size, output_NN)
             loss = self.backprogation(index_matrix, output_NN, training_set_output, batch_size)
             epo.append(i)
             lo.append(loss)
             if (i % 5 == 0):
-                if self.validation(min_error_VL, errors_validation, validation_set_input, validation_set_output):
-                    best_w_validation = [self.struct_layers, min_error_VL]
+                best_min_err_validation = self.validation(best_min_err_validation, errors_validation, validation_set)
         #graphycs.grafico(epo, lo, "epochs", "loss")
-        ThreadPool(self.struct_layers, training_set_input, index_matrix, batch_size, output_NN)
+        #ThreadPool(self.struct_layers, training_set_input, index_matrix, batch_size, output_NN)
         print("output ", output_NN)
-       
-       
-        #graphycs.grafico(epo, min_error_VL, "epochs", "validation_error")
-        output_NN = np.zeros(validation_set_output.shape)
-        ThreadPool(best_w_validation[0], validation_set_input, 0, validation_set_input.shape[0], output_NN)
-        print("best model ", output_NN)
+    
+        #graphycs.grafico(epo, best_min_err_validation, "epochs", "validation_error")
+        output_NN = np.zeros(output_matrix(validation_set).shape)
+        ThreadPool(self.struct_layers, input_matrix(validation_set), 0, input_matrix(validation_set).shape[0], output_NN, True)
+        print("validation len ", validation_set.shape[0], "best model ", output_NN)
         #print("accuratezza: \n" ,np.abs((self.output_expected -output_NN) / self.output_expected)*100)
-        return best_w_validation
+        return best_min_err_validation
 
     def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
         
@@ -100,12 +96,14 @@ class neural_network:
         return np.add(Dw_new, np.dot(self.alfa, D_w_old))
 
     #return TRUE if this is the best model
-    def validation(self,min_error_VL, errors_validation, validation_set_input, validation_set_output):
+    def validation(self,best_min_err_validation, errors_validation, validation_set):
+        validation_set_input = input_matrix(validation_set)
+        validation_set_output = output_matrix(validation_set)
         output_NN = np.zeros(validation_set_output.shape)
-        ThreadPool(self.struct_layers, validation_set_input, 0, validation_set_input.shape[0], output_NN)
+        ThreadPool(self.struct_layers, validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
         loss_validation = MSE(output_NN, validation_set_output, validation_set_output.shape[0])
         errors_validation.append(loss_validation)
-        if loss_validation < min_error_VL:
-            min_error_VL = loss_validation
+        if loss_validation < best_min_err_validation | best_min_err_validation == -1:
+            best_min_err_validation = loss_validation
             return True
         return False

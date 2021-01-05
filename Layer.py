@@ -29,5 +29,5 @@ class Layer:
             out[i] = sig.sigmoid(net_i)
         return out
     
-    def set_x(size_x):
-        self.x = np.empty(size_x,float)
+    def set_x(self, rows):
+        self.x = np.empty([rows, self.w_matrix.shape[0]],float)
