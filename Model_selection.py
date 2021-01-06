@@ -21,7 +21,7 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
     validation_set_input = validation_set.input()
     validation_set_output = validation_set.output()
     output_NN = np.zeros(validation_set_output.shape)
-    #ThreadPool(best_model.struct_layers, validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
+    best_model.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
     print("best model ", output_NN)
 
 

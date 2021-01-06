@@ -68,23 +68,26 @@ class neural_network:
         epo = []
         lo = []
         errors_validation = []
+        index_matrix = 0
+        best_w = 0
         for i in range(epochs):
-            index_matrix = np.random.randint(0, (training_set_input.shape[0] - batch_size)+1 )
+            index_matrix = i*batch_size % (training_set_input.shape[0]- batch_size)#np.random.randint(0, (training_set_input.shape[0] - batch_size)+1 )
             self.ThreadPool_Forward(training_set_input, index_matrix, batch_size, output_NN)
             loss = self.backprogation(index_matrix, output_NN, training_set_output, batch_size)
             epo.append(i)
             lo.append(loss)
             if (i % 5 == 0):
-                best_min_err_validation = self.validation(best_min_err_validation, errors_validation, validation_set)
+                best_min_err_validation = self.validation(best_min_err_validation, best_w, errors_validation, validation_set)
         #graphycs.grafico(epo, lo, "epochs", "loss")
         #ThreadPool_Forward(self.struct_layers, training_set_input, index_matrix, batch_size, output_NN)
+        print("accuratezza training: \n" ,np.sum(np.abs((training_set_output - output_NN) / training_set_output)*100) /training_set_input.shape[0] )
         print("output ", output_NN)
     
         #graphycs.grafico(epo, best_min_err_validation, "epochs", "validation_error")
         output_NN = np.zeros(validation_set.output().shape)
         self.ThreadPool_Forward(validation_set.input(), 0, validation_set.input().shape[0], output_NN, True)
         print("validation len ", validation_set.output().shape[0], "error_best_model", best_min_err_validation, "best model ", output_NN)
-        #print("accuratezza: \n" ,np.abs((self.output_expected -output_NN) / self.output_expected)*100)
+        print("accuratezza: \n" ,np.sum(np.abs((validation_set.output() -output_NN) / validation_set.output())*100) / validation_set.output().shape[0])
         return best_min_err_validation
 
     def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
@@ -127,7 +130,7 @@ class neural_network:
         return np.add(Dw_new, np.dot(self.alfa, D_w_old))
 
     #return TRUE if this is the best model
-    def validation(self,best_min_err_validation, errors_validation, validation_set):
+    def validation(self,best_min_err_validation, best_w, errors_validation, validation_set):
         validation_set_input = validation_set.input()
         validation_set_output = validation_set.output()
         output_NN = np.zeros(validation_set_output.shape)
@@ -135,6 +138,6 @@ class neural_network:
         loss_validation = MSE(output_NN, validation_set_output, validation_set_output.shape[0])
         errors_validation.append(loss_validation)
         if (loss_validation < best_min_err_validation) | (best_min_err_validation == -1):
+            best_w = self.struct_layers
             best_min_err_validation = loss_validation
-            print(best_min_err_validation)
         return best_min_err_validation

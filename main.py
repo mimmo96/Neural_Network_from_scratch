@@ -35,7 +35,6 @@ batch_size=3
 alfa = [0.5]
 v_lambda = [0]
 dim_output = 1
-'''INSERIRE VARIABILE GLOBALE PER DEFINIRE NUMERO DI OUTPUT'''
 
 matriceinput= leggifile.leggi(filename) #np.random.rand(100, 20)*100 
 matriceinput = function.normalize_input(matriceinput)
@@ -49,8 +48,8 @@ nj=[[dim_input,10, 10, dim_output,0], [dim_input,15,10,dim_output,0] ]
 #training_set_output = training_set[:, 0:training_set.shape[1] -2 ]
 
 alfa = [0, 0.5, 0.9]
-learning_rate = [0.001, 0.05, 0.1]
-v_lambda = [0, 0.01, 0.1]
+learning_rate = [0.001, 0.005, 0.01]
+v_lambda = [0, 0.01, 0.05, 0.07]
 
 model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set, batch_size, num_epoch)
 
