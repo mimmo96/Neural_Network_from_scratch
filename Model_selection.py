@@ -1,7 +1,5 @@
 import neural_network
 import numpy as np
-from function import input_matrix, output_matrix
-from ThreadPool import ThreadPool
 def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set, batch_size, epochs):
     
     best_min_validation = -1
@@ -20,9 +18,11 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                             best_min_validation = min_validation
                             best_model = NN
 
-    validation_set_input = input_matrix(validation_set)
-    validation_set_output = output_matrix(validation_set)
+    validation_set_input = validation_set.input()
+    validation_set_output = validation_set.output()
     output_NN = np.zeros(validation_set_output.shape)
-    ThreadPool(best_model.struct_layers, validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
+    #ThreadPool(best_model.struct_layers, validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
     print("best model ", output_NN)
-    
+
+
+

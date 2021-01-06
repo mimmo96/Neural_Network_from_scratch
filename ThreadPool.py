@@ -1,16 +1,13 @@
 from concurrent.futures import ThreadPoolExecutor
 import concurrent
-from function import output_nn
+from function import forward
 from time import sleep
 import numpy as np
 import time
 
 
 def task(struct_layers, x_input, i, output, row_input_layer, validation = False):
-    output[i, :] = output_nn(struct_layers, x_input, row_input_layer, validation)
-   # if validation:
-    #    print("output thread: ", i, output[i,:])
-
+    output[i, :] = forward(struct_layers, x_input, row_input_layer, validation)
 
 def ThreadPool(struct_layers, matrix_input, index_matrix, batch_size, output, validation = False):
     executor = ThreadPoolExecutor(10)
