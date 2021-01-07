@@ -27,32 +27,22 @@ print(nj)
 #np.random.randint(1,5)
 
 '''
-hidden_layer=2
-learning_rate=[0.01]
+
 num_epoch=1000
 filename = "dati.csv"
-batch_size=3
-alfa = [0.5]
-v_lambda = [0]
+batch_size=4
 dim_output = 1
 
-matriceinput= leggifile.leggi(filename) #np.random.rand(100, 20)*100 
+matriceinput= leggifile.leggi(filename)
 matriceinput = function.normalize_input(matriceinput)
 training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput, dim_output)
 
 newInput=matriceinput[0]
 dim_input=np.size(newInput) - dim_output
-#nj= set_hiddenunits(hidden_layer,dim_input,dim_output)
-nj=[[dim_input,10, 10, dim_output,0], [dim_input,15,10,dim_output,0] ]
-#CORREGGERE MATRICEINPUT CON TR_INPUT
-#training_set_output = training_set[:, 0:training_set.shape[1] -2 ]
 
+nj=[[dim_input,9, 9, dim_output,0] ]
 alfa = [0, 0.5, 0.9]
-learning_rate = [0.001, 0.005, 0.01]
+learning_rate = [0.05, 0.1, 0.001, 0.9]
 v_lambda = [0, 0.01, 0.05, 0.07]
 
 model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set, batch_size, num_epoch)
-
-#neural_network1=neural_network.neural_network(nj, alfa, v_lambda, learning_rate, 3)
-#neural_network.mini_batch()
-#neural_network1.trainig(training_set, validation_set, batch_size, 100)

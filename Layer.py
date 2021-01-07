@@ -14,8 +14,6 @@ class Layer:
         self.Delta_w_old = np.zeros(self.w_matrix.shape)
 
     def net(self, net_i, x_input):
-        #if np.size(x_input) != np.size(self.w_matrix[:, net_i]):
-         #   print(net_i, x_input, self.w_matrix[:, net_i])
         return np.dot(self.w_matrix[:, net_i], x_input)
 
     def net_matrix(self, nodo_i):
@@ -23,7 +21,6 @@ class Layer:
 
     def output(self,x_input):
         out = np.empty(self.nj)
-        #i = 0
         for i in range(self.nj):
             net_i = self.net(i, x_input)
             out[i] = sig.sigmoid(net_i)

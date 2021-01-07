@@ -51,11 +51,3 @@ def MSE(output, output_expected, example_cardinality):
     mse = np.sum(np.subtract(output, output_expected)) / example_cardinality
     mse = np.power(mse,2)
     return mse
-'''
-def input_matrix(matrix):
-    #print(matrix[:, 0: matrix.shape[1] -2 ])
-    return matrix[:, 0: matrix.shape[1] -1 ]
-def output_matrix(matrix):
-    #print(matrix[:, matrix.shape[1] -2 : matrix.shape[1] ])
-    return matrix[:, matrix.shape[1] -1 : matrix.shape[1] ]
-'''
