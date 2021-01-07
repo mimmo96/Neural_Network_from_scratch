@@ -28,9 +28,9 @@ print(nj)
 
 '''
 
-num_epoch=1000
+num_epoch=100
 filename = "dati.csv"
-batch_size=4
+batch_size=1
 dim_output = 1
 
 matriceinput= leggifile.leggi(filename)

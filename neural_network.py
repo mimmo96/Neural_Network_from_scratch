@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from function import der_loss, derivate_sigmoid, derivate_sigmoid_2, MSE
 import graphycs
 from concurrent.futures import ThreadPoolExecutor
+import Matrix_io
 
 class neural_network:
     
@@ -27,6 +28,7 @@ class neural_network:
             x_input = np.append(x_input, 1)
             if validation == False:
                 layer.x[row_input_layer,:] = x_input  
+                #print("layer.x[row_input_layer,:]",layer.x[row_input_layer,:])
             #hidden layer
             if i != 0:
                 x_input = layer.output(x_input)
@@ -35,18 +37,34 @@ class neural_network:
                 output=np.zeros(layer.nj)
                 for nj in range(layer.nj):
                     output[nj]=layer.net(nj, x_input)
+                #print("forward output ", output)
             i = i - 1
         return output
 
     def task_forwarding(self, x_input, i, output, row_input_layer, validation = False):
+        #print("output ", self.forward(x_input, row_input_layer, validation))        
         output[i, :] = self.forward(x_input, row_input_layer, validation)
+        #print("Aaaaaaaaaaa:", output[i, :])
 
     def ThreadPool_Forward(self, matrix_input, index_matrix, batch_size, output, validation = False):
         executor = ThreadPoolExecutor(10)
         max_i = batch_size + index_matrix
+        '''
+        print("-----------------------------------------")
+        print("max_i",max_i)
+        print("batch_size",batch_size)
+        print("index_matrix",index_matrix)
+        print("index_matrix",matrix_input)
+        print("output",output)
+        
+        '''
         for i in range(index_matrix, max_i):
             row_input_layer = i % batch_size
+            #print("matrix_input[i, :]",matrix_input[i, :])
+            #print("row_input_layer",row_input_layer)
+            #print("i",i)
             executor.submit(self.task_forwarding, matrix_input[i, :], i, output, row_input_layer, validation)
+        #print("--------------------END-------------------------")
         executor.shutdown(True)
 
         return output
@@ -60,29 +78,34 @@ class neural_network:
 
         training_set_input = training_set.input() 
         training_set_output = training_set.output()
-        output_NN = np.zeros(training_set_output.shape)
 
         best_min_err_validation = -1
         errors_validation = []
-        index_matrix = 0
+        index_matrix = 1
         best_w = 0
 
         for i in range(epochs):
-            index_matrix = i*batch_size % (training_set_input.shape[0]- batch_size)    #np.random.randint(0, (training_set_input.shape[0] - batch_size)+1 )
-            self.ThreadPool_Forward(training_set_input, index_matrix, batch_size, output_NN)  
-            loss = self.backprogation(index_matrix, output_NN, training_set_output, batch_size)
+            
+            mini_batch = training_set.create_batch(batch_size)
+            for batch in mini_batch:
+                output_NN = np.zeros(batch.output().shape)
+                self.ThreadPool_Forward(batch.input(),0, batch_size, output_NN)  
+                loss = self.backprogation(0, output_NN, batch.output(), batch_size)
+                #print("output previsto: \n",batch.output(), "\noutput effettivo: \n", output_NN, )
             if (i % 5 == 0):
                 best_min_err_validation = self.validation(best_min_err_validation, best_w, errors_validation, validation_set)
-     
+
+        output_NN = np.zeros(training_set_output.shape)
+        self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
         print("--------------------------TRAINING RESULT----------------------") 
         print("alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  nj:",self.nj)
         print("errore medio training: \n" ,np.sum(np.abs(training_set_output - output_NN))/training_set_output.shape[0] )
-        print("output previsto: \n",training_set_output, "\noutput effettivo: \n", output_NN, )
+        print("output previsto: \n",training_set_output, "\noutput effettivo: \n", output_NN )
         print("------------------------------FINE-----------------------------")
         
         '''
         output_NN = np.zeros(validation_set.output().shape)
-        self.ThreadPool_Forward(validation_set.input(), 0, validation_set.input().shape[0], output_NN, True)
+        self.ThreadPool_Forward(validation_set.input(), validation_set.input().shape[0], output_NN, True)
         print("----------------------------------------------------------------")
         print( "validation_set", validation_set.output(),"\nerror_best_model", best_min_err_validation, "\nbest model ", output_NN)
         print("----------------------------------------------------------------")
