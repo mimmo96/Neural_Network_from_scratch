@@ -78,7 +78,7 @@ class neural_network:
 
         training_set_input = training_set.input() 
         training_set_output = training_set.output()
-
+        print("----------------------MEDIA OUTPUT TRAINING SET ----------------------------------\n", np.sum(training_set_output) / training_set_output.shape[0])
         best_min_err_validation = -1
         errors_validation = []
         index_matrix = 1
@@ -136,7 +136,7 @@ class neural_network:
                     for k in range(batch_size):
                         delta[j,k]=np.dot(product[k],der_sig[k])
                 #regolarizzazione di thikonov
-                gradient = np.dot(delta[j,:],layer.x) - self.v_lambda*layer.w_matrix[:, j]*2
+                gradient = np.dot(delta[j,:],layer.x) - np.dot(self.v_lambda,layer.w_matrix[:, j])*2
                 gradient = np.divide(gradient,batch_size)
                 Dw_new = np.dot(gradient, self.learning_rate)
                 #momentum

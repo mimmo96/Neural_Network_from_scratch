@@ -28,9 +28,9 @@ print(nj)
 
 '''
 
-num_epoch=100
+num_epoch=2000
 filename = "dati.csv"
-batch_size=1
+batch_size=32
 dim_output = 1
 
 matriceinput= leggifile.leggi(filename)
@@ -40,9 +40,11 @@ training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput, 
 newInput=matriceinput[0]
 dim_input=np.size(newInput) - dim_output
 
-nj=[[dim_input,9, 9, dim_output,0] ]
-alfa = [0, 0.5, 0.9]
-learning_rate = [0.05, 0.1, 0.001, 0.9]
-v_lambda = [0, 0.01, 0.05, 0.07]
+nj=[ [dim_input, 10, dim_output,0] , [dim_input, 15, dim_output,0], [dim_input, 20, dim_output,0], [dim_input, 10, 10, dim_output,0],
+    [dim_input, 5, 5 , dim_output,0], [dim_input, 13, 13, dim_output,0], [dim_input, 20, 20, dim_output,0], [dim_input, 10, 20, dim_output,0], 
+    [dim_input, 20, 40, dim_output,0]]
+alfa = [0]
+learning_rate = [0.001, 0.0001, 0.01, 0.1]
+v_lambda = [0]
 
 model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set, batch_size, num_epoch)
