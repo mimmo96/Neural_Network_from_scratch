@@ -1,7 +1,7 @@
 import numpy as np
 import Layer
 import matplotlib.pyplot as plt
-from function import der_loss, derivate_sigmoid_2, MSE
+from function import der_loss, derivate_sigmoid_2, LOSS
 import graphycs
 from concurrent.futures import ThreadPoolExecutor
 import Matrix_io
@@ -80,15 +80,16 @@ class neural_network:
         best_min_err_validation = -1
         errors_validation = []
         index_matrix = 1
-        best_w = 0
-        loss_epochs=0;
+        best_loss_validation=-1
+        #layer migliori sulla validation
+        best_struct_layers = 0
 
         #variabili per il grafico training
         epoch_array=np.empty(0)
         loss_array=np.empty(0)
 
         #variabili per il grafico validation
-        validation_error=np.empty(0)
+        validation_array=np.empty(0)
         epoch_validation=np.empty(0)
 
         for i in range(epochs):
@@ -102,22 +103,24 @@ class neural_network:
                 #creo array output_NN che mi servirà per memorizzare i risultati di output
                 output_NN = np.zeros(batch.output().shape)
                 self.ThreadPool_Forward(batch.input(),0, batch_size, output_NN) 
-                #somma loss di tutto il batch 
                 self.backprogation(0, output_NN, batch.output(), batch_size)
+
+            #calcolo la loss su tutto l'intero training
+            output_NN = np.zeros(training_set.output().shape)
+            self.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
+            loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1])
             
-            '''
-            loss_batch=np.divide(loss_batch,dim)
-            loss_array=np.append(loss_array,loss_batch)
+            #salvo nell'array i valori del training
+            loss_array=np.append(loss_array,loss_training)
             epoch_array=np.append(epoch_array,i)
-            # print("epoch: ",i," loss:",loss_batch)
-            loss_epochs=loss_batch
-            '''
+            
             if (i % 5 == 0):
-                best_min_err_validation = self.validation(best_min_err_validation, best_w, errors_validation, validation_set)
-                validation_error=np.append(validation_error,best_min_err_validation)
+                #calcolo la loss sulla validazione e me la salvo nell'array
+                best_loss_validation = self.validation(best_loss_validation, best_struct_layers, errors_validation, validation_set)
+                validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
-        '''
+        
         #grafico training
         plt.title("LOSS/EPOCH")
         plt.xlabel("Epoch")
@@ -125,19 +128,17 @@ class neural_network:
         plt.plot(epoch_array,loss_array)
 
         #grafico validation
-        plt.plot(epoch_validation,validation_error)     
+        plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         plt.show()
-        '''
+        
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 
         print("alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  nj:",self.nj)
-        errore=np.sum(np.abs(training_set_output - output_NN))/training_set_output.shape[0]
-        print("errore medio training: \n" ,errore )
+        #print("errore training: \n" ,errore )
         #print("loss: \n",loss_epochs)
         #print("output previsto: \n",training_set_output, "\noutput effettivo: \n", output_NN )
-        print("------------------------------FINE TRAINING ",num_training,"-----------------------------")
         
         '''
         output_NN = np.zeros(validation_set.output().shape)
@@ -146,7 +147,6 @@ class neural_network:
         print( "validation_set", validation_set.output(),"\nerror_best_model", best_min_err_validation, "\nbest model ", output_NN)
         print("----------------------------------------------------------------")
         '''
-        return errore,loss_epochs
 
     def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
         #parto dall'ultimo livello fino ad arrivare al primo
@@ -162,21 +162,21 @@ class neural_network:
                     max_row = index_matrix+batch_size
                     #delta=(d-o)
                     delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
-                    #calcolo della loss
-                    #sommatoria loss di ogni neurone (d-o)^2
-                    #loss = loss + MSE(output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j], batch_size)
+                 
                 #hiddenlayer
                 else:
-                    #calcola il net di tutta la matrice e applica la funzione
-                    #sig(net)
                     der_sig = derivate_sigmoid_2(layer.net_matrix(j))
                     #product è un vettore delta*pesi
                     product = delta_out.T.dot(self.struct_layers[i + 1].w_matrix[j, :])
                     #delta=Sommatoria da 0 a batch_size di delta_precedenti*pesi
                     for k in range(batch_size):
                         delta[j,k]=np.dot(product[k],der_sig[k])
+
                 #regolarizzazione di thikonov
-                gradient = -np.dot(delta[j,:],layer.x) - np.dot(self.v_lambda,layer.w_matrix[:, j])*2
+           
+                temp=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
+                temp[temp.shape[0]-1]=0
+                gradient = -np.dot(delta[j,:],layer.x) - temp
                 gradient = np.divide(gradient,batch_size)
                 Dw_new = np.dot(gradient, self.learning_rate)
                 #momentum
@@ -191,14 +191,14 @@ class neural_network:
         return np.add(Dw_new, np.dot(self.alfa, D_w_old))
 
     #return TRUE if this is the best model
-    def validation(self,best_min_err_validation, best_w, errors_validation, validation_set):
+    def validation(self,best_loss_validation, best_struct_layers, errors_validation, validation_set):
         validation_set_input = validation_set.input()
         validation_set_output = validation_set.output()
         output_NN = np.zeros(validation_set_output.shape)
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
-        loss_validation = MSE(output_NN, validation_set_output, validation_set_output.shape[0])
+        loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1])
         errors_validation.append(loss_validation)
-        if (loss_validation < best_min_err_validation) | (best_min_err_validation == -1):
-            best_w = self.struct_layers
-            best_min_err_validation = loss_validation
-        return best_min_err_validation
+        if (loss_validation < best_loss_validation) | (best_loss_validation == -1):
+            best_struct_layers = self.struct_layers
+            best_loss_validation = loss_validation
+        return best_loss_validation

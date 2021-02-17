@@ -129,10 +129,12 @@ def normalize_input(x,dim_output):
     #print(x)
     return x
 
-def MSE(output, output_expected, example_cardinality):
+def LOSS(output, output_expected, example_cardinality,num_output):
     #(d-o)^2
-    mse = np.sum(np.subtract(output, output_expected)) 
-    mse = np.power(mse,2)/example_cardinality
+    mse=np.power(np.subtract(output, output_expected),2)
+    mse = np.sum(mse,axis=0)
+    mse = np.sum(mse)
+    mse = np.divide(mse,np.dot(example_cardinality,num_output)*2)
     return mse
 
 def accuracy(real_matrix, matrix):

@@ -30,16 +30,16 @@ print(nj)
 '''
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=100
+num_epoch=500
 filename = "dati.csv"
-batch_size=8
+batch_size=30
 dim_output = 2
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
-nj=[ [10, 20, 20, 2, 0] ]
-alfa = [0,0.5]
-learning_rate = [0.002]
-v_lambda = [0]
+nj=[ [10, 15, 15, 2, 0],[10, 10, 10, 2, 0], [10, 20, 2, 0], [10, 50, 2, 0] ,[10, 100, 15, 2, 0], [10, 50, 50, 2, 0] ]
+alfa = [0,0.9]
+learning_rate = [0.001, 0.1,0.01]
+v_lambda = [0, 0.05]
 
 #-------------------------------FINE PARAMETRI------------------------------
 
