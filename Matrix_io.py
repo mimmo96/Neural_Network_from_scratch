@@ -39,11 +39,3 @@ class Matrix_io:
             mini_batches.append(mini_batch)
         return mini_batches
         
-        
-    '''
-    def set_output(self, new_matrix_output):
-        if self.matrix.shape == new_matrix_output.shape:
-            self.matrix_output = new_matrix_output
-        else:
-            raise ("self.matrix_output.shape != new_matrix_output.shape")
-    '''

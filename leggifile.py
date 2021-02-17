@@ -11,7 +11,7 @@ def leggi(filename):
 
     #numero di valori in input
     righe = len(data)
-    colonne = len(data[0])
+    colonne = len(data[0])-1
     #array che conterra [#input][#array di valori interi]
     matriceinput=np.zeros([righe, colonne])
 
@@ -19,7 +19,7 @@ def leggi(filename):
     for i in range(righe):
         array = np.array(data[i], dtype="float")
         for j in range(colonne):
-                matriceinput[i,j] = array[j]
+                matriceinput[i,j] = array[j+1]
 
     return matriceinput
 

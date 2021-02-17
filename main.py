@@ -4,6 +4,7 @@ import leggifile
 import function
 import neural_network
 from Model_selection import model_selection
+from random import randint
 
 '''
 hidden_layer=3
@@ -27,24 +28,27 @@ print(nj)
 #np.random.randint(1,5)
 
 '''
+#----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=2000
+num_epoch=100
 filename = "dati.csv"
-batch_size=32
-dim_output = 1
+batch_size=8
+dim_output = 2
 
+#mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
+nj=[ [10, 20, 20, 2, 0] ]
+alfa = [0,0.5]
+learning_rate = [0.002]
+v_lambda = [0]
+
+#-------------------------------FINE PARAMETRI------------------------------
+
+#leggo i dati dal file e li salvo in una matrice
 matriceinput= leggifile.leggi(filename)
-matriceinput = function.normalize_input(matriceinput)
+#divido il data set in training,validation,test
 training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput, dim_output)
 
 newInput=matriceinput[0]
 dim_input=np.size(newInput) - dim_output
 
-nj=[ [dim_input, 10, dim_output,0] , [dim_input, 15, dim_output,0], [dim_input, 20, dim_output,0], [dim_input, 10, 10, dim_output,0],
-    [dim_input, 5, 5 , dim_output,0], [dim_input, 13, 13, dim_output,0], [dim_input, 20, 20, dim_output,0], [dim_input, 10, 20, dim_output,0], 
-    [dim_input, 20, 40, dim_output,0]]
-alfa = [0]
-learning_rate = [0.001, 0.0001, 0.01, 0.1]
-v_lambda = [0]
-
-model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set, batch_size, num_epoch)
+model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_size, num_epoch)

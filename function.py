@@ -113,34 +113,27 @@ def derivate_sigmoid_2(x):
     return sig
 
 # derivata loss
-def der_loss(output_layer, output_expected):
+def der_loss( output_expected,output_layer):
     val = np.subtract(output_expected,output_layer)
-    val=np.dot(2,val)
+  
     return val
 
-def normalize_input(x):
+def normalize_input(x,dim_output):
     colonne = x.shape[1]
-    x_input = x[:, 0:(colonne-2)]
+    x_input = x[:, 0:(colonne-dim_output)]
     max = x_input.max()
     min = x_input.min()
 
     x_input = (x_input - min)/(max -min)
-    x[:, 0:(colonne-2)] = x_input
+    x[:, 0:(colonne-dim_output)] = x_input
     #print(x)
     return x
 
 def MSE(output, output_expected, example_cardinality):
-    mse = np.sum(np.subtract(output, output_expected)) / example_cardinality
-    mse = np.power(mse,2)
+    #(d-o)^2
+    mse = np.sum(np.subtract(output, output_expected)) 
+    mse = np.power(mse,2)/example_cardinality
     return mse
-'''
-def input_matrix(matrix):
-    #print(matrix[:, 0: matrix.shape[1] -2 ])
-    return matrix[:, 0: matrix.shape[1] -1 ]
-def output_matrix(matrix):
-    #print(matrix[:, matrix.shape[1] -2 : matrix.shape[1] ])
-    return matrix[:, matrix.shape[1] -1 : matrix.shape[1] ]
-'''
 
 def accuracy(real_matrix, matrix):
     a = real_matrix - matrix

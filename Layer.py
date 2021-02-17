@@ -13,9 +13,11 @@ class Layer:
         self.w_matrix = init_w(intervallo, [nj_prec+1,nj])
         self.Delta_w_old = np.zeros(self.w_matrix.shape)
 
+    #net=W*X_input (singola componente)
     def net(self, net_i, x_input):
         return np.dot(self.w_matrix[:, net_i], x_input)
-
+    
+    #net=W*X_input di tutta la matrice
     def net_matrix(self, nodo_i):
         return np.dot(self.x, self.w_matrix[:, nodo_i])
 
@@ -23,7 +25,7 @@ class Layer:
         out = np.empty(self.nj)
         for i in range(self.nj):
             net_i = self.net(i, x_input)
-            out[i] = sig.sigmoid(net_i)
+            out[i] = sig._tanh(net_i)
         return out
     
     def set_x(self, rows):
