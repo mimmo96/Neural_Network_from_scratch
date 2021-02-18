@@ -6,49 +6,30 @@ import neural_network
 from Model_selection import model_selection
 from random import randint
 
-'''
-hidden_layer=3
-dim_input=13
-dim_output=1
 
-num_hidden_units=(np.dot(dim_input,2) //3) + dim_output
-nj=[]
-
-for k in range(1,(dim_input*2)-1):
-    arr=[dim_input]
-    
-    for i in range(hidden_layer-1):
-        arr.append(k)
-    
-    arr.append(dim_output)
-    arr.append(0)
-    nj.append(arr)
-print(nj)
-
-#np.random.randint(1,5)
-
-'''
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=500
+num_epoch=100
 filename = "dati.csv"
-batch_size=30
+batch_size=1
 dim_output = 2
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
-nj=[ [10, 15, 15, 2, 0],[10, 10, 10, 2, 0], [10, 20, 2, 0], [10, 50, 2, 0] ,[10, 100, 15, 2, 0], [10, 50, 50, 2, 0] ]
-alfa = [0,0.9]
-learning_rate = [0.001, 0.1,0.01]
-v_lambda = [0, 0.05]
+nj=[ [10, 20, 2, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
+learning_rate = [0.001,0.002,0.2,0.5,0.9,0.007]
+alfa = [0,0.5,0.6,0.7,0.8,0.9]
+v_lambda = [0.01,0]
+fun=["sigmoidal","tanh","relu"]
 
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
 matriceinput= leggifile.leggi(filename)
+matriceinput = function.normalize_input(matriceinput,dim_output)
 #divido il data set in training,validation,test
 training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput, dim_output)
 
 newInput=matriceinput[0]
 dim_input=np.size(newInput) - dim_output
 
-model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_size, num_epoch)
+model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_size, num_epoch,fun)

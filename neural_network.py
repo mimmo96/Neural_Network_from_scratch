@@ -8,19 +8,20 @@ import Matrix_io
 
 class neural_network:
     
-    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer):
+    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer,function):
 
         self.alfa = alfa
         self.v_lambda = v_lambda
         self.learning_rate=learning_rate
         self.nj=nj
+        self.function=function
         #creo la struttura struct_layer che conterrà i vari layer
         self.struct_layers = np.empty(numero_layer, Layer.Layer)
         self.numero_layer = numero_layer
        
         #inserisco i layer in struct layer
         for i in range(1,self.numero_layer+1):
-            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],0.7)
+            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],0.7,function)
 
     #   --------METODI CHE ERANO NEI THREAD------------
     #restituisce il risultato della moltiplicazione di w*x di tutta la rete e di tutti i layer
@@ -77,9 +78,7 @@ class neural_network:
         training_set_input = training_set.input() 
         training_set_output = training_set.output()
         #print("----------------------MEDIA OUTPUT TRAINING SET ----------------------------------\n", np.sum(training_set_output) / training_set_output.shape[0])
-        best_min_err_validation = -1
         errors_validation = []
-        index_matrix = 1
         best_loss_validation=-1
         #layer migliori sulla validation
         best_struct_layers = 0
@@ -120,7 +119,7 @@ class neural_network:
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
-        
+        '''
         #grafico training
         plt.title("LOSS/EPOCH")
         plt.xlabel("Epoch")
@@ -132,10 +131,11 @@ class neural_network:
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         plt.show()
         
+        '''
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 
-        print("alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  nj:",self.nj)
+        print("alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  nj:",self.nj, " function:",self.function)
         #print("errore training: \n" ,errore )
         #print("loss: \n",loss_epochs)
         #print("output previsto: \n",training_set_output, "\noutput effettivo: \n", output_NN )
@@ -165,7 +165,7 @@ class neural_network:
                  
                 #hiddenlayer
                 else:
-                    der_sig = derivate_sigmoid_2(layer.net_matrix(j))
+                    der_sig = derivate_sigmoid_2(layer.net_matrix(j),self.function)
                     #product è un vettore delta*pesi
                     product = delta_out.T.dot(self.struct_layers[i + 1].w_matrix[j, :])
                     #delta=Sommatoria da 0 a batch_size di delta_precedenti*pesi

@@ -27,13 +27,6 @@ def _identity (x):
     '''
     return x
 
-def _threshold (x):
-    '''
-        threshold activation function: treshold(x) = 1 if x>0
-                                       treshold(x) = 0 if x<=0
-    '''
-    return 1 if x>0 else 0
-
 def _logistic (x):
     '''
         logistic activation function: logistic(x) = 1 / (1 + exp(-x))
@@ -69,12 +62,6 @@ def _identity_derivative (x):
     '''
     return 1
 
-def _threshold_derivative (x):
-    '''
-        threshold activation function derivative: treshold'(x) = 0
-    '''
-    return 0
-
 def _logistic_derivative (x):
     '''
         logistic activation function derivative: logistic'(x) = logistic(x) * ( 1 - logistic(x) )
@@ -93,6 +80,7 @@ def _zero_one_tanh_derivative (x):
     '''
     return 1/2 * ( 1 - (math.tanh (x))**2 )
 
+'''
 # funzione sigmoidale
 def sigmoid(x):
     if -x > np.log(np.finfo(type(x)).max):
@@ -104,11 +92,44 @@ def derivate_sigmoid(x):
     sig = sigmoid(x)
     return np.dot(sig, np.subtract(1, sig))
 
-def derivate_sigmoid_2(x):
+'''
+def choose_function(fun,net):
+    if fun=="sigmoidal":
+        return _logistic(net)
+    
+    if fun=="tanh":
+        return _tanh(net)
+    
+    if fun=="relu":
+        return _relu(net)
+    
+    if fun=="identity":
+        return _identity(net)
+    
+    if fun=="zero_one_h":
+        return _zero_one_tanh(net)
+
+def choose_derivate_function(fun,net):
+    if fun=="sigmoidal":
+        return _logistic_derivative(net)
+    
+    if fun=="tanh":
+        return _tanh_derivative(net)
+    
+    if fun=="relu":
+        return _relu_derivative(net)
+    
+    if fun=="identity":
+        return _identity_derivative(net)
+    
+    if fun=="zero_one_h":
+        return _zero_one_tanh_derivative(net)
+
+def derivate_sigmoid_2(x,type_fun):
     sig=np.empty(np.size(x))
     i=0
     for net in x:
-        sig[i] = sigmoid(net)
+        sig[i] = choose_derivate_function(type_fun,net)
         i=i+1
     return sig
 
@@ -166,4 +187,3 @@ def create_batch(data, batch_size):
             mini_batch = np.append(mini_batch, data[0:batch_size-mini_batch.shape[0]], axis = 0)
         mini_batches.append(mini_batch)
     return mini_batches
-

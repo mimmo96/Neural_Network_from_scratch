@@ -2,7 +2,7 @@ import neural_network
 import numpy as np
 from function import LOSS
 
-def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_size, epochs):
+def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_size, epochs,fun):
     
     #inizializzo i parametri che mi serviranno per salvare i dati dopo il training (per la scelta del miglior modello)
     best_min_validation = -1   
@@ -13,39 +13,40 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
     num_training=1;
     best_loss_training=-1
     
-    for learning_rate in vector_learning_rate:
-        for v_lambda in vector_lambda:
-            for units in vectors_units:
+    for function in fun:
+        for units in vectors_units:
+            for learning_rate in vector_learning_rate:
                 for alfa in vector_alfa:
-                    #salvo il numero di layer 
-                    numero_layer=np.size(units)-2
-                    #creo la neural network con i parametri passati
-                    NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer) 
-                    #restituisce il minimo errore della validation
-                    NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
-                    
-                    #calcolo la loss su tutto l'intero training
-                    output_NN = np.zeros(training_set.output().shape)
-                    NN.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
-                    loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1])
-                    print("loss:", loss_training)
-                    
-                    if best_loss_training == -1:
-                        best_loss_training = loss_training
-                        best_model = NN
-                    else:
-                        if loss_training < best_loss_training: 
-                            print("aggiorno l'errore! \n vecchio errore:", best_loss_training,
-                            "\n nuovo errore:", loss_training)
+                    for v_lambda in vector_lambda:
+                        #salvo il numero di layer 
+                        numero_layer=np.size(units)-2
+                        #creo la neural network con i parametri passati
+                        NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function) 
+                        #restituisce il minimo errore della validation
+                        NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
+                        
+                        #calcolo la loss su tutto l'intero training
+                        output_NN = np.zeros(training_set.output().shape)
+                        NN.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
+                        loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1])
+                        print("loss:", loss_training)
+                        
+                        if best_loss_training == -1:
                             best_loss_training = loss_training
                             best_model = NN
-                            best_learning_rate =learning_rate
-                            best_v_lambda=v_lambda
-                            best_units=units
-                            best_alfa=alfa
-                            
-                print("------------------------------FINE TRAINING ",num_training,"-----------------------------")
-                num_training=num_training+1        
+                        else:
+                            if loss_training < best_loss_training: 
+                                print("aggiorno l'errore! \n vecchio errore:", best_loss_training,
+                                "\n nuovo errore:", loss_training)
+                                best_loss_training = loss_training
+                                best_model = NN
+                                best_learning_rate =learning_rate
+                                best_v_lambda=v_lambda
+                                best_units=units
+                                best_alfa=alfa
+                                
+                    print("------------------------------FINE TRAINING ",num_training,"-----------------------------")
+                    num_training=num_training+1        
     
     print("parametri migliori:  learning_rate:",best_learning_rate, "v_lambda:",best_v_lambda,"units:",best_units,"alfa:",best_alfa)
     print("\nerrore sul training migliore: ", best_loss_training) 

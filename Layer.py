@@ -7,11 +7,12 @@ class Layer:
     # #nj=numero di nodi
     #nj_plus nodi livello successivo
 
-    def __init__(self, nj, nj_prec, intervallo, batch_size = 0):
+    def __init__(self, nj, nj_prec, intervallo, fun,batch_size = 0):
         self.nj = nj
         self.x = np.empty([batch_size,nj_prec +1],float)
         self.w_matrix = init_w(intervallo, [nj_prec+1,nj])
         self.Delta_w_old = np.zeros(self.w_matrix.shape)
+        self.fun = fun
 
     #net=W*X_input (singola componente)
     def net(self, net_i, x_input):
@@ -25,7 +26,7 @@ class Layer:
         out = np.empty(self.nj)
         for i in range(self.nj):
             net_i = self.net(i, x_input)
-            out[i] = sig._tanh(net_i)
+            out[i] = sig.choose_function(self.fun, net_i,)
         return out
     
     def set_x(self, rows):
