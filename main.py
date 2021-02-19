@@ -9,9 +9,9 @@ from random import randint
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=100
+num_epoch=[100,500]
 filename = "dati.csv"
-batch_size=1
+batch_array=[1,2,4,8,16,32]
 dim_output = 2
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
@@ -32,4 +32,4 @@ training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput, 
 newInput=matriceinput[0]
 dim_input=np.size(newInput) - dim_output
 
-model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_size, num_epoch,fun,weight)
+model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun,weight)
