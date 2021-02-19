@@ -12,7 +12,8 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
     best_alfa=vector_alfa[0]
     num_training=1;
     best_loss_training=-1
-    
+    best_function=1
+
     for function in fun:
         for units in vectors_units:
             for learning_rate in vector_learning_rate:
@@ -44,11 +45,12 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                 best_v_lambda=v_lambda
                                 best_units=units
                                 best_alfa=alfa
+                                best_function=function
                                 
                     print("------------------------------FINE TRAINING ",num_training,"-----------------------------")
                     num_training=num_training+1        
     
-    print("parametri migliori:  learning_rate:",best_learning_rate, "v_lambda:",best_v_lambda,"units:",best_units,"alfa:",best_alfa)
+    print("parametri migliori:  epoch:",epochs," batch_size:",batch_size," alfa:",best_alfa, "  lamda:", best_v_lambda, "  learning_rate:",best_learning_rate ,"  layer:",best_units, " function:",best_function)
     print("\nerrore sul training migliore: ", best_loss_training) 
     
     #ricalcolo il migliore modello sul validation_set

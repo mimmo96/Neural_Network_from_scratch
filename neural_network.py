@@ -144,7 +144,7 @@ class neural_network:
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 
-        print("alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  nj:",self.nj, " function:",self.function)
+        print("epoch:",epochs," batch_size:",batch_size," alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  layer:",self.nj, " function:",self.function)
         #print("errore training: \n" ,errore )
         #print("loss: \n",loss_epochs)
         #print("output previsto: \n",training_set_output, "\noutput effettivo: \n", output_NN )

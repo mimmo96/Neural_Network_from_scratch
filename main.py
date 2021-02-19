@@ -20,7 +20,6 @@ learning_rate = [0.001,0.002,0.2,0.5,0.9,0.007, 1, 2, 3, 4]
 alfa = [0,0.5,0.6,0.7,0.8,0.9]
 v_lambda = [0.01,0]
 fun=["sigmoidal","tanh","relu"]
-
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
