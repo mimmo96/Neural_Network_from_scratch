@@ -50,8 +50,8 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                             best_alfa=alfa
                                             best_function=function
                                         
-                            print("------------------------------FINE TRAINING ",num_training,"-----------------------------")
-                            num_training=num_training+1        
+                                    print("------------------------------FINE TRAINING ",num_training,"-----------------------------")
+                                    num_training=num_training+1        
     
     print("parametri migliori:  epoch:",epochs," batch_size:",batch_size," alfa:",best_alfa, "  lamda:", best_v_lambda, "  learning_rate:",best_learning_rate ,"  layer:",best_units, 
     " function:",best_function, " weight:",weig)
