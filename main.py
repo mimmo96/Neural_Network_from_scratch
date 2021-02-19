@@ -16,7 +16,7 @@ dim_output = 2
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 nj=[ [10, 20, 2, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
-learning_rate = [0.001,0.002,0.2,0.5,0.9,0.007]
+learning_rate = [0.001,0.002,0.2,0.5,0.9,0.007, 1, 2, 3, 4]
 alfa = [0,0.5,0.6,0.7,0.8,0.9]
 v_lambda = [0.01,0]
 fun=["sigmoidal","tanh","relu"]

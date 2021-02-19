@@ -12,7 +12,12 @@ class neural_network:
 
         self.alfa = alfa
         self.v_lambda = v_lambda
-        self.learning_rate=learning_rate
+        #controlliamo se bisogna usare learning rate variabile
+        if (learning_rate >= 1) | (learning_rate == 0):
+            self.tau = np.power(2, learning_rate)
+        else:
+            self.learning_rate=learning_rate
+            self.tau = 0
         self.nj=nj
         self.function=function
         #creo la struttura struct_layer che conterrà i vari layer
@@ -97,6 +102,10 @@ class neural_network:
             dim=np.size(mini_batch)*2 
             #loss sull'intero ciclo di batch
             #print("---------------")
+            
+            #se usiamo learning rate variabile lo aggiorno
+            if self.tau != 0:
+                self.learning_rate = 1 / (1 + (i / self.tau))
 
             for batch in mini_batch:
                 #creo array output_NN che mi servirà per memorizzare i risultati di output
