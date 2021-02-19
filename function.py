@@ -37,6 +37,11 @@ def weight_initialization(type_weight,fan_in,fan_out):
         dist=np.random.normal(0,std,None)
         return dist
     
+    if type_weight=="Glorot":
+        stddev = np.sqrt(np.divide(2, (fan_in+fan_out)))
+        dist = np.random.normal(0,stddev,None)
+        return dist
+
     return np.random.uniform(-0.7, 0.7)
     
 def init_w( dim_matrix,type_weight):
