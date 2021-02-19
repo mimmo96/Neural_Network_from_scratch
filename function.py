@@ -2,13 +2,50 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-def init_w(intervallo, dim_matrix):
+def weight_initialization(type_weight,fan_in,fan_out):
+    #best for sigmoid activation function
+    if type_weight=="random":
+        #[-intervallo,intervallo]
+        return np.random.uniform(-0.7, 0.7)
+
+    if type_weight=="uniform":
+        #[-1/sqrt(fan-in),1/sqrt(fan-out)]
+        a=np.divide(1,np.sqrt(fan_in))
+        b=np.divide(1,np.sqrt(fan_out))
+        return np.random.uniform(-a, b)
+
+    if type_weight=="Xavier Normal":
+        #Wij ~ N(mean,std) , mean=0 , std=sqrt(2/(fan_in + fan_out)).
+        std=np.sqrt(2/(fan_in + fan_out))
+        dist=np.random.normal(0,std,None)
+        return dist
+    
+    if type_weight=="Xavier Uniform":
+        # [-sqrt(6)/sqrt(fan_in+fan_out),sqrt(6)/sqrt(fan_in + fan_out)]
+        inter= np.divide(np.sqrt(6),np.sqrt(fan_in+fan_out))
+        return np.random.uniform(-inter, inter)
+    
+    #best for RelU
+    if type_weight=="He uniform":
+        #Uniform [-sqrt(6/fan_in),sqrt(6/fan_in)]
+        inter= np.divide(np.sqrt(6),fan_in)
+        return np.random.uniform(-inter, inter)
+    
+    if type_weight=="He Normal":
+        #Wij ~ N(mean,std) , mean=0 , std=sqrt(2/fan_in).
+        std=np.sqrt(np.divide(2,fan_in))
+        dist=np.random.normal(0,std,None)
+        return dist
+    
+    return np.random.uniform(-0.7, 0.7)
+    
+def init_w( dim_matrix,type_weight):
     #intervallo = np.divide(np.sqrt(6), np.sqrt((nj+nj_plus)))
     w = np.zeros([dim_matrix[0], dim_matrix[1]])
     for i in range(dim_matrix[0]):
         for j in range(dim_matrix[1]):
             while abs(w[i,j]) < 0.0000001:
-                w[i, j] = np.random.uniform(-intervallo, intervallo)
+                w[i, j] = weight_initialization(type_weight,dim_matrix[0],dim_matrix[1])
     return w
 
 ############################

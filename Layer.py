@@ -7,10 +7,10 @@ class Layer:
     # #nj=numero di nodi
     #nj_plus nodi livello successivo
 
-    def __init__(self, nj, nj_prec, intervallo, fun,batch_size = 0):
+    def __init__(self, nj, nj_prec, type_weight,fun,batch_size = 0):
         self.nj = nj
         self.x = np.empty([batch_size,nj_prec +1],float)
-        self.w_matrix = init_w(intervallo, [nj_prec+1,nj])
+        self.w_matrix = init_w( [nj_prec+1,nj],type_weight)
         self.Delta_w_old = np.zeros(self.w_matrix.shape)
         self.fun = fun
 

@@ -8,7 +8,7 @@ import Matrix_io
 
 class neural_network:
     
-    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer,function):
+    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer,function,type_weight):
 
         self.alfa = alfa
         self.v_lambda = v_lambda
@@ -23,10 +23,11 @@ class neural_network:
         #creo la struttura struct_layer che conterrà i vari layer
         self.struct_layers = np.empty(numero_layer, Layer.Layer)
         self.numero_layer = numero_layer
+        self.type_weight=type_weight
        
         #inserisco i layer in struct layer
         for i in range(1,self.numero_layer+1):
-            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],0.7,function)
+            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],type_weight,function)
 
     #   --------METODI CHE ERANO NEI THREAD------------
     #restituisce il risultato della moltiplicazione di w*x di tutta la rete e di tutti i layer
@@ -144,7 +145,7 @@ class neural_network:
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 
-        print("epoch:",epochs," batch_size:",batch_size," alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  layer:",self.nj, " function:",self.function)
+        print("epoch:",epochs," batch_size:",batch_size," alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  layer:",self.nj, " function:",self.function, " weight:", self.type_weight)
         #print("errore training: \n" ,errore )
         #print("loss: \n",loss_epochs)
         #print("output previsto: \n",training_set_output, "\noutput effettivo: \n", output_NN )
