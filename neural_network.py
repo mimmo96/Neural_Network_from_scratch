@@ -1,14 +1,14 @@
 import numpy as np
 import Layer
 import matplotlib.pyplot as plt
-from function import der_loss, derivate_sigmoid_2, LOSS
+from function import der_loss, LOSS, _classification,  _derivate_activation_function
 import graphycs
 from concurrent.futures import ThreadPoolExecutor
 import Matrix_io
 
 class neural_network:
     
-    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer,function,type_weight):
+    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer,function,type_weight, type_problem = "Regression"):
 
         self.alfa = alfa
         self.v_lambda = v_lambda
@@ -24,7 +24,7 @@ class neural_network:
         self.struct_layers = np.empty(numero_layer, Layer.Layer)
         self.numero_layer = numero_layer
         self.type_weight=type_weight
-       
+        self.type_problem = type_problem
         #inserisco i layer in struct layer
         for i in range(1,self.numero_layer+1):
             self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],type_weight,function)
@@ -112,6 +112,7 @@ class neural_network:
                 #creo array output_NN che mi servirà per memorizzare i risultati di output
                 output_NN = np.zeros(batch.output().shape)
                 self.ThreadPool_Forward(batch.input(),0, batch_size, output_NN) 
+                #----------------------------------questo 0  in backprop non serve!!!!!-----------------------------------------------------------
                 self.backprogation(0, output_NN, batch.output(), batch_size)
 
             #calcolo la loss su tutto l'intero training
@@ -169,13 +170,19 @@ class neural_network:
             for j in range(0, layer.nj):
                 #outputlayer
                 if i == (np.size(self.struct_layers) - 1):
+                    if self.type_problem == "Regression":
+                         delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
+                    else: 
+                        delta[j,:] = _classification(layer.net_matrix(j), output_NN[:,j], training_set_output[:,j], self.function)
+
+                    ##################### da commentare ##########################
                     max_row = index_matrix+batch_size
                     #delta=(d-o)
                     delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
-                 
+                    ##############################################################
                 #hiddenlayer
                 else:
-                    der_sig = derivate_sigmoid_2(layer.net_matrix(j),self.function)
+                    der_sig = _derivate_activation_function(layer.net_matrix(j),self.function)
                     #product è un vettore delta*pesi
                     product = delta_out.T.dot(self.struct_layers[i + 1].w_matrix[j, :])
                     #delta=Sommatoria da 0 a batch_size di delta_precedenti*pesi

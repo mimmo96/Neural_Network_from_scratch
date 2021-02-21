@@ -53,6 +53,25 @@ def init_w( dim_matrix,type_weight):
                 w[i, j] = weight_initialization(type_weight,dim_matrix[0],dim_matrix[1])
     return w
 
+
+#############################
+#       TYPE PROBLEM        #
+#############################
+def _classification(nets, output_NN, output_expected, type_fun):
+    
+    delta = _derivate_activation_function(nets, type_fun)
+    derivate_loss = der_loss(output_expected, output_NN)
+    print ("delta ", delta )
+    print ("derivate loss ", derivate_loss)
+    for k in range(np.size(delta)):
+        delta[k]=np.dot(delta[k],derivate_loss[k])
+    
+    return delta
+
+
+
+
+
 ############################
 #   ACTIVATION FUNCTIONS   #
 ############################
@@ -167,10 +186,10 @@ def choose_derivate_function(fun,net):
     if fun=="zero_one_h":
         return _zero_one_tanh_derivative(net)
 
-def derivate_sigmoid_2(x,type_fun):
-    sig=np.empty(np.size(x))
+def _derivate_activation_function(nets,type_fun):
+    sig=np.empty(np.size(nets))
     i=0
-    for net in x:
+    for net in nets:
         sig[i] = choose_derivate_function(type_fun,net)
         i=i+1
     return sig

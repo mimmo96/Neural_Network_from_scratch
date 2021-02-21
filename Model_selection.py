@@ -25,7 +25,7 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                     #salvo il numero di layer 
                                     numero_layer=np.size(units)-2
                                     #creo la neural network con i parametri passati
-                                    NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function,weig) 
+                                    NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function,weig, "classification") 
                                     #restituisce il minimo errore della validation
                                     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
                                     
