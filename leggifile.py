@@ -20,10 +20,14 @@ def leggi(filename):
         stringa=data[i][0]
         stringa=stringa.split()
         stringa[np.size(stringa)-1]=0
-     
+        temp=stringa[0]
+   
         for k in range (0,np.size(stringa)-1):
-            stringa[k]=float(stringa[k])
-     
+            if(k==np.size(stringa)-2):
+                stringa[k]=temp
+            else:
+                stringa[k]=float(stringa[k+1])
+   
         for j in range(colonne):
                 matriceinput[i,j] = stringa[j]
 
