@@ -234,6 +234,7 @@ m = np.matrix([[2, 4, 5],
 #data: matrice
 #batch_size: dimensione di ogni batch
 def create_batch(data, batch_size):
+
     #array di matrici contenente blocchi di dimensione batch_size
     mini_batches = []
     #definisce numero di batch
@@ -248,3 +249,17 @@ def create_batch(data, batch_size):
             mini_batch = np.append(mini_batch, data[0:batch_size-mini_batch.shape[0]], axis = 0)
         mini_batches.append(mini_batch)
     return mini_batches
+
+def sign(fun,vector):
+    for i in np.size(vector):
+        if fun=="sigmoidal":
+            if vector[i] >= 0.5:
+                vector[i] = 1
+            else:
+                vector[i] = 0
+            
+        if fun=="tanh":
+            if vector[i] >= 0:
+                vector[i] = 1
+            else:
+                vector[i] = 0
