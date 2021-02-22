@@ -14,8 +14,8 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
     best_loss_training=-1
     best_function=1
 
-    for batch_size in batch_array:
-        for epochs in epoch_array:
+    for epochs in epoch_array:
+        for batch_size in batch_array:
             for function in fun:
                 for units in vectors_units:
                     for learning_rate in vector_learning_rate:

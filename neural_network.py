@@ -1,6 +1,7 @@
 import numpy as np
 import Layer
 import matplotlib.pyplot as plt
+import math
 from function import der_loss, LOSS, _classification,  _derivate_activation_function
 import graphycs
 from concurrent.futures import ThreadPoolExecutor
@@ -86,6 +87,8 @@ class neural_network:
         #print("----------------------MEDIA OUTPUT TRAINING SET ----------------------------------\n", np.sum(training_set_output) / training_set_output.shape[0])
         errors_validation = []
         best_loss_validation=-1
+        validation_stop=3
+
         #layer migliori sulla validation
         best_struct_layers = 0
 
@@ -130,6 +133,12 @@ class neural_network:
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
+                   #se ho raggiunto lo stesso valore o maggiore del precedente per 3 cicli consecutivi nella validation mi fermo
+            # oppure se ho un errore troppo grande o troppo piccolo
+            if(validation_stop==0 | (math.isnan(best_loss_validation)) | (math.isnan(best_loss_validation)) | 
+               (math.isnan(loss_training)) | (math.isnan(loss_training))):
+                break
+
         '''
         #grafico training
         plt.title("LOSS/EPOCH")
