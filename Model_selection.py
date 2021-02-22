@@ -1,6 +1,6 @@
 import neural_network
 import numpy as np
-from function import LOSS
+from function import LOSS, accuracy
 
 def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_array, epoch_array,fun,weight):
     
@@ -33,7 +33,8 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                     output_NN = np.zeros(training_set.output().shape)
                                     NN.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
                                     loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1])
-                                    print("loss:", loss_training)
+                                    acc=accuracy(training_set.output(),output_NN)
+                                    print("loss:", loss_training,"\naccuratezza:", acc,"\n")
                                     
                                     if best_loss_training == -1:
                                         best_loss_training = loss_training

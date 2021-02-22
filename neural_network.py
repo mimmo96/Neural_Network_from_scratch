@@ -2,7 +2,7 @@ import numpy as np
 import Layer
 import matplotlib.pyplot as plt
 import math
-from function import der_loss, LOSS, _classification,  _derivate_activation_function
+from function import der_loss, LOSS, _classification,  _derivate_activation_function,sign
 import graphycs
 from concurrent.futures import ThreadPoolExecutor
 import Matrix_io
@@ -50,7 +50,8 @@ class neural_network:
                 output=np.zeros(layer.nj)
                 for nj in range(layer.nj):
                     output[nj]=layer.net(nj, x_input)
-            
+                if self.type_problem != "Regression":
+                    output = sign(self.function, output)
             i = i - 1
         return output
 

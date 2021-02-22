@@ -61,8 +61,6 @@ def _classification(nets, output_NN, output_expected, type_fun):
     
     delta = _derivate_activation_function(nets, type_fun)
     derivate_loss = der_loss(output_expected, output_NN)
-    print ("delta ", delta )
-    print ("derivate loss ", derivate_loss)
     for k in range(np.size(delta)):
         delta[k]=np.dot(delta[k],derivate_loss[k])
     
@@ -219,16 +217,15 @@ def LOSS(output, output_expected, example_cardinality,num_output):
     mse = np.divide(mse,np.dot(example_cardinality,num_output)*2)
     return mse
 
+#sono due vettori
 def accuracy(real_matrix, matrix):
     a = real_matrix - matrix
-    return np.sum(a, 0)
-
-r = np.matrix([[1, 4, 5], 
-    [-5, 8, 9]])
-m = np.matrix([[2, 4, 5], 
-    [-2, 8, 9]])
-
-#print(accuracy(r, m))
+    count=0
+    for result in a:
+        if (result==0):
+            count=count+1
+    return (np.divide(count,np.size(real_matrix))*100)
+        
 
 #restituisce un array di matrici
 #data: matrice
@@ -251,6 +248,7 @@ def create_batch(data, batch_size):
     return mini_batches
 
 def sign(fun,vector):
+    print("vector:",vector)
     for i in np.size(vector):
         if fun=="sigmoidal":
             if vector[i] >= 0.5:
@@ -263,3 +261,4 @@ def sign(fun,vector):
                 vector[i] = 1
             else:
                 vector[i] = 0
+
