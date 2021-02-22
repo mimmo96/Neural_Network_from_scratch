@@ -154,6 +154,8 @@ def derivate_sigmoid(x):
 '''
 def choose_function(fun,net):
     if fun=="sigmoidal":
+        if (_logistic(net) > 1):
+            print("SIAMO NELLA SIGMOIDALE:", _logistic(net))
         return _logistic(net)
     
     if fun=="tanh":
@@ -248,7 +250,6 @@ def create_batch(data, batch_size):
     return mini_batches
 
 def sign(fun,vector):
-    #print("vector:",vector)
     for value in vector:
         if fun=="sigmoidal":
             if value >= 0.5:

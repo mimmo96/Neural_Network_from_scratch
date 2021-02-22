@@ -48,10 +48,14 @@ class neural_network:
             #output layer
             else:
                 output=np.zeros(layer.nj)
-                for nj in range(layer.nj):
-                    output[nj]=layer.net(nj, x_input)
+                
                 if self.type_problem != "Regression":
+                    output = layer.output(x_input)
                     output = sign(self.function, output)
+                else:
+                    for nj in range(layer.nj):
+                        output[nj]=layer.net(nj, x_input)
+                
             i = i - 1
         return output
 
@@ -140,7 +144,7 @@ class neural_network:
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
                 break
 
-        
+        '''
         #grafico training
         plt.title("LOSS/EPOCH")
         plt.xlabel("Epoch")
@@ -151,7 +155,7 @@ class neural_network:
         plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         plt.show()
-        
+        '''
         
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
@@ -200,7 +204,6 @@ class neural_network:
                         delta[j,k]=np.dot(product[k],der_sig[k])
 
                 #regolarizzazione di thikonov
-           
                 temp=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
                 temp[temp.shape[0]-1]=0
                 gradient = -np.dot(delta[j,:],layer.x) - temp
