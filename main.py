@@ -25,7 +25,12 @@ weight=["uniform","random","Xavier Normal","Xavier Uniform","He uniform","He Nor
 
 #leggo i dati dal file e li salvo in una matrice
 matriceinput= leggifile.leggi(filename)
+
+print(matriceinput)
+'''
 matriceinput = function.normalize_input(matriceinput,dim_output)
+
+
 #divido il data set in training,validation,test
 training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput, dim_output)
 
@@ -33,3 +38,4 @@ newInput=matriceinput[0]
 dim_input=np.size(newInput) - dim_output
 
 model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun,weight)
+'''

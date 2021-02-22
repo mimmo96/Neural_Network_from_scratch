@@ -11,15 +11,21 @@ def leggi(filename):
 
     #numero di valori in input
     righe = len(data)
-    colonne = len(data[0])-1
+    colonne = 7
     #array che conterra [#input][#array di valori interi]
     matriceinput=np.zeros([righe, colonne])
 
     #scandisco le righe e salvo i valori in un array
     for i in range(righe):
-        array = np.array(data[i], dtype="float")
+        stringa=data[i][0]
+        stringa=stringa.split()
+        stringa[np.size(stringa)-1]=0
+     
+        for k in range (0,np.size(stringa)-1):
+            stringa[k]=float(stringa[k])
+     
         for j in range(colonne):
-                matriceinput[i,j] = array[j+1]
+                matriceinput[i,j] = stringa[j]
 
     return matriceinput
 
