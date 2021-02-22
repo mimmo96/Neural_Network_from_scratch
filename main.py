@@ -11,16 +11,16 @@ from random import randint
 
 num_epoch=[100,500]
 filename = "dati.csv"
-batch_array=[1]
+batch_array=[32, 16, 1]
 dim_output = 1
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.001,0.002,0.2,0.5,0.007, 1, 2, 3, 4]
+learning_rate = [0.001,0.002,0.2,0.5,0.007]
 alfa = [0,0.5,0.6,0.7,0.8,0.9]
 v_lambda = [0.01,0]
-fun=["sigmoidal","tanh"]
+fun=["tanh"]
 weight=["uniform","random"]
 #-------------------------------FINE PARAMETRI------------------------------
 

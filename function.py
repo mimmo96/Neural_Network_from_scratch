@@ -248,17 +248,17 @@ def create_batch(data, batch_size):
     return mini_batches
 
 def sign(fun,vector):
-    print("vector:",vector)
-    for i in np.size(vector):
+    #print("vector:",vector)
+    for value in vector:
         if fun=="sigmoidal":
-            if vector[i] >= 0.5:
-                vector[i] = 1
+            if value >= 0.5:
+                return 1
             else:
-                vector[i] = 0
+                return 0
             
         if fun=="tanh":
-            if vector[i] >= 0:
-                vector[i] = 1
+            if value >= 0:
+                return 1
             else:
-                vector[i] = 0
+                return 0
 

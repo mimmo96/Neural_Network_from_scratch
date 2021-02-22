@@ -140,7 +140,7 @@ class neural_network:
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
                 break
 
-        '''
+        
         #grafico training
         plt.title("LOSS/EPOCH")
         plt.xlabel("Epoch")
@@ -152,7 +152,7 @@ class neural_network:
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         plt.show()
         
-        '''
+        
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 
