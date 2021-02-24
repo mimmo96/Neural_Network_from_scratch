@@ -44,7 +44,7 @@ class neural_network:
             if i != 0:
                 #calcolo il net e lo salvo in x_input
                 x_input = layer.output(x_input)
-            
+        
             #output layer
             else:
                 output=np.zeros(layer.nj)
@@ -55,8 +55,7 @@ class neural_network:
                     output = sign(self.function, output)
                 else:
                     for nj in range(layer.nj):
-                        output[nj]=layer.net(nj, x_input)
-                
+                        output[nj]=layer.net(nj, x_input) 
             i = i - 1
         return output
 
@@ -65,16 +64,17 @@ class neural_network:
         
     def ThreadPool_Forward(self, matrix_input, index_matrix, batch_size, output, validation = False):
         #creo il pool di thread
+
         executor = ThreadPoolExecutor(10)
         #indice massimo che posso raggiungere con la dimensione del batch
         max_i = batch_size + index_matrix
-       
+    
         #prendo l'indice relativo all'training example del batch
         for i in range(index_matrix, max_i):
             #row_input va da 0 a batch_size-1
             row_input_layer = i % batch_size   
             executor.submit(self.task_forwarding, matrix_input[i, :], i, output, row_input_layer, validation)
-
+       
         executor.shutdown(True)
 
         return output
@@ -142,10 +142,10 @@ class neural_network:
             if(validation_stop==0 | (math.isnan(best_loss_validation)) | (math.isnan(best_loss_validation)) | 
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
                 break
-
         
+        titolo= "epoch:"+str(epochs)+" batch:"+str(batch_size)+" alfa:"+str(self.alfa)+" lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+" layer:"+str(self.nj)+ " function:"+str(self.function)+" weight:"+str(self.type_weight)
         #grafico training
-        plt.title("LOSS/EPOCH")
+        plt.title(titolo)
         plt.xlabel("Epoch")
         plt.ylabel("LOSS")
         plt.plot(epoch_array,loss_array)
@@ -153,8 +153,9 @@ class neural_network:
         #grafico validation
         plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
-        plt.show()
-        
+        file='figure/training'+str(num_training)+".png"
+        plt.savefig(file,format='png',dpi=150)
+        plt.close('all')
         
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
@@ -184,14 +185,14 @@ class neural_network:
                 #outputlayer
                 if i == (np.size(self.struct_layers) - 1):
                     if self.type_problem == "Regression":
-                        delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
+                        delta[j,:] = der_loss( output_NN[:,j],training_set_output[:,j] )
                     else: 
                         delta[j,:] = _classification(layer.net_matrix(j), output_NN[:,j], training_set_output[:,j], self.function)
 
                     ##################### da commentare ##########################
-                    max_row = index_matrix+batch_size
+                    #max_row = index_matrix+batch_size
                     #delta=(d-o)
-                    delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
+                    #delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
                     ##############################################################
                 #hiddenlayer
                 else:
@@ -203,10 +204,11 @@ class neural_network:
                         delta[j,k]=np.dot(product[k],der_sig[k])
 
                 #regolarizzazione di thikonov
+                gradient = -np.dot(delta[j,:],layer.x) 
+                gradient = np.divide(gradient,64)
                 temp=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
                 temp[temp.shape[0]-1]=0
-                gradient = -np.dot(delta[j,:],layer.x) - temp
-                gradient = np.divide(gradient,batch_size)
+                gradient=gradient - temp
                 Dw_new = np.dot(gradient, self.learning_rate)
                 #momentum
                 #d_new=d_new+alfa*delta_old
