@@ -209,13 +209,15 @@ def normalize_input(x,dim_output):
     x[:, 0:(colonne-dim_output)] = x_input
     #print(x)
     return x
-
-def LOSS(output, output_expected, example_cardinality,num_output):
+#w = matrice pesi dell'output layer
+def LOSS(output, output_expected, example_cardinality,num_output, penalty_term):
     #((d-o)^2)/2*num_ex*batch
     mse=np.power(np.subtract(output, output_expected),2)
     mse = np.sum(mse,axis=0)
     mse = np.sum(mse)
     mse = np.divide(mse,np.dot(example_cardinality,num_output)*2)
+    #thikonov
+    mse += penalty_term
     return mse
 
 #sono due vettori

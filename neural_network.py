@@ -2,7 +2,7 @@ import numpy as np
 import Layer
 import matplotlib.pyplot as plt
 import math
-from function import der_loss, LOSS, _classification,  _derivate_activation_function,sign
+from function import der_loss, LOSS, _classification,  _derivate_activation_function, sign
 import graphycs
 from concurrent.futures import ThreadPoolExecutor
 import Matrix_io
@@ -10,7 +10,7 @@ import backpropagation as bp
 
 class neural_network:
     
-    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer,function,type_weight, type_problem = "Regression"):
+    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, type_weight, type_problem = "Regression"):
 
         self.alfa = alfa
         self.v_lambda = v_lambda
@@ -22,6 +22,7 @@ class neural_network:
             self.tau = 0
         self.nj=nj
         self.function=function
+        self.fun_out = fun_out
         #creo la struttura struct_layer che conterrà i vari layer
         self.struct_layers = np.empty(numero_layer, Layer.Layer)
         self.numero_layer = numero_layer
@@ -29,7 +30,7 @@ class neural_network:
         self.type_problem = type_problem
         #inserisco i layer in struct layer
         for i in range(1,self.numero_layer+1):
-            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],type_weight,function)
+            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],type_weight)
 
     #   --------METODI CHE ERANO NEI THREAD------------
     #restituisce il risultato della moltiplicazione di w*x di tutta la rete e di tutti i layer
@@ -44,7 +45,7 @@ class neural_network:
             #hidden layer
             if i != 0:
                 #calcolo il net e lo salvo in x_input
-                x_input = layer.output(x_input)
+                x_input = layer.output(self.function, x_input)
             
             #output layer
             else:
@@ -52,8 +53,8 @@ class neural_network:
                 
                 if self.type_problem != "Regression":
                     for nj in range(layer.nj):
-                        output[nj]=layer.output(x_input)
-                    output = sign(self.function, output)
+                        output[nj]=layer.output(self.fun_out, x_input)
+                    output = sign(self.fun_out, output)
                 else:
                     for nj in range(layer.nj):
                         output[nj]=layer.net(nj, x_input)
@@ -126,7 +127,8 @@ class neural_network:
             #calcolo la loss su tutto l'intero training
             output_NN = np.zeros(training_set.output().shape)
             self.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
-            loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1])
+            penalty_term = self.penalty_NN()
+            loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1], penalty_term)
             
             #salvo nell'array i valori del training
             loss_array=np.append(loss_array,loss_training)
@@ -134,7 +136,7 @@ class neural_network:
             
             if (i % 5 == 0):
                 #calcolo la loss sulla validazione e me la salvo nell'array
-                best_loss_validation = self.validation(validation_set)
+                best_loss_validation = self.validation(validation_set, penalty_term)
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
@@ -233,40 +235,47 @@ class neural_network:
             layer = self.struct_layers[i]
             #per ogni nodo di ogni layer
             delta_layer_corrente = []
+            delta_layer_corrente_media = []
+            gradient_tot = 0
             for j in range(0, layer.nj):
-                #outputlayer
-                if i == (np.size(self.struct_layers) - 1):
-                    delta = bp._delta_output_layer(training_set_output[0][0], output_NN[0][0], layer.net_matrix(j)[0], self.function)
-                    delta_layer_corrente.append(delta)
-                #hiddenlayer
-                else:
-                    delta = bp._delta_hidden_layer(delta_layer_succesivo,self.struct_layers[i + 1].w_matrix[j, :], layer.net_matrix(j)[0], self.function)
-                    delta_layer_corrente.append(delta)
+                for num_example in range(batch_size):
+                    #outputlayer
+                    if i == (np.size(self.struct_layers) - 1):
+                        delta = bp._delta_output_layer(training_set_output[num_example][j], output_NN[num_example][j], layer.net_matrix(j)[num_example], self.function)
+                        delta_layer_corrente.append(delta)
+                    #hiddenlayer
+                    else:
+                        delta = bp._delta_hidden_layer(delta_layer_succesivo,self.struct_layers[i + 1].w_matrix[j, :], layer.net_matrix(j)[num_example], self.function)
+                        delta_layer_corrente.append(delta)
 
-                gradient = bp.gradiente(delta, layer.x[0, :])
+                    gradient = bp.gradiente(delta, layer.x[num_example, :])
+                    gradient_tot += gradient
+                delta_layer_corrente_media.append(np.average(delta_layer_corrente))
 
+                gradient_tot = gradient_tot / batch_size
                 #regolarizzazione di thikonov
-                #regularizer=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
-                #regularizer[regularizer.shape[0]-1]=0
-                #gradient = gradient - regularizer
+                regularizer=np.dot(self.v_lambda,layer.w_matrix[:, j])
+                regularizer[regularizer.shape[0]-1]=0
                 
-                #Dw_new = np.dot(gradient, self.learning_rate)
                 #momentum
-                #d_new=d_new+alfa*delta_old
-                #Dw_new = np.add(Dw_new, np.dot(self.alfa, layer.Delta_w_old[:,j]))
-                #layer.Delta_w_old[:,j] = Dw_new
+                momentum = self.alfa*layer.Delta_w_old[:,j]
 
-                layer.w_matrix[:, j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient)
-                #layer.w_matrix[:, j] = layer.w_matrix[:, j] + self.alfa*layer.Delta_w_old[:,j]
-                #layer.Delta_w_old[:,j] = layer.w_matrix[:, j]
-
-            delta_layer_succesivo = delta_layer_corrente
+                #update weights
+                layer.w_matrix[:, j],  layer.Delta_w_old[:,j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient, regularizer, momentum)
+            
+            delta_layer_succesivo = delta_layer_corrente_media
 
     #return TRUE if this is the best model
-    def validation(self,validation_set):
+    def validation(self,validation_set, penalty_term):
         validation_set_input = validation_set.input()
         validation_set_output = validation_set.output()
         output_NN = np.zeros(validation_set_output.shape)
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
-        loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1])
+        loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1], penalty_term)
         return loss_validation
+
+    def penalty_NN(self):
+        penalty = 0
+        for layer in self.struct_layers:
+            penalty += layer.penalty()
+        return self.v_lambda*penalty
