@@ -62,7 +62,7 @@ def _classification(nets, output_NN, output_expected, type_fun):
     delta = _derivate_activation_function(nets, type_fun)
     derivate_loss = der_loss(output_expected, output_NN)
     for k in range(np.size(delta)):
-        delta[k]=np.dot(delta[k],derivate_loss[k])
+        delta[k]=np.dot(delta[k],derivate_loss[k]) /2
     
     return delta
 
@@ -90,6 +90,7 @@ def _logistic (x):
     '''
         logistic activation function: logistic(x) = 1 / (1 + exp(-x))
     '''
+    #print("LA X DI LOGISTIC è: ", x)
     return 1 / ( 1 + math.exp(-x) )
 
 def _tanh (x):
@@ -154,8 +155,6 @@ def derivate_sigmoid(x):
 '''
 def choose_function(fun,net):
     if fun=="sigmoidal":
-        if (_logistic(net) > 1):
-            print("SIAMO NELLA SIGMOIDALE:", _logistic(net))
         return _logistic(net)
     
     if fun=="tanh":
@@ -212,7 +211,7 @@ def normalize_input(x,dim_output):
     return x
 
 def LOSS(output, output_expected, example_cardinality,num_output):
-    #(d-o)^2
+    #((d-o)^2)/2*num_ex*batch
     mse=np.power(np.subtract(output, output_expected),2)
     mse = np.sum(mse,axis=0)
     mse = np.sum(mse)
@@ -233,7 +232,6 @@ def accuracy(real_matrix, matrix):
 #data: matrice
 #batch_size: dimensione di ogni batch
 def create_batch(data, batch_size):
-
     #array di matrici contenente blocchi di dimensione batch_size
     mini_batches = []
     #definisce numero di batch
@@ -250,21 +248,18 @@ def create_batch(data, batch_size):
     return mini_batches
 
 def sign(fun,vector):
-    for value in vector:
+    
+    for i in range (0,np.size(vector)):
         if fun=="sigmoidal":
-            if value >= 0.5:
-                return 1
+            if vector[i] >= 0.5:
+                vector[i]= 1
             else:
-                return 0
+                vector[i]= 0
             
         if fun=="tanh":
-            if value >= 0:
-                return 1
+            if vector[i] >= 0:
+                vector[i]= 1
             else:
-<<<<<<< HEAD
-                return 0
-=======
                 vector[i]= 0
     return vector
->>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
 

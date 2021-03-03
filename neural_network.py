@@ -6,6 +6,7 @@ from function import der_loss, LOSS, _classification,  _derivate_activation_func
 import graphycs
 from concurrent.futures import ThreadPoolExecutor
 import Matrix_io
+import backpropagation as bp
 
 class neural_network:
     
@@ -50,7 +51,8 @@ class neural_network:
                 output=np.zeros(layer.nj)
                 
                 if self.type_problem != "Regression":
-                    output = layer.output(x_input)
+                    for nj in range(layer.nj):
+                        output[nj]=layer.output(x_input)
                     output = sign(self.function, output)
                 else:
                     for nj in range(layer.nj):
@@ -90,7 +92,6 @@ class neural_network:
         training_set_input = training_set.input() 
         training_set_output = training_set.output()
         #print("----------------------MEDIA OUTPUT TRAINING SET ----------------------------------\n", np.sum(training_set_output) / training_set_output.shape[0])
-        errors_validation = []
         best_loss_validation=-1
         validation_stop=3
 
@@ -108,7 +109,6 @@ class neural_network:
         for i in range(epochs):
             #divide gli esempi in matrici fatte da batch_size parti
             mini_batch = training_set.create_batch(batch_size)
-            dim=np.size(mini_batch)*2 
             #loss sull'intero ciclo di batch
             #print("---------------")
             
@@ -134,7 +134,7 @@ class neural_network:
             
             if (i % 5 == 0):
                 #calcolo la loss sulla validazione e me la salvo nell'array
-                best_loss_validation = self.validation(best_loss_validation, best_struct_layers, errors_validation, validation_set)
+                best_loss_validation = self.validation(validation_set)
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
@@ -144,11 +144,7 @@ class neural_network:
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
                 break
 
-<<<<<<< HEAD
-        '''
-=======
         
->>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
         #grafico training
         plt.title("LOSS/EPOCH")
         plt.xlabel("Epoch")
@@ -159,11 +155,7 @@ class neural_network:
         plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         plt.show()
-<<<<<<< HEAD
-        '''
-=======
         
->>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
         
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
@@ -180,7 +172,7 @@ class neural_network:
         print( "validation_set", validation_set.output(),"\nerror_best_model", best_min_err_validation, "\nbest model ", output_NN)
         print("----------------------------------------------------------------")
         '''
-
+    '''
     def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
         #parto dall'ultimo livello fino ad arrivare al primo
         for i in range(np.size(self.struct_layers) - 1, -1, -1):
@@ -193,18 +185,13 @@ class neural_network:
                 #outputlayer
                 if i == (np.size(self.struct_layers) - 1):
                     if self.type_problem == "Regression":
-<<<<<<< HEAD
-                         delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
-=======
                         delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
->>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
                     else: 
                         delta[j,:] = _classification(layer.net_matrix(j), output_NN[:,j], training_set_output[:,j], self.function)
-
                     ##################### da commentare ##########################
-                    max_row = index_matrix+batch_size
+                    #max_row = index_matrix+batch_size
                     #delta=(d-o)
-                    delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
+                    #delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
                     ##############################################################
                 #hiddenlayer
                 else:
@@ -214,12 +201,14 @@ class neural_network:
                     #delta=Sommatoria da 0 a batch_size di delta_precedenti*pesi
                     for k in range(batch_size):
                         delta[j,k]=np.dot(product[k],der_sig[k])
-
+                
+                gradient = -np.dot(delta[j,:],layer.x)
+                gradient = np.divide(gradient,batch_size)
                 #regolarizzazione di thikonov
                 temp=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
                 temp[temp.shape[0]-1]=0
-                gradient = -np.dot(delta[j,:],layer.x) - temp
-                gradient = np.divide(gradient,batch_size)
+                gradient = gradient - temp
+                
                 Dw_new = np.dot(gradient, self.learning_rate)
                 #momentum
                 #d_new=d_new+alfa*delta_old
@@ -231,16 +220,51 @@ class neural_network:
 
     def DeltaW_new(self,Dw_new,D_w_old):
         return np.add(Dw_new, np.dot(self.alfa, D_w_old))
+    '''
+    #training_set_output.size() == batch_size 
+    #output_NN.size() == batch_size 
+    def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
+        delta_layer_succesivo = []
+        delta_layer_corrente = []
+        #parto dall'ultimo livello fino ad arrivare al primo
+        for i in range(np.size(self.struct_layers) - 1, -1, -1):
+            layer = self.struct_layers[i]
+            #per ogni nodo di ogni layer
+            delta_layer_corrente = []
+            for j in range(0, layer.nj):
+                #outputlayer
+                if i == (np.size(self.struct_layers) - 1):
+                    delta = bp._delta_output_layer(training_set_output[0][0], output_NN[0][0], layer.net_matrix(j)[0], self.function)
+                    delta_layer_corrente.append(delta)
+                #hiddenlayer
+                else:
+                    delta = bp._delta_hidden_layer(delta_layer_succesivo,self.struct_layers[i + 1].w_matrix[j, :], layer.net_matrix(j)[0], self.function)
+                    delta_layer_corrente.append(delta)
+
+                gradient = bp.gradiente(delta, layer.x[0, :])
+
+                #regolarizzazione di thikonov
+                #regularizer=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
+                #regularizer[regularizer.shape[0]-1]=0
+                #gradient = gradient - regularizer
+                
+                #Dw_new = np.dot(gradient, self.learning_rate)
+                #momentum
+                #d_new=d_new+alfa*delta_old
+                #Dw_new = np.add(Dw_new, np.dot(self.alfa, layer.Delta_w_old[:,j]))
+                #layer.Delta_w_old[:,j] = Dw_new
+
+                layer.w_matrix[:, j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient)
+                #layer.w_matrix[:, j] = layer.w_matrix[:, j] + self.alfa*layer.Delta_w_old[:,j]
+                #layer.Delta_w_old[:,j] = layer.w_matrix[:, j]
+
+            delta_layer_succesivo = delta_layer_corrente
 
     #return TRUE if this is the best model
-    def validation(self,best_loss_validation, best_struct_layers, errors_validation, validation_set):
+    def validation(self,validation_set):
         validation_set_input = validation_set.input()
         validation_set_output = validation_set.output()
         output_NN = np.zeros(validation_set_output.shape)
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
         loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1])
-        errors_validation.append(loss_validation)
-        if (loss_validation < best_loss_validation) | (best_loss_validation == -1):
-            best_struct_layers = self.struct_layers
-            best_loss_validation = loss_validation
-        return best_loss_validation
+        return loss_validation
