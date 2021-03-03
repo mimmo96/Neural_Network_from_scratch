@@ -42,7 +42,7 @@ def weight_initialization(type_weight,fan_in,fan_out):
         dist = np.random.normal(0,stddev,None)
         return dist
 
-    return np.random.uniform(-0.25, 0.25)
+    return np.random.uniform(-0.7, 0.7)
     
 def init_w( dim_matrix,type_weight):
     #intervallo = np.divide(np.sqrt(6), np.sqrt((nj+nj_plus)))
@@ -60,10 +60,10 @@ def init_w( dim_matrix,type_weight):
 def _classification(nets, output_NN, output_expected, type_fun):
     
     delta = _derivate_activation_function(nets, type_fun)
-    derivate_loss = np.divide(der_loss(output_NN,output_expected ),2)
+    derivate_loss = der_loss(output_expected, output_NN)
     for k in range(np.size(delta)):
         delta[k]=np.dot(delta[k],derivate_loss[k])
-        
+    
     return delta
 
 
@@ -261,3 +261,4 @@ def sign(fun,vector):
             else:
                 vector[i]= 0
     return vector
+
