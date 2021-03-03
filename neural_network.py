@@ -144,9 +144,9 @@ class neural_network:
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
                 break
 
-        
+        titolo= "epoch:"+str(epochs)+" batch:"+str(batch_size)+" alfa:"+str(self.alfa)+" lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+" layer:"+str(self.nj)+ " function:"+str(self.function)+" weight:"+str(self.type_weight)
         #grafico training
-        plt.title("LOSS/EPOCH")
+        plt.title(titolo)
         plt.xlabel("Epoch")
         plt.ylabel("LOSS")
         plt.plot(epoch_array,loss_array)
@@ -154,7 +154,9 @@ class neural_network:
         #grafico validation
         plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
-        plt.show()
+        file='figure/training'+str(num_training)+".png"
+        plt.savefig(file,format='png',dpi=150)
+        plt.close('all')
         
         
         output_NN = np.zeros(training_set_output.shape)
