@@ -1,5 +1,7 @@
 import numpy as np
 import Layer
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import math
 from function import der_loss, LOSS, _classification,  _derivate_activation_function, sign
