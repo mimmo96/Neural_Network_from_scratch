@@ -18,10 +18,17 @@ dim_output = 1
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
 learning_rate = [0.2,0.5,1, 4]
+<<<<<<< HEAD
 alfa = [0.5,0.65, 0.8,0.9]
 v_lambda = [0.01,0]
 fun=["sigmoidal", "tanh"]
 weight=["uniform","random"]
+=======
+alfa = [0,0.65, 0.8,0.9]
+v_lambda = [0,0.0001]
+fun=["sigmoidal", "tanh"]
+weight=["random"]
+>>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice

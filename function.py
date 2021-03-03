@@ -261,5 +261,10 @@ def sign(fun,vector):
             if value >= 0:
                 return 1
             else:
+<<<<<<< HEAD
                 return 0
+=======
+                vector[i]= 0
+    return vector
+>>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
 

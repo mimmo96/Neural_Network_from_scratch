@@ -144,7 +144,11 @@ class neural_network:
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
                 break
 
+<<<<<<< HEAD
         '''
+=======
+        
+>>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
         #grafico training
         plt.title("LOSS/EPOCH")
         plt.xlabel("Epoch")
@@ -155,7 +159,11 @@ class neural_network:
         plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         plt.show()
+<<<<<<< HEAD
         '''
+=======
+        
+>>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
         
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
@@ -185,7 +193,11 @@ class neural_network:
                 #outputlayer
                 if i == (np.size(self.struct_layers) - 1):
                     if self.type_problem == "Regression":
+<<<<<<< HEAD
                          delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
+=======
+                        delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
+>>>>>>> parent of 6e50a4c (aggiunti grafici automatizzati)
                     else: 
                         delta[j,:] = _classification(layer.net_matrix(j), output_NN[:,j], training_set_output[:,j], self.function)
 
