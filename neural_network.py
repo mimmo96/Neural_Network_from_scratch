@@ -50,8 +50,7 @@ class neural_network:
                 output=np.zeros(layer.nj)
                 
                 if self.type_problem != "Regression":
-                    for nj in range(layer.nj):
-                        output[nj]=layer.output(x_input)
+                    output = layer.output(x_input)
                     output = sign(self.function, output)
                 else:
                     for nj in range(layer.nj):
@@ -91,6 +90,7 @@ class neural_network:
         training_set_input = training_set.input() 
         training_set_output = training_set.output()
         #print("----------------------MEDIA OUTPUT TRAINING SET ----------------------------------\n", np.sum(training_set_output) / training_set_output.shape[0])
+        errors_validation = []
         best_loss_validation=-1
         validation_stop=3
 
@@ -108,6 +108,7 @@ class neural_network:
         for i in range(epochs):
             #divide gli esempi in matrici fatte da batch_size parti
             mini_batch = training_set.create_batch(batch_size)
+            dim=np.size(mini_batch)*2 
             #loss sull'intero ciclo di batch
             #print("---------------")
             
@@ -133,7 +134,7 @@ class neural_network:
             
             if (i % 5 == 0):
                 #calcolo la loss sulla validazione e me la salvo nell'array
-                best_loss_validation = self.validation(validation_set)
+                best_loss_validation = self.validation(best_loss_validation, best_struct_layers, errors_validation, validation_set)
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
@@ -143,7 +144,7 @@ class neural_network:
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
                 break
 
-        
+        '''
         #grafico training
         plt.title("LOSS/EPOCH")
         plt.xlabel("Epoch")
@@ -154,7 +155,7 @@ class neural_network:
         plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         plt.show()
-        
+        '''
         
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
@@ -184,7 +185,7 @@ class neural_network:
                 #outputlayer
                 if i == (np.size(self.struct_layers) - 1):
                     if self.type_problem == "Regression":
-                        delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
+                         delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
                     else: 
                         delta[j,:] = _classification(layer.net_matrix(j), output_NN[:,j], training_set_output[:,j], self.function)
 
@@ -220,10 +221,14 @@ class neural_network:
         return np.add(Dw_new, np.dot(self.alfa, D_w_old))
 
     #return TRUE if this is the best model
-    def validation(self,validation_set):
+    def validation(self,best_loss_validation, best_struct_layers, errors_validation, validation_set):
         validation_set_input = validation_set.input()
         validation_set_output = validation_set.output()
         output_NN = np.zeros(validation_set_output.shape)
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
         loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1])
-        return loss_validation
+        errors_validation.append(loss_validation)
+        if (loss_validation < best_loss_validation) | (best_loss_validation == -1):
+            best_struct_layers = self.struct_layers
+            best_loss_validation = loss_validation
+        return best_loss_validation

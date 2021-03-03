@@ -154,6 +154,8 @@ def derivate_sigmoid(x):
 '''
 def choose_function(fun,net):
     if fun=="sigmoidal":
+        if (_logistic(net) > 1):
+            print("SIAMO NELLA SIGMOIDALE:", _logistic(net))
         return _logistic(net)
     
     if fun=="tanh":
@@ -210,7 +212,7 @@ def normalize_input(x,dim_output):
     return x
 
 def LOSS(output, output_expected, example_cardinality,num_output):
-    #((d-o)^2)/2*num_ex*batch
+    #(d-o)^2
     mse=np.power(np.subtract(output, output_expected),2)
     mse = np.sum(mse,axis=0)
     mse = np.sum(mse)
@@ -231,6 +233,7 @@ def accuracy(real_matrix, matrix):
 #data: matrice
 #batch_size: dimensione di ogni batch
 def create_batch(data, batch_size):
+
     #array di matrici contenente blocchi di dimensione batch_size
     mini_batches = []
     #definisce numero di batch
@@ -247,18 +250,16 @@ def create_batch(data, batch_size):
     return mini_batches
 
 def sign(fun,vector):
-    
-    for i in range (0,np.size(vector)):
+    for value in vector:
         if fun=="sigmoidal":
-            if vector[i] >= 0.5:
-                vector[i]= 1
+            if value >= 0.5:
+                return 1
             else:
-                vector[i]= 0
+                return 0
             
         if fun=="tanh":
-            if vector[i] >= 0:
-                vector[i]= 1
+            if value >= 0:
+                return 1
             else:
-                vector[i]= 0
-    return vector
+                return 0
 
