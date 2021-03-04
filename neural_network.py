@@ -4,7 +4,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import math
-from function import der_loss, LOSS, _classification,  _derivate_activation_function, sign
+from function import der_loss, LOSS, _classification,  _derivate_activation_function, sign, accuracy
 import graphycs
 from concurrent.futures import ThreadPoolExecutor
 import Matrix_io
@@ -31,8 +31,10 @@ class neural_network:
         self.type_weight=type_weight
         self.type_problem = type_problem
         #inserisco i layer in struct layer
+        self.units = []
         for i in range(1,self.numero_layer+1):
             self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],type_weight)
+            self.units.append(nj[i])
 
     #   --------METODI CHE ERANO NEI THREAD------------
     #restituisce il risultato della moltiplicazione di w*x di tutta la rete e di tutti i layer
@@ -138,7 +140,7 @@ class neural_network:
             
             if (i % 5 == 0):
                 #calcolo la loss sulla validazione e me la salvo nell'array
-                best_loss_validation = self.validation(validation_set, penalty_term)
+                acc_validation, best_loss_validation = self.validation(validation_set, penalty_term)
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
@@ -147,8 +149,8 @@ class neural_network:
             if(validation_stop==0 | (math.isnan(best_loss_validation)) | (math.isnan(best_loss_validation)) | 
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
                 break
-
-        titolo= "epoch:"+str(epochs)+" batch:"+str(batch_size)+" alfa:"+str(self.alfa)+" lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+" layer:"+str(self.nj)+ " function:"+str(self.function)+" weight:"+str(self.type_weight)
+        acc=accuracy(training_set.output(),output_NN)
+        titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc)) + "; acc_val: " + str(int(acc_validation))
         #grafico training
         plt.title(titolo)
         plt.xlabel("Epoch")
@@ -230,29 +232,30 @@ class neural_network:
     #training_set_output.size() == batch_size 
     #output_NN.size() == batch_size 
     def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
-        delta_layer_succesivo = []
+        delta_layer_succesivo = np.empty([0,0])
+        #matrice dimensione = nodi layer corrente X numero esempi
         delta_layer_corrente = []
         #parto dall'ultimo livello fino ad arrivare al primo
         for i in range(np.size(self.struct_layers) - 1, -1, -1):
             layer = self.struct_layers[i]
             #per ogni nodo di ogni layer
-            delta_layer_corrente = []
-            delta_layer_corrente_media = []
+            delta_layer_corrente = np.empty([layer.nj, batch_size])
+            #delta_layer_corrente_media = []
             gradient_tot = 0
             for j in range(0, layer.nj):
                 for num_example in range(batch_size):
                     #outputlayer
                     if i == (np.size(self.struct_layers) - 1):
                         delta = bp._delta_output_layer(training_set_output[num_example][j], output_NN[num_example][j], layer.net_matrix(j)[num_example], self.function)
-                        delta_layer_corrente.append(delta)
                     #hiddenlayer
                     else:
-                        delta = bp._delta_hidden_layer(delta_layer_succesivo,self.struct_layers[i + 1].w_matrix[j, :], layer.net_matrix(j)[num_example], self.function)
-                        delta_layer_corrente.append(delta)
+                        delta = bp._delta_hidden_layer(delta_layer_succesivo[:, num_example ],self.struct_layers[i + 1].w_matrix[j, :], layer.net_matrix(j)[num_example], self.function)
+                        
+                    delta_layer_corrente[j,num_example] = delta
 
                     gradient = bp.gradiente(delta, layer.x[num_example, :])
                     gradient_tot += gradient
-                delta_layer_corrente_media.append(np.average(delta_layer_corrente))
+                #delta_layer_corrente_media.append(np.average(delta_layer_corrente))
 
                 gradient_tot = gradient_tot / batch_size
                 #regolarizzazione di thikonov
@@ -265,7 +268,7 @@ class neural_network:
                 #update weights
                 layer.w_matrix[:, j],  layer.Delta_w_old[:,j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient, regularizer, momentum)
             
-            delta_layer_succesivo = delta_layer_corrente_media
+            delta_layer_succesivo = delta_layer_corrente
 
     #return TRUE if this is the best model
     def validation(self,validation_set, penalty_term):
@@ -274,7 +277,8 @@ class neural_network:
         output_NN = np.zeros(validation_set_output.shape)
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
         loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1], penalty_term)
-        return loss_validation
+        acc = accuracy(validation_set_output, output_NN)
+        return acc, loss_validation
 
     def penalty_NN(self):
         penalty = 0

@@ -9,20 +9,20 @@ from random import randint
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=[100]
+num_epoch=[500]
 filename = "dati.csv"
-batch_array=[32, 62]
+batch_array=[3, 20, 62]
 dim_output = 1
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.01, 0.04, 0.065, 0.2, 0.5, 1, 3, 4]
-alfa = [0.5, 0.65, 0.9]
-v_lambda = [0, 0.001,0.0001]
-fun=["sigmoidal", "tanh"]
-fun_out=["sigmoidal", "tanh"]
-weight=["random","uniform"]
+learning_rate = [0.44]
+alfa = [0.44, 0.55]
+v_lambda = [0]
+fun = ["sigmoidal"]
+fun_out=["tanh", "sigmoidal"]
+weight=["uniform", "random"]
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
@@ -36,6 +36,6 @@ training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput, 
 newInput=matriceinput[0]
 dim_input=np.size(newInput) - dim_output
 
-nj=[[dim_input,2,dim_output,0], [dim_input,5,dim_output,0], [dim_input,2,3,dim_output,0], [dim_input,3,5,dim_output,0],[dim_input,3,6,dim_output,0] ]
+nj=[[dim_input,2, dim_output,0], [dim_input,3,dim_output,0], [dim_input,4,dim_output,0]]
 
 model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight)

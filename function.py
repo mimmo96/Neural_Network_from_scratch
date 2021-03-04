@@ -6,7 +6,7 @@ def weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
     if type_weight=="random":
         #[-intervallo,intervallo]
-        return np.random.uniform(-0.7, 0.7)
+        return np.random.uniform(-0.1, 0.1)
 
     if type_weight=="uniform":
         #[-1/sqrt(fan-in),1/sqrt(fan-out)]
