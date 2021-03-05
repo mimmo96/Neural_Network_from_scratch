@@ -7,20 +7,22 @@ from Model_selection import model_selection
 from random import randint
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
-
+from sklearn.preprocessing import LabelEncoder
+import Matrix_io
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=[200]
+num_epoch=[100]
 filename = "dati.csv"
+file_name_test = "test_set.csv"
 batch_array=[1]
 dim_output = 1
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [2,0.5,0.001,0.00095,0.7]
-alfa = [0.44, 0.6,0]
+learning_rate = [1, 2,0.44,0.01, 0.075, 0.5,0.25]
+alfa = [0, 0.5, 0.6]
 v_lambda = [0]
 fun = ["sigmoidal","tanh"]
 fun_out=["tanh", "sigmoidal"]
@@ -28,19 +30,49 @@ weight=["uniform", "random"]
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
-matriceinput= leggifile.leggi(filename)
-one=OneHotEncoder(sparse=False)
-filename = "dati.csv"
-matriceinput= leggifile.leggi(filename)
 
-matriceinput=one.fit_transform(matriceinput[:,:6])
-#matriceinput = function.normalize_input(matriceinput,dim_output)
+training_set = leggifile.leggi(filename)
+validation_set = leggifile.leggi(file_name_test)
+test_set = validation_set
+
+one = OneHotEncoder(sparse=False)
+########################
+
+training_set_X = one.fit_transform(training_set[:, :-1])
+tmp = np.append(training_set_X,np.zeros([len(training_set_X),1]),1)
+tmp[:, -1] = training_set[:, -1]
+training_set = tmp
+
+
+validation_set_X = one.fit_transform(validation_set[:,:-1])
+tmp = np.append(validation_set_X,np.zeros([len(validation_set_X),1]),1)
+tmp[:, -1] = validation_set[:, -1]
+validation_set = tmp
+'''
+label=LabelEncoder()
+
+training_label_out= label.fit_transform(training_set[:, -1])
+validation_label_out=label.fit_transform(validation_set[:, -1])
+test_label_out=label.fit_transform(test_set[:, -1])
+
+print("training_label:",training_label_out.shape)
+
+training_set = one.fit_transform(training_set)
+validation_set = one.fit_transform(validation_set)
+'''
+test_set = one.fit_transform(training_set)
+
+#training_set = function.normalize_input(training_set,dim_output)
 
 #divido il data set in training,validation,test
-training_set, validation_set, test_set = leggifile.divide_exaples(matriceinput, dim_output)
-
-newInput=matriceinput[0]
+#training_set, validation_set, test_set = leggifile.divide_exaples(training_set, dim_output)
+newInput=training_set[0]
 dim_input=np.size(newInput) - dim_output
+
+training_set = Matrix_io.Matrix_io(training_set, dim_output)
+validation_set = Matrix_io.Matrix_io(validation_set, dim_output)
+test_set = Matrix_io.Matrix_io(test_set, dim_output)
+
 
 nj=[[dim_input,2, dim_output,0], [dim_input,3,dim_output,0], [dim_input,4,dim_output,0]]
 

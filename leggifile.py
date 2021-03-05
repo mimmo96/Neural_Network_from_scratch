@@ -35,7 +35,7 @@ def leggi(filename):
 
 def divide_exaples(matrix_input, columns_output):
     rows = matrix_input.shape[0]
-    training_size = rows // 2 
+    training_size = rows*3 // 4 
     validation_size = (rows - training_size) // 2
 
     training = Matrix_io.Matrix_io(matrix_input[0:training_size, :], columns_output)
