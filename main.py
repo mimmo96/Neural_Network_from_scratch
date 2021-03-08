@@ -11,7 +11,7 @@ import Matrix_io
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=[100]
+num_epoch=[400]
 filename = "dati.csv"
 file_name_test = "test_set.csv"
 batch_array=[124]
@@ -20,11 +20,11 @@ dim_output = 1
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [2,4,0.1,0.44,0.01, 0.075, 0.5,0.25]
-alfa = [0,0.5, 0.8]
+learning_rate = [0.8]
+alfa = [0.9]
 v_lambda = [0]
-fun = ["tanh"]
-fun_out=["tanh"]
+fun = ["sigmoidal"]
+fun_out=["sigmoidal"]
 weight=["random"]
 #-------------------------------FINE PARAMETRI------------------------------
 
