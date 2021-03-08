@@ -221,14 +221,14 @@ def LOSS(output, output_expected, example_cardinality,num_output, penalty_term):
     return mse
 
 #sono due vettori
-def accuracy(real_matrix, matrix):
-    a = real_matrix - matrix
+def accuracy(fun,output_expected, output_NN):
+    output_NN=sign(fun,output_NN)
+    a = output_expected - output_NN 
     count=0
     for result in a:
         if (result==0):
             count=count+1
-    return (np.divide(count,np.size(real_matrix))*100)
-        
+    return (np.divide(count,np.size(output_expected))*100)
 
 #restituisce un array di matrici
 #data: matrice

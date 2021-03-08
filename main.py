@@ -7,7 +7,6 @@ from Model_selection import model_selection
 from random import randint
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
 import Matrix_io
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
@@ -15,18 +14,18 @@ import Matrix_io
 num_epoch=[100]
 filename = "dati.csv"
 file_name_test = "test_set.csv"
-batch_array=[1]
+batch_array=[124]
 dim_output = 1
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [1, 2,0.44,0.01, 0.075, 0.5,0.25]
-alfa = [0, 0.5, 0.6]
+learning_rate = [2,4,0.1,0.44,0.01, 0.075, 0.5,0.25]
+alfa = [0,0.5, 0.8]
 v_lambda = [0]
-fun = ["sigmoidal","tanh"]
-fun_out=["tanh", "sigmoidal"]
-weight=["uniform", "random"]
+fun = ["tanh"]
+fun_out=["tanh"]
+weight=["random"]
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
@@ -36,31 +35,23 @@ validation_set = leggifile.leggi(file_name_test)
 test_set = validation_set
 
 one = OneHotEncoder(sparse=False)
+label=LabelEncoder()
 ########################
 
-training_set_X = one.fit_transform(training_set[:, :-1])
+training_set_X = one.fit_transform(training_set[:,:-1])
 tmp = np.append(training_set_X,np.zeros([len(training_set_X),1]),1)
-tmp[:, -1] = training_set[:, -1]
+tmp[:, -1] = label.fit_transform(training_set[:, -1])
 training_set = tmp
-
 
 validation_set_X = one.fit_transform(validation_set[:,:-1])
 tmp = np.append(validation_set_X,np.zeros([len(validation_set_X),1]),1)
-tmp[:, -1] = validation_set[:, -1]
+tmp[:, -1] = label.fit_transform(validation_set[:, -1])
 validation_set = tmp
-'''
-label=LabelEncoder()
 
-training_label_out= label.fit_transform(training_set[:, -1])
-validation_label_out=label.fit_transform(validation_set[:, -1])
-test_label_out=label.fit_transform(test_set[:, -1])
-
-print("training_label:",training_label_out.shape)
-
-training_set = one.fit_transform(training_set)
-validation_set = one.fit_transform(validation_set)
-'''
-test_set = one.fit_transform(training_set)
+test_set_X = one.fit_transform(test_set[:,:-1])
+tmp = np.append(test_set_X,np.zeros([len(test_set_X),1]),1)
+tmp[:, -1] = label.fit_transform(test_set[:, -1])
+test_set = tmp
 
 #training_set = function.normalize_input(training_set,dim_output)
 

@@ -58,7 +58,7 @@ class neural_network:
                 if self.type_problem != "Regression":
                     for nj in range(layer.nj):
                         output[nj]=layer.output(self.fun_out, x_input)
-                    output = sign(self.fun_out, output)
+                    #output = sign(self.fun_out, output)
                 else:
                     for nj in range(layer.nj):
                         output[nj]=layer.net(nj, x_input)
@@ -140,7 +140,7 @@ class neural_network:
             
             if (i % 5 == 0):
                 #calcolo la loss sulla validazione e me la salvo nell'array
-                acc_validation, best_loss_validation = self.validation(validation_set, penalty_term)
+                acc_validation, best_loss_validation = self.validation(self.fun_out,validation_set, penalty_term)
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
@@ -148,8 +148,10 @@ class neural_network:
             # oppure se ho un errore troppo grande o troppo piccolo
             if(validation_stop==0 | (math.isnan(best_loss_validation)) | (math.isnan(best_loss_validation)) | 
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
+                print("INTERROMPO!")
                 break
-        acc=accuracy(training_set.output(),output_NN)
+
+        acc=accuracy(self.fun_out,training_set.output(),output_NN)
         titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc)) + "; acc_val: " + str(int(acc_validation))
         #grafico training
         plt.title(titolo)
@@ -169,66 +171,7 @@ class neural_network:
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 
         print("epoch:",epochs," batch_size:",batch_size," alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  layer:",self.nj, " function:",self.function, " weight:", self.type_weight)
-        #print("errore training: \n" ,errore )
-        #print("loss: \n",loss_epochs)
-        #print("output previsto: \n",training_set_output, "\noutput effettivo: \n", output_NN )
-        
-        '''
-        output_NN = np.zeros(validation_set.output().shape)
-        self.ThreadPool_Forward(validation_set.input(), validation_set.input().shape[0], output_NN, True)
-        print("----------------------------------------------------------------")
-        print( "validation_set", validation_set.output(),"\nerror_best_model", best_min_err_validation, "\nbest model ", output_NN)
-        print("----------------------------------------------------------------")
-        '''
-    '''
-    def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
-        #parto dall'ultimo livello fino ad arrivare al primo
-        for i in range(np.size(self.struct_layers) - 1, -1, -1):
-            layer = self.struct_layers[i]
-            delta = np.empty([layer.nj,batch_size],float)
-            der_sig=np.empty(batch_size,float)
-           
-            #per ogni nodo di ogni layer
-            for j in range(0, layer.nj):
-                #outputlayer
-                if i == (np.size(self.struct_layers) - 1):
-                    if self.type_problem == "Regression":
-                        delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
-                    else: 
-                        delta[j,:] = _classification(layer.net_matrix(j), output_NN[:,j], training_set_output[:,j], self.function)
-                    ##################### da commentare ##########################
-                    #max_row = index_matrix+batch_size
-                    #delta=(d-o)
-                    #delta[j,:] = der_loss( output_NN[index_matrix:max_row,j],training_set_output[index_matrix:max_row,j] )
-                    ##############################################################
-                #hiddenlayer
-                else:
-                    der_sig = _derivate_activation_function(layer.net_matrix(j),self.function)
-                    #product è un vettore delta*pesi
-                    product = delta_out.T.dot(self.struct_layers[i + 1].w_matrix[j, :])
-                    #delta=Sommatoria da 0 a batch_size di delta_precedenti*pesi
-                    for k in range(batch_size):
-                        delta[j,k]=np.dot(product[k],der_sig[k])
-                
-                gradient = -np.dot(delta[j,:],layer.x)
-                gradient = np.divide(gradient,batch_size)
-                #regolarizzazione di thikonov
-                temp=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
-                temp[temp.shape[0]-1]=0
-                gradient = gradient - temp
-                
-                Dw_new = np.dot(gradient, self.learning_rate)
-                #momentum
-                #d_new=d_new+alfa*delta_old
-                Dw_new = np.add(Dw_new, np.dot(self.alfa, layer.Delta_w_old[:,j]))
-                layer.Delta_w_old[:,j] = Dw_new
-                #update weights
-                layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], Dw_new)
-            delta_out = delta
-
-    def DeltaW_new(self,Dw_new,D_w_old):
-        return np.add(Dw_new, np.dot(self.alfa, D_w_old))
-    '''
+    
     #training_set_output.size() == batch_size 
     #output_NN.size() == batch_size 
     def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
@@ -266,18 +209,18 @@ class neural_network:
                 momentum = self.alfa*layer.Delta_w_old[:,j]
 
                 #update weights
-                layer.w_matrix[:, j],  layer.Delta_w_old[:,j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient, regularizer, momentum)
+                layer.w_matrix[:, j],  layer.Delta_w_old[:,j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient_tot, regularizer, momentum)
             
             delta_layer_succesivo = delta_layer_corrente
 
     #return TRUE if this is the best model
-    def validation(self,validation_set, penalty_term):
+    def validation(self,fun_out,validation_set, penalty_term):
         validation_set_input = validation_set.input()
         validation_set_output = validation_set.output()
         output_NN = np.zeros(validation_set_output.shape)
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
         loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1], penalty_term)
-        acc = accuracy(validation_set_output, output_NN)
+        acc = accuracy(fun_out,validation_set_output, output_NN)
         return acc, loss_validation
 
     def penalty_NN(self):
