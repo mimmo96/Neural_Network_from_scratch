@@ -2,7 +2,6 @@ import numpy as np
 import csv
 import leggifile
 import function
-import neural_network
 from Model_selection import model_selection
 from random import randint
 from sklearn.preprocessing import LabelEncoder
@@ -14,7 +13,7 @@ import Matrix_io
 num_epoch=[400]
 filename = "monks/monks1.train.csv"
 file_name_test = "monks/monks1.test.csv"
-batch_array=[1]
+batch_array=[124]
 dim_output = 1
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)

@@ -116,7 +116,6 @@ class neural_network:
             #divide gli esempi in matrici fatte da batch_size parti
             mini_batch = training_set.create_batch(batch_size)
             #loss sull'intero ciclo di batch
-            #print("---------------")
             
             #se usiamo learning rate variabile lo aggiorno
             if self.tau != 0:
@@ -146,7 +145,7 @@ class neural_network:
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
-                   #se ho raggiunto lo stesso valore o maggiore del precedente per 3 cicli consecutivi nella validation mi fermo
+            #se ho raggiunto lo stesso valore o maggiore del precedente per 3 cicli consecutivi nella validation mi fermo
             # oppure se ho un errore troppo grande o troppo piccolo
             if(validation_stop==0 | (math.isnan(best_loss_validation)) | (math.isnan(best_loss_validation)) | 
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
@@ -190,8 +189,7 @@ class neural_network:
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 
         print("epoch:",epochs," batch_size:",batch_size," alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  layer:",self.nj, " function:",self.function, " weight:", self.type_weight)
     
-    #training_set_output.size() == batch_size 
-    #output_NN.size() == batch_size 
+
     def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
         delta_layer_succesivo = np.empty([0,0])
         #matrice dimensione = nodi layer corrente X numero esempi
