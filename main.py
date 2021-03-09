@@ -12,8 +12,8 @@ import Matrix_io
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
 num_epoch=[400]
-filename = "dati.csv"
-file_name_test = "test_set.csv"
+filename = "monks/monks1.train.csv"
+file_name_test = "monks/monks1.test.csv"
 batch_array=[124]
 dim_output = 1
 
@@ -65,6 +65,6 @@ validation_set = Matrix_io.Matrix_io(validation_set, dim_output)
 test_set = Matrix_io.Matrix_io(test_set, dim_output)
 
 
-nj=[[dim_input,2, dim_output,0], [dim_input,3,dim_output,0], [dim_input,4,dim_output,0]]
+nj=[[dim_input,4, dim_output,0], [dim_input,15,dim_output,0], [dim_input,20,dim_output,0]]
 
 model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight)
