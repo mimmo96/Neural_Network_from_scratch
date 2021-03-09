@@ -110,6 +110,7 @@ class neural_network:
         #variabili per il grafico validation
         validation_array=np.empty(0)
         epoch_validation=np.empty(0)
+        accuracy_array=np.empty(0)
 
         for i in range(epochs):
             #divide gli esempi in matrici fatte da batch_size parti
@@ -133,9 +134,10 @@ class neural_network:
             self.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
             penalty_term = self.penalty_NN()
             loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1], penalty_term)
-            
+            acc=accuracy(self.fun_out,training_set.output(),output_NN)
             #salvo nell'array i valori del training
             loss_array=np.append(loss_array,loss_training)
+            accuracy_array=np.append(accuracy_array,acc)
             epoch_array=np.append(epoch_array,i)
             
             if (i % 5 == 0):
@@ -151,8 +153,10 @@ class neural_network:
                 print("INTERROMPO!")
                 break
 
+        #------------GRAFICO TRAINING-------------------------------
+
         acc=accuracy(self.fun_out,training_set.output(),output_NN)
-        titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc)) + "; acc_val: " + str(int(acc_validation))
+        titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc*100)) + "; acc_val: " + str(int(acc_validation*100))
         #grafico training
         plt.title(titolo)
         plt.xlabel("Epoch")
@@ -163,10 +167,24 @@ class neural_network:
         plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         file='figure/training'+str(num_training)+".png"
-        plt.savefig(file,format='png',dpi=150)
+        plt.savefig(file,format='png',dpi=200)
         plt.close('all')
         
+        #--------------GRAFICO ACCURATEZZA-----------------------------
+
+        titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc*100)) + "; acc_val: " + str(int(acc_validation*100))
+        #grafico training
+        plt.title(titolo)
+        plt.xlabel("Epoch")
+        plt.ylabel("ACCURATEZZA")
+        plt.plot(epoch_array,accuracy_array)
+
+        file='figure/training'+str(num_training)+"-accuratezza"+".png"
+        plt.savefig(file,format='png',dpi=200)
+        plt.close('all')
         
+        #----------------------------------------------------------------
+
         output_NN = np.zeros(training_set_output.shape)
         self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 

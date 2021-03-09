@@ -90,8 +90,9 @@ def _logistic (x):
     '''
         logistic activation function: logistic(x) = 1 / (1 + exp(-x))
     '''
-    #print("LA X DI LOGISTIC è: ", x)
-    return 1 / ( 1 + math.exp(-x) )
+    # return 1 / ( 1 + math.exp(-x) )
+    div=np.divide(1.0,1+np.exp(-x))
+    return div
 
 def _tanh (x):
     '''
@@ -126,7 +127,7 @@ def _logistic_derivative (x):
     '''
         logistic activation function derivative: logistic'(x) = logistic(x) * ( 1 - logistic(x) )
     '''
-    return _logistic(x) * ( 1 - _logistic (x) )
+    return  _logistic(x) * ( 1 - _logistic(x) )
 
 def _tanh_derivative (x):
     '''
@@ -228,7 +229,7 @@ def accuracy(fun,output_expected, output_NN):
     for result in a:
         if (result==0):
             count=count+1
-    return (np.divide(count,np.size(output_expected))*100)
+    return (np.divide(count,np.size(output_expected)))
 
 #restituisce un array di matrici
 #data: matrice

@@ -36,7 +36,7 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                         NN.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
                                         loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1], penalty_term)
                                         acc=accuracy(fun_out,training_set.output(),output_NN)
-                                        print("loss:", loss_training,"\naccuratezza:", acc,"\n")
+                                        print("loss:", loss_training,"\naccuratezza:", acc*100,"\n")
                                         
                                         if best_loss_training == -1:
                                             best_loss_training = loss_training

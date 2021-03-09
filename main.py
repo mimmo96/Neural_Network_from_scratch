@@ -14,7 +14,7 @@ import Matrix_io
 num_epoch=[400]
 filename = "monks/monks1.train.csv"
 file_name_test = "monks/monks1.test.csv"
-batch_array=[124]
+batch_array=[1]
 dim_output = 1
 
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
@@ -53,7 +53,7 @@ tmp = np.append(test_set_X,np.zeros([len(test_set_X),1]),1)
 tmp[:, -1] = label.fit_transform(test_set[:, -1])
 test_set = tmp
 
-#training_set = function.normalize_input(training_set,dim_output)
+training_set = function.normalize_input(training_set,dim_output)
 
 #divido il data set in training,validation,test
 #training_set, validation_set, test_set = leggifile.divide_exaples(training_set, dim_output)
