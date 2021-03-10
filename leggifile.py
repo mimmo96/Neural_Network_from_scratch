@@ -4,35 +4,69 @@ import argparse
 import Matrix_io
 parser = argparse.ArgumentParser(description='Process some integers.')
 
-def leggi(filename):
+def leggi(problem_type,filename):
 
     with open(filename, newline='') as csvfile:
         data = list(csv.reader(csvfile))
 
-    #numero di valori in input
-    righe = len(data)
-    colonne = 7
-    #array che conterra [#input][#array di valori interi]
-    matriceinput=np.zeros([righe, colonne])
+    #file di classificazione
+    if(problem_type=="classification"):
+        #numero di valori in input
+        righe = len(data)
+        colonne = 7
+        #array che conterra [#input][#array di valori interi]
+        matriceinput=np.zeros([righe, colonne])
 
-    #scandisco le righe e salvo i valori in un array
-    for i in range(righe):
-        stringa=data[i][0]
-        stringa=stringa.split()
-        stringa[np.size(stringa)-1]=0
-        temp=stringa[0]
-   
-        for k in range (0,np.size(stringa)-1):
-            if(k==np.size(stringa)-2):
-                stringa[k]=temp
-            else:
-                stringa[k]=float(stringa[k+1])
-   
-        for j in range(colonne):
-                matriceinput[i,j] = stringa[j]
+        #scandisco le righe e salvo i valori in un array
+        for i in range(righe):
+            stringa=data[i][0]
+            stringa=stringa.split()
+            stringa[np.size(stringa)-1]=0
+            temp=stringa[0]
+    
+            for k in range (0,np.size(stringa)-1):
+                if(k==np.size(stringa)-2):
+                    stringa[k]=temp
+                else:
+                    stringa[k]=float(stringa[k+1])
+    
+            for j in range(colonne):
+                    matriceinput[i,j] = stringa[j]
 
-    return matriceinput
+        return matriceinput
+    
+    #file di regressione
+    else:
+        #numero di valori in input
+        righe = len(data)
+        colonne = 12
+        #array che conterra [#input][#array di valori interi]
+        matriceinput=np.zeros([righe-7, colonne])
 
+        #scandisco le righe e salvo i valori in un array
+        #parto da 7 come indice perchè escludo i commenti iniziali
+        for i in range(7,righe):
+            array = np.array(data[i], dtype="float")
+    
+            stringa=data[i]
+            '''
+            stringa=data[i][0]
+            print("STRING:",stringa)
+            stringa=stringa.split()
+            stringa[np.size(stringa)-1]=0
+            temp=stringa[0]
+            '''   
+            #trasformo in float  
+            cazzo=np.zeros(np.size(stringa)-1)
+            for k in range (0,np.size(stringa)-1):
+                cazzo[k]=float(stringa[k+1])
+
+            for j in range(colonne):
+                matriceinput[i-7,j] = cazzo[j]
+
+        return matriceinput
+
+#separo gli esempi di training
 def divide_exaples(matrix_input, columns_output):
     rows = matrix_input.shape[0]
     training_size = rows*3 // 4 

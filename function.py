@@ -210,6 +210,7 @@ def normalize_input(x,dim_output):
     x[:, 0:(colonne-dim_output)] = x_input
     #print(x)
     return x
+
 #w = matrice pesi dell'output layer
 def LOSS(output, output_expected, example_cardinality,num_output, penalty_term):
     #((d-o)^2)/2*num_ex*batch
@@ -222,13 +223,19 @@ def LOSS(output, output_expected, example_cardinality,num_output, penalty_term):
     return mse
 
 #sono due vettori
-def accuracy(fun,output_expected, output_NN):
-    output_NN=sign(fun,output_NN)
+def accuracy(type_problem,fun,output_expected, output_NN):
+
+    if(type_problem=="classification"):
+        output_NN=sign(fun,output_NN)
+
     a = output_expected - output_NN 
+    a = np.sum(a,axis=1)
+
     count=0
     for result in a:
         if (result==0):
             count=count+1
+    
     return (np.divide(count,np.size(output_expected)))
 
 #restituisce un array di matrici
@@ -264,5 +271,12 @@ def sign(fun,vector):
                 vector[i]= 1
             else:
                 vector[i]= 0
+
+        if fun=="zero_one_h":
+            if vector[i] >= 0.5:
+                vector[i]= 1
+            else:
+                vector[i]= 0
+
     return vector
 

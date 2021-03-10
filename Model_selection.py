@@ -2,7 +2,7 @@ import neural_network
 import numpy as np
 from function import LOSS, accuracy
 
-def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_array, epoch_array,fun,fun_output, weight):
+def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_array, epoch_array,fun,fun_output, weight,type_problem):
     
     #inizializzo i parametri che mi serviranno per salvare i dati dopo il training (per la scelta del miglior modello)
     best_min_validation = -1   
@@ -26,7 +26,7 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                         #salvo il numero di layer 
                                         numero_layer=np.size(units)-2
                                         #creo la neural network con i parametri passati
-                                        NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, "classification") 
+                                        NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, type_problem) 
                                         #restituisce il minimo errore della validation
                                         NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
                                         
@@ -35,7 +35,7 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                         output_NN = np.zeros(training_set.output().shape)
                                         NN.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
                                         loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1], penalty_term)
-                                        acc=accuracy(fun_out,training_set.output(),output_NN)
+                                        acc=accuracy(type_problem,fun_out,training_set.output(),output_NN)
                                         print("loss:", loss_training,"\naccuratezza:", acc*100,"\n")
                                         
                                         if best_loss_training == -1:
