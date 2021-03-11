@@ -141,19 +141,7 @@ def _zero_one_tanh_derivative (x):
     '''
     return 1/2 * ( 1 - (math.tanh (x))**2 )
 
-'''
-# funzione sigmoidale
-def sigmoid(x):
-    if -x > np.log(np.finfo(type(x)).max):
-        return 0.0
-    return np.divide(1, np.add(1, np.exp(-x)))
 
-# derivata funzione sigmoidale
-def derivate_sigmoid(x):
-    sig = sigmoid(x)
-    return np.dot(sig, np.subtract(1, sig))
-
-'''
 def choose_function(fun,net):
     if fun=="sigmoidal":
         return _logistic(net)
@@ -212,14 +200,22 @@ def normalize_input(x,dim_output):
     return x
 
 #w = matrice pesi dell'output layer
-def LOSS(output, output_expected, example_cardinality,num_output, penalty_term):
+def LOSS(output, output_expected, batch_size, penalty_term):
     #((d-o)^2)/2*num_ex*batch
     mse=np.power(np.subtract(output, output_expected),2)
     mse = np.sum(mse,axis=0)
     mse = np.sum(mse)
-    mse = np.divide(mse,np.dot(example_cardinality,num_output)*2)
+    mse = np.divide(mse,batch_size)
     #thikonov
     mse += penalty_term
+    return mse
+
+def MEE(output, output_expected, batch_size):
+    #norma euclidea
+    mse=np.linalg.norm(np.subtract(output, output_expected))
+    mse = np.sum(mse,axis=0)
+    mse = np.sum(mse)
+    mse = np.divide(mse,batch_size)
     return mse
 
 #sono due vettori
@@ -227,10 +223,9 @@ def accuracy(type_problem,fun,output_expected, output_NN):
 
     if(type_problem=="classification"):
         output_NN=sign(fun,output_NN)
-
+    
     a = output_expected - output_NN 
     a = np.sum(a,axis=1)
-
     count=0
     for result in a:
         if (result==0):

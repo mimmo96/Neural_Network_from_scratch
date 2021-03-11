@@ -96,6 +96,7 @@ class neural_network:
         #divido il training in input e output
         training_set_input = training_set.input() 
         training_set_output = training_set.output()
+
         #print("----------------------MEDIA OUTPUT TRAINING SET ----------------------------------\n", np.sum(training_set_output) / training_set_output.shape[0])
         best_loss_validation=-1
         validation_stop=3
@@ -124,7 +125,7 @@ class neural_network:
             for batch in mini_batch:
                 #creo array output_NN che mi servirà per memorizzare i risultati di output
                 output_NN = np.zeros(batch.output().shape)
-                self.ThreadPool_Forward(batch.input(),0, batch_size, output_NN) 
+                self.ThreadPool_Forward(batch.input(),0, batch_size, output_NN)   
                 #----------------------------------questo 0  in backprop non serve!!!!!-----------------------------------------------------------
                 self.backprogation(0, output_NN, batch.output(), batch_size)
 
@@ -132,7 +133,7 @@ class neural_network:
             output_NN = np.zeros(training_set.output().shape)
             self.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
             penalty_term = self.penalty_NN()
-            loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1], penalty_term)
+            loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0], penalty_term)
             acc=accuracy(self.type_problem,self.fun_out,training_set.output(),output_NN)
             #salvo nell'array i valori del training
             loss_array=np.append(loss_array,loss_training)
@@ -153,9 +154,12 @@ class neural_network:
                 break
 
         #------------GRAFICO TRAINING-------------------------------
-
-        acc=accuracy( self.type_problem,self.fun_out,training_set.output(),output_NN)
-        titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc*100)) + "; acc_val: " + str(int(acc_validation*100))
+        if(self.type_problem=="classification"):
+            acc=accuracy( self.type_problem,self.fun_out,training_set.output(),output_NN)
+            titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc*100)) + "; acc_val: " + str(int(acc_validation*100))
+        else:
+            titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L: linear\nweight:"+str(self.type_weight)
+   
         #grafico training
         plt.title(titolo)
         plt.xlabel("Epoch")
@@ -170,17 +174,17 @@ class neural_network:
         plt.close('all')
         
         #--------------GRAFICO ACCURATEZZA-----------------------------
+        if(self.type_problem=="classification"):
+            titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc*100)) + "; acc_val: " + str(int(acc_validation*100))
+            #grafico training
+            plt.title(titolo)
+            plt.xlabel("Epoch")
+            plt.ylabel("ACCURATEZZA")
+            plt.plot(epoch_array,accuracy_array)
 
-        titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc*100)) + "; acc_val: " + str(int(acc_validation*100))
-        #grafico training
-        plt.title(titolo)
-        plt.xlabel("Epoch")
-        plt.ylabel("ACCURATEZZA")
-        plt.plot(epoch_array,accuracy_array)
-
-        file='figure/training'+str(num_training)+"-accuratezza"+".png"
-        plt.savefig(file,format='png',dpi=200)
-        plt.close('all')
+            file='figure/training'+str(num_training)+"-accuratezza"+".png"
+            plt.savefig(file,format='png',dpi=200)
+            plt.close('all')
         
         #----------------------------------------------------------------
 
@@ -279,7 +283,7 @@ class neural_network:
         validation_set_output = validation_set.output()
         output_NN = np.zeros(validation_set_output.shape)
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
-        loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1], penalty_term)
+        loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0], penalty_term)
         acc = accuracy( self.type_problem,fun_out,validation_set_output, output_NN)
         return acc, loss_validation
 

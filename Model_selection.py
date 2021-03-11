@@ -1,6 +1,6 @@
 import neural_network
 import numpy as np
-from function import LOSS, accuracy
+from function import LOSS, accuracy,MEE
 
 def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_array, epoch_array,fun,fun_output, weight,type_problem):
     
@@ -34,9 +34,13 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                         penalty_term = NN.penalty_NN()
                                         output_NN = np.zeros(training_set.output().shape)
                                         NN.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
-                                        loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0],training_set.output().shape[1], penalty_term)
-                                        acc=accuracy(type_problem,fun_out,training_set.output(),output_NN)
-                                        print("loss:", loss_training,"\naccuratezza:", acc*100,"\n")
+                                        loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0], penalty_term)
+                                        if(type_problem=="classification"):
+                                            acc=accuracy(type_problem,fun_out,training_set.output(),output_NN)
+                                            print("loss:", loss_training,"\naccuratezza:", acc*100,"\n")
+                                        else:
+                                            mee=MEE(output_NN, training_set.output(), training_set.output().shape[0])
+                                            print("loss:", loss_training,"\nMEE:", mee,"\n")
                                         
                                         if best_loss_training == -1:
                                             best_loss_training = loss_training
@@ -65,7 +69,7 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
     validation_set_output = validation_set.output()
     output_NN = np.zeros(validation_set_output.shape)
     best_model.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
-    loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],validation_set_output.shape[1],penalty_term)
+    loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0],penalty_term)
     print("errore sul validation:",loss_validation)
     
     #ricalcolo il migliore modello sul test_set
@@ -73,7 +77,7 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
     test_set_output = test_set.output()
     output_NN = np.zeros(test_set_output.shape)
     best_model.ThreadPool_Forward(test_set_input, 0, test_set_input.shape[0], output_NN, True)
-    loss_test = LOSS(output_NN, test_set_output, test_set_output.shape[0],test_set_output.shape[1],penalty_term)
+    loss_test = LOSS(output_NN, test_set_output, test_set_output.shape[0],penalty_term)
     print("errore sui test:",loss_test)
 
     return best_model
