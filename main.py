@@ -60,7 +60,7 @@ newInput=training_set[0]
 dim_input=np.size(newInput) - dim_output
 
 #cambio la divisione dei dati a seconda de lmodello che mi ritrovo ad affrontare
-if(problem_type=="classfication"):
+if(problem_type=="classification"):
     training_set = Matrix_io.Matrix_io(training_set, dim_output)
     validation_set = Matrix_io.Matrix_io(validation_set, dim_output)
     test_set = Matrix_io.Matrix_io(test_set, dim_output)
