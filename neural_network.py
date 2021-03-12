@@ -211,7 +211,7 @@ class neural_network:
                     #for k in range(batch_size):
                         #delta[j,k]=np.dot(product[k],der_sig[k])
                 
-                gradient = np.dot(delta[j,:],layer.x)
+                gradient = -np.dot(delta[j,:],layer.x)
                 gradient = np.divide(gradient,batch_size)
                 #regolarizzazione di thikonov
                 regularizer=np.dot(self.v_lambda,layer.w_matrix[:, j])

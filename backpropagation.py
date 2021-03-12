@@ -7,7 +7,7 @@ import numpy as np
 #type(type_function) = stringa
 def _delta_output_layer(output_expected, output_NN, net, type_function):
     derivata = choose_derivate_function(type_function, net)
-    return 2*derivata*(output_expected - output_NN)
+    return -2*derivata*(output_expected - output_NN)
 
 
 #CASO 2:
