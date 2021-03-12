@@ -10,21 +10,20 @@ import Matrix_io
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=[400]
-filename = "monks/monks1.train.csv"
+num_epoch=[50]
+filename = r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\CUP\ML-CUP20-TR.csv"
 file_name_test = "monks/monks1.test.csv"
-batch_array=[62]
-dim_output = 1
-problem_type="classification"
+dim_output = 2
+problem_type="Regression"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.8]
-alfa = [0.9]
-v_lambda = [0]
-fun = ["zero_one_h"]
+learning_rate = [0.01]
+alfa = [0]
+v_lambda = [0.001]
+fun = ["sigmoidal"]
 #fun_out non sarà considerata in caso di regressione
-fun_out=["zero_one_h"]
+fun_out=["Regression"]
 weight=["random"]
 #-------------------------------FINE PARAMETRI------------------------------
 
@@ -68,7 +67,8 @@ if(problem_type=="classification"):
 else:
     training_set, validation_set, test_set = leggifile.divide_exaples(training_set, dim_output)
 
-nj=[[dim_input,4,dim_output,0],[dim_input,40,dim_output,0]]
+nj=[[dim_input,20,dim_output,0]]
+batch_array=[training_set.input().shape[0]]
 
 #prima di fare la model selection controllo se il batch è di dimensione giusta
 for i in batch_array:

@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+from scipy.special import expit
 
 def weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
@@ -78,7 +79,7 @@ def _relu (x):
     '''
         REctified Linear Unit acivation function: relu(x) = max(0,x)
     '''
-    return max(0,x)
+    return np.maximum(0,x)
 
 def _identity (x):
     '''
@@ -91,20 +92,20 @@ def _logistic (x):
         logistic activation function: logistic(x) = 1 / (1 + exp(-x))
     '''
     # return 1 / ( 1 + math.exp(-x) )
-    div=np.divide(1.0,1+np.exp(-x))
-    return div
+    #div=np.divide(1.0,1+np.exp(-x))
+    return expit(x)
 
 def _tanh (x):
     '''
         tanh activation function (returns hyperbolic tangent of the input) = tanh(x)
     '''
-    return math.tanh (x)
+    return np.tanh (x)
 
 def _zero_one_tanh (x):
     '''
         tanh activation function which output is from zero to one: _zero_one_tanh(x) = (1 + tanh(x))/2
     '''
-    return (1 + math.tanh (x))/2
+    return (1 + np.tanh (x))/2
 
 ########################################
 #   ACTIVATION FUNCTIONS DERIVATIVES   #
@@ -115,7 +116,7 @@ def _relu_derivative (x):
         REctified Linear Unit activation function derivative: relu'(x) = 0 if x<0
                                                               relu'(x) = 1 if x>=0
     '''
-    return 0 if x<=0 else 1
+    return (x>=0).view('i1')
 
 def _identity_derivative (x):
     '''
@@ -133,13 +134,13 @@ def _tanh_derivative (x):
     '''
         tanh activation function derivatives: tanh'(x) = 1 - (tanh(x))**2
     '''
-    return 1 - (math.tanh (x))**2
+    return 1 - (np.tanh (x))**2
 
 def _zero_one_tanh_derivative (x):
     '''
         zero-one tanh activation function derivatives: tanh'(x) = 1/2 * ( 1 - (tanh(x))**2 )
     '''
-    return 1/2 * ( 1 - (math.tanh (x))**2 )
+    return 1/2 * ( 1 - (np.tanh (x))**2 )
 
 
 def choose_function(fun,net):
@@ -157,6 +158,8 @@ def choose_function(fun,net):
     
     if fun=="zero_one_h":
         return _zero_one_tanh(net)
+    if fun == "Regression":
+        return net
 
 def choose_derivate_function(fun,net):
     if fun=="sigmoidal":
@@ -173,6 +176,9 @@ def choose_derivate_function(fun,net):
     
     if fun=="zero_one_h":
         return _zero_one_tanh_derivative(net)
+   
+    if fun == "Regression":
+        return 1
 
 def _derivate_activation_function(nets,type_fun):
     sig=np.empty(np.size(nets))

@@ -54,14 +54,8 @@ class neural_network:
             
             #output layer
             else:
-                output=np.zeros(layer.nj)
-                
-                if self.type_problem != "Regression":
-                    for nj in range(layer.nj):
-                        output[nj]=layer.output(self.fun_out, x_input)
-                else:
-                    for nj in range(layer.nj):
-                        output[nj]=layer.net(nj, x_input)
+                output = np.zeros(layer.nj)
+                output = layer.output(self.fun_out, x_input)
                 
             i = i - 1
         return output
@@ -127,7 +121,7 @@ class neural_network:
                 output_NN = np.zeros(batch.output().shape)
                 self.ThreadPool_Forward(batch.input(),0, batch_size, output_NN)   
                 #----------------------------------questo 0  in backprop non serve!!!!!-----------------------------------------------------------
-                self.backprogation(0, output_NN, batch.output(), batch_size)
+                self.backprogation(output_NN, batch.output(), batch_size)
 
             #calcolo la loss su tutto l'intero training
             output_NN = np.zeros(training_set.output().shape)
@@ -193,8 +187,8 @@ class neural_network:
         print("--------------------------TRAINING ",num_training," RESULT----------------------") 
         print("epoch:",epochs," batch_size:",batch_size," alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  layer:",self.nj, " function:",self.function, " weight:", self.type_weight)
     
-    '''
-    def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
+    
+    def backprogation(self, output_NN, training_set_output, batch_size):
         #parto dall'ultimo livello fino ad arrivare al primo
         for i in range(np.size(self.struct_layers) - 1, -1, -1):
             layer = self.struct_layers[i]
@@ -203,36 +197,44 @@ class neural_network:
            
             #per ogni nodo di ogni layer
             for j in range(0, layer.nj):
+                nets_batch = layer.net_matrix(j)
                 #outputlayer
                 if i == (np.size(self.struct_layers) - 1):
-                    if self.type_problem == "Regression":
-                        delta[j,:] = der_loss( output_NN[index_matrix:batch_size,j],training_set_output[index_matrix:max_row,j] )
-                    else: 
-                        delta[j,:] = _classification(layer.net_matrix(j), output_NN[:,j], training_set_output[:,j], self.function)
+                        delta[j,:] = bp._delta_output_layer(training_set_output[:,j], output_NN[:,j], nets_batch, self.fun_out)
                 #hiddenlayer
                 else:
-                    der_sig = _derivate_activation_function(layer.net_matrix(j),self.function)
+                    delta[j, :] = bp._delta_hidden_layer(delta_layer_succesivo.T, self.struct_layers[i + 1].w_matrix[j, :], nets_batch, self.function)
+                    #der_sig = _derivate_activation_function(layer.net_matrix(j),self.function)
                     #product è un vettore delta*pesi
-                    product = delta_out.T.dot(self.struct_layers[i + 1].w_matrix[j, :])
+                    #product = delta_out.T.dot(self.struct_layers[i + 1].w_matrix[j, :])
                     #delta=Sommatoria da 0 a batch_size di delta_precedenti*pesi
-                    for k in range(batch_size):
-                        delta[j,k]=np.dot(product[k],der_sig[k])
+                    #for k in range(batch_size):
+                        #delta[j,k]=np.dot(product[k],der_sig[k])
                 
-                gradient = -np.dot(delta[j,:],layer.x)
+                gradient = np.dot(delta[j,:],layer.x)
                 gradient = np.divide(gradient,batch_size)
                 #regolarizzazione di thikonov
-                temp=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
-                temp[temp.shape[0]-1]=0
-                gradient = gradient - temp
+                regularizer=np.dot(self.v_lambda,layer.w_matrix[:, j])
+                regularizer[regularizer.shape[0]-1]=0
                 
-                Dw_new = np.dot(gradient, self.learning_rate)
+                #momentum
+                momentum = self.alfa*layer.Delta_w_old[:,j]
+
+                #update weights
+                layer.w_matrix[:, j],  layer.Delta_w_old[:,j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient, regularizer, momentum)
+                #regolarizzazione di thikonov
+                #temp=np.dot(self.v_lambda,layer.w_matrix[:, j])*2
+                #temp[temp.shape[0]-1]=0
+                #gradient = gradient - temp
+                
+                #Dw_new = np.dot(gradient, self.learning_rate)
                 #momentum
                 #d_new=d_new+alfa*delta_old
-                Dw_new = np.add(Dw_new, np.dot(self.alfa, layer.Delta_w_old[:,j]))
-                layer.Delta_w_old[:,j] = Dw_new
+                #Dw_new = np.add(Dw_new, np.dot(self.alfa, layer.Delta_w_old[:,j]))
+                #layer.Delta_w_old[:,j] = Dw_new
                 #update weights
-                layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], Dw_new)
-            delta_out = delta
+                #layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], Dw_new)
+            delta_layer_succesivo = delta
 
     def DeltaW_new(self,Dw_new,D_w_old):
         return np.add(Dw_new, np.dot(self.alfa, D_w_old))
@@ -253,7 +255,7 @@ class neural_network:
                 for num_example in range(batch_size):
                     #outputlayer
                     if i == (np.size(self.struct_layers) - 1):
-                        delta = bp._delta_output_layer(training_set_output[num_example][j], output_NN[num_example][j], layer.net_matrix(j)[num_example], self.function)
+                        delta = bp._delta_output_layer(training_set_output[num_example][j], output_NN[num_example][j], layer.net_matrix(j)[num_example], self.fun_out)
                     #hiddenlayer
                     else:
                         delta = bp._delta_hidden_layer(delta_layer_succesivo[:, num_example ],self.struct_layers[i + 1].w_matrix[j, :], layer.net_matrix(j)[num_example], self.function)
@@ -276,7 +278,7 @@ class neural_network:
                 layer.w_matrix[:, j],  layer.Delta_w_old[:,j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient_tot, regularizer, momentum)
 
             delta_layer_succesivo = delta_layer_corrente
-    
+    '''
     #return TRUE if this is the best model
     def validation(self,fun_out,validation_set, penalty_term):
         validation_set_input = validation_set.input()
