@@ -6,9 +6,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import math
 from function import der_loss, LOSS, _classification,  _derivate_activation_function, sign, accuracy
-import graphycs
 from concurrent.futures import ThreadPoolExecutor
-import Matrix_io
 import backpropagation as bp
 
 class neural_network:
@@ -95,9 +93,6 @@ class neural_network:
         best_loss_validation=-1
         validation_stop=3
 
-        #layer migliori sulla validation
-        best_struct_layers = 0
-
         #variabili per il grafico training
         epoch_array=np.empty(0)
         loss_array=np.empty(0)
@@ -182,11 +177,8 @@ class neural_network:
         
         #----------------------------------------------------------------
 
-        output_NN = np.zeros(training_set_output.shape)
-        self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
-        print("--------------------------TRAINING ",num_training," RESULT----------------------") 
-        print("epoch:",epochs," batch_size:",batch_size," alfa:",self.alfa, "  lamda:", self.v_lambda, "  learning_rate:",self.learning_rate ,"  layer:",self.nj, " function:",self.function, " weight:", self.type_weight)
-    
+       # output_NN = np.zeros(training_set_output.shape)
+       # self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
     
     def backprogation(self, output_NN, training_set_output, batch_size):
         #parto dall'ultimo livello fino ad arrivare al primo

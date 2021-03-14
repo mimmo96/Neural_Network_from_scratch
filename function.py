@@ -207,11 +207,8 @@ def normalize_input(x,dim_output):
 
 #w = matrice pesi dell'output layer
 def LOSS(output, output_expected, batch_size, penalty_term):
-    #((d-o)^2)/2*num_ex*batch
-    mse=np.power(np.subtract(output, output_expected),2)
-    mse = np.sum(mse,axis=0)
-    mse = np.sum(mse)
-    mse = np.divide(mse,batch_size)
+    #MSE
+    mse= np.sum((output - output_expected)**2) / batch_size
     #thikonov
     mse += penalty_term
     return mse

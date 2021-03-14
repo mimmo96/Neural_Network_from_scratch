@@ -1,5 +1,4 @@
 import numpy as np
-import csv
 import leggifile
 import function
 from Model_selection import model_selection
@@ -10,18 +9,18 @@ import Matrix_io
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=[50]
-filename = r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\CUP\ML-CUP20-TR.csv"
-file_name_test = "monks/monks1.test.csv"
+num_epoch=[400]
+filename = "CUP\ML-CUP20-TR.csv"
+file_name_test = "CUP\ML-CUP20-TR.csv"
 dim_output = 2
 problem_type="Regression"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.01]
-alfa = [0]
+learning_rate = [0.0021435]
+alfa = [0.5]
 v_lambda = [0.001]
-fun = ["sigmoidal"]
+fun = ["tanh"]
 #fun_out non sarà considerata in caso di regressione
 fun_out=["Regression"]
 weight=["random"]
@@ -67,8 +66,8 @@ if(problem_type=="classification"):
 else:
     training_set, validation_set, test_set = leggifile.divide_exaples(training_set, dim_output)
 
-nj=[[dim_input,20,dim_output,0]]
-batch_array=[training_set.input().shape[0]]
+nj=[[dim_input,20,20,dim_output,0]]
+batch_array=[32,512]
 
 #prima di fare la model selection controllo se il batch è di dimensione giusta
 for i in batch_array:
