@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from scipy.special import expit
+from scipy.spatial import distance
 
 def weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
@@ -208,16 +209,19 @@ def normalize_input(x,dim_output):
 #w = matrice pesi dell'output layer
 def LOSS(output, output_expected, batch_size, penalty_term):
     #MSE
-    mse= np.sum((output - output_expected)**2) / batch_size
+    mse= np.subtract(output,output_expected)**2
+    mse = np.sum(mse,axis=0)
+    mse = np.sum(mse)
+    mse = np.divide(mse,2*batch_size)
     #thikonov
     mse += penalty_term
     return mse
 
 def MEE(output, output_expected, batch_size):
     #norma euclidea
-    mse=np.linalg.norm(np.subtract(output, output_expected))
-    mse = np.sum(mse,axis=0)
-    mse = np.sum(mse)
+    mse=0
+    for i in range (0,output_expected.shape[1]):
+        mse+=distance.euclidean(output[:,i], output_expected[:,i])
     mse = np.divide(mse,batch_size)
     return mse
 

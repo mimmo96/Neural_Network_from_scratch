@@ -1,6 +1,7 @@
 from os import fsdecode
 import numpy as np
 import Layer
+import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -159,6 +160,8 @@ class neural_network:
         plt.plot(epoch_validation,validation_array)     
         plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
         file='figure/training'+str(num_training)+".png"
+        if os.path.exists(file):
+            os.remove(file)
         plt.savefig(file,format='png',dpi=200)
         plt.close('all')
         

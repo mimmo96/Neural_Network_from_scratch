@@ -1,6 +1,7 @@
 from leggifile import print_result
 import neural_network
 import numpy as np
+import ensemble
 from function import LOSS, accuracy,MEE
 from concurrent.futures import ThreadPoolExecutor
 
@@ -35,15 +36,12 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
                                         "  layer:"+str(units)+ " function:"+str(function)+ " weight:"+ str(weig))
                                         #salvo il numero di layer 
                                         numero_layer=np.size(units)-2
-                                        #creo la neural network con i parametri passati
-                                        NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, type_problem) 
                             
                                         #calcvolo la media dei 5 modelli generati e restituisco la loss e la MEE/accuratezza
-                                        loss_validation,MEE=ThreadPool_average(type_problem,fun_out,NN,training_set,validation_set, batch_size, epochs,num_training)
-                                        
+                                        loss_validation,MEE,NN=ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function)
                                         #stampo il risultato di fine training
-                                        print_result(out_file+"RESULT:") 
-                                        print_result(out_file+"MEDIA LOSS:"+ str(loss_validation)+ " \nMEDIA MEE:"+ str(MEE))
+                                        print_result(out_file,"RESULT:") 
+                                        print_result(out_file,"MEDIA LOSS:"+ str(loss_validation)+ " \nMEDIA MEE:"+ str(MEE))
     
                                         if best_loss_validation == -1:
                                             best_loss_validation = loss_validation
@@ -87,37 +85,50 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
 # funzioni per parallelizzare il calcolo con i 5 modelli in modo da fare la media finale
 def task(type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training):
     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
-    penalty_term = NN.penalty_NN()
     output_NN = np.zeros(validation_set.output().shape)
     NN.ThreadPool_Forward(validation_set.input(), 0, validation_set.input().shape[0], output_NN, True)
+    penalty_term = NN.penalty_NN()
     loss_tot = LOSS(output_NN, validation_set.output(), validation_set.output().shape[0], penalty_term)
     if(type_problem=="classification"):
         MEE_tot=accuracy(type_problem,fun_out,validation_set.output(),output_NN)
     else:
         MEE_tot=MEE(output_NN, validation_set.output(), validation_set.output().shape[0])
     
-    return loss_tot,MEE_tot
+    return loss_tot,MEE_tot,output_NN
     
 
-def ThreadPool_average(type_problem,fun_out,NN,training_set,validation_set, batch_size, epochs,num_training):
+def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function):
     #creo il pool di thread
     executor = ThreadPoolExecutor(5)
     loss_tot=0
+    best_loss=100000000000000000
     MEE_tot=0
+    best_NN=0
+    output=0
 
     for i in range(0,5):
-        loss,MEE=executor.submit(task,type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training).result()
+        #creo la neural network con i parametri passati
+        NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, type_problem) 
+        loss,MEE,out=executor.submit(task,type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training).result()
         print("loss ",i,":" ,loss)
         print("MEE ",i,":", MEE)
+        if(loss<best_loss):
+            best_loss=loss
+            best_NN=NN
+        best_loss=loss
         loss_tot = loss_tot + loss
         MEE_tot= MEE_tot +MEE
-
+        output=output+out
+    
+    en=ensemble.ensemble(best_NN,validation_set.output())
+    loss_ensemble=en.loss_average(output,5)
+    print("loss_ensemble:",loss_ensemble)
     executor.shutdown(True)
 
     loss_tot=np.divide(loss_tot,5)
     MEE_tot=np.divide(MEE_tot,5)
 
-    return loss_tot,MEE_tot
+    return loss_tot,MEE_tot,best_NN
 
 
 # top_model=array contente i migliori 10 modelli

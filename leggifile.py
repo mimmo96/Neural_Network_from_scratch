@@ -75,3 +75,4 @@ def print_result(out_file,stampa):
     print(stampa)
     stampa=stampa+"\n"
     out_file.write(stampa)
+    out_file.flush()

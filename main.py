@@ -9,7 +9,7 @@ import Matrix_io
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=[400]
+num_epoch=[10]
 filename = "CUP\ML-CUP20-TR.csv"
 file_name_test = "CUP\ML-CUP20-TR.csv"
 dim_output = 2
@@ -17,10 +17,10 @@ problem_type="Regression"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.0021435,0.001,0.01]
-alfa = [0.5,0.7,0.9]
-v_lambda = [0,0.001]
-fun = ["tanh"]
+learning_rate = [0.001,0.002,0.004]
+alfa = [0.5,0.6,0.7]
+v_lambda = [0,0.0001]
+fun = ["tanh"]      
 #fun_out non sarà considerata in caso di regressione
 fun_out=["Regression"]
 weight=["random"]
@@ -66,7 +66,7 @@ if(problem_type=="classification"):
 else:
     training_set, validation_set, test_set = leggifile.divide_exaples(training_set, dim_output)
 
-nj=[[dim_input,20,20,dim_output,0]]
+nj=[[dim_input,20,dim_output,0],[dim_input,7,7,dim_output,0]]
 batch_array=[32]
 
 #prima di fare la model selection controllo se il batch è di dimensione giusta
