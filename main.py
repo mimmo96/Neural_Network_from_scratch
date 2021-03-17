@@ -6,7 +6,7 @@ from random import randint
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import Matrix_io
-
+import CV_k_fold
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
 num_epoch=[10]
@@ -75,5 +75,6 @@ for i in batch_array:
         print("batch troppo grande!!!\nSTOPPO")
         exit()
 
-model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
+#model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
 
+CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)

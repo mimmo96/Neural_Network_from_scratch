@@ -28,14 +28,31 @@ class Matrix_io:
         mini_batches = []
         #definisce numero di batch
         no_of_batches = self.matrix.shape[0] // batch_size
+        
         for i in range(no_of_batches):
             mini_batch = Matrix_io(self.matrix[i*batch_size:(i+1)*batch_size], self.len_output)
             mini_batches.append(mini_batch)
+        
         if self.matrix.shape[0] / batch_size != 0:
             #matrice con le restanti righe di self.matrix
             mini_batch = Matrix_io(self.matrix[(i+1)*batch_size:], self.len_output)
+            
             if mini_batch.matrix.shape[0] < batch_size:
                 mini_batch.matrix = np.append(mini_batch.matrix, self.matrix[0:batch_size-mini_batch.matrix.shape[0]], axis = 0)
             mini_batches.append(mini_batch)
-        return mini_batches
         
+        return mini_batches
+    
+    def create_fold(self, start_index, end_index, last_set = False):
+        
+        if last_set:
+            end_index = self.matrix.shape[0]
+        
+        training_k = np.delete(self.matrix, slice(start_index,end_index), axis=0)
+        validation_k = self.matrix[start_index:end_index,:]
+
+        training_k = Matrix_io(training_k,self.len_output )
+        validation_k = Matrix_io(validation_k, self.len_output)
+        
+        return training_k, validation_k 
+                

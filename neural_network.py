@@ -275,13 +275,16 @@ class neural_network:
             delta_layer_succesivo = delta_layer_corrente
     '''
     #return TRUE if this is the best model
-    def validation(self,fun_out,validation_set, penalty_term):
+    def validation(self,validation_set, penalty_term = 0):
         validation_set_input = validation_set.input()
         validation_set_output = validation_set.output()
+        
         output_NN = np.zeros(validation_set_output.shape)
+        
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
         loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0], penalty_term)
-        acc = accuracy( self.type_problem,fun_out,validation_set_output, output_NN)
+        acc = accuracy(self.type_problem,self.fun_out,validation_set_output, output_NN)
+        
         return acc, loss_validation
 
     def penalty_NN(self):
