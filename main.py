@@ -9,20 +9,20 @@ import Matrix_io
 import CV_k_fold
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch=[10]
-filename = "CUP\ML-CUP20-TR.csv"
-file_name_test = "CUP\ML-CUP20-TR.csv"
-dim_output = 2
-problem_type="Regression"
+num_epoch = 10
+filename = r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\monks\monks1.train.csv"
+file_name_test = r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\monks\monks1.test.csv"
+dim_output = 1
+problem_type="classification"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.001,0.002,0.004]
-alfa = [0.5,0.6,0.7]
-v_lambda = [0,0.0001]
-fun = ["tanh"]      
+learning_rate = [0.5]
+alfa = [0.5]
+v_lambda = [0]
+fun = ["zero_one_h"]      
 #fun_out non sarà considerata in caso di regressione
-fun_out=["Regression"]
+fun_out=["zero_one_h"]
 weight=["random"]
 #-------------------------------FINE PARAMETRI------------------------------
 
@@ -66,7 +66,7 @@ if(problem_type=="classification"):
 else:
     training_set, validation_set, test_set = leggifile.divide_exaples(training_set, dim_output)
 
-nj=[[dim_input,20,dim_output,0],[dim_input,7,7,dim_output,0]]
+nj=[[dim_input,4,dim_output,0],[dim_input,3,dim_output,0]]
 batch_array=[32]
 
 #prima di fare la model selection controllo se il batch è di dimensione giusta
@@ -77,4 +77,6 @@ for i in batch_array:
 
 #model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
 
-CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
+top_k = CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
+
+print(top_k)
