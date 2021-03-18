@@ -10,25 +10,24 @@ import CV_k_fold
 import result
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch = 10
-filename = r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\monks\monks1.train.csv"
-file_name_test = r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\monks\monks1.test.csv"
-dim_output = 1
-problem_type="classification"
+num_epoch = [1]
+filename = "CUP\ML-CUP20-TR.csv"
+file_name_test = "CUP\ML-CUP20-TR.csv"
+dim_output = 2
+problem_type="Regression"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.5]
+learning_rate = [0.01,0.0065]
 alfa = [0.5]
 v_lambda = [0]
-fun = ["zero_one_h"]      
+fun = ["tanh"]      
 #fun_out non sarà considerata in caso di regressione
-fun_out=["zero_one_h"]
-weight=["random"]
+fun_out=["Regression"]
+weight=["uniform"]
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
-
 training_set = read_write_file.read_csv(problem_type,filename)
 validation_set = read_write_file.read_csv(problem_type,filename)
 test_set = validation_set
@@ -65,9 +64,8 @@ if(problem_type=="classification"):
     test_set = Matrix_io.Matrix_io(test_set, dim_output)
 
 else:
-    training_set, validation_set, test_set = read_write_file.divide_exaples(training_set, dim_output)
-
-nj=[[dim_input,4,dim_output,0],[dim_input,3,dim_output,0]]
+    training_set, validation_set, test_set = read_write_file.divide_exaples_hold_out(training_set, dim_output)
+nj=[[dim_input,20,dim_output,0]]
 batch_array=[32]
 
 #prima di fare la model selection controllo se il batch è di dimensione giusta
@@ -76,9 +74,8 @@ for i in batch_array:
         print("batch troppo grande!!!\nSTOPPO")
         exit()
 
-#model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
+model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
 
-
-top_k = CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
-result.write_result(top_k, r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\CUP\top_k.csv")
+#top_k = CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
+#result.write_result(top_k, r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\CUP\top_k.csv")
 #print(top_k)

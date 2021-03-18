@@ -5,4 +5,6 @@ settings.json
 *.json
 *.png
 *.json
+result/
+figure/
 .vscode/settings.json
