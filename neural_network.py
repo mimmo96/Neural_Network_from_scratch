@@ -133,7 +133,7 @@ class neural_network:
             
             if (i % 5 == 0):
                 #calcolo la loss sulla validazione e me la salvo nell'array
-                acc_validation, best_loss_validation = self.validation(self.fun_out,validation_set, penalty_term)
+                acc_validation, best_loss_validation = self.validation(validation_set, penalty_term)
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
@@ -202,8 +202,8 @@ class neural_network:
                 #layer.w_matrix[:, j] = np.add(layer.w_matrix[:, j], Dw_new)
             delta_layer_succesivo = delta
 
-    def DeltaW_new(self,Dw_new,D_w_old):
-        return np.add(Dw_new, np.dot(self.alfa, D_w_old))
+   # def DeltaW_new(self,Dw_new,D_w_old):
+    #    return np.add(Dw_new, np.dot(self.alfa, D_w_old))
     '''
 
     def backprogation(self, index_matrix, output_NN, training_set_output, batch_size):
