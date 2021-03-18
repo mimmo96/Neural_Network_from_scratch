@@ -3,6 +3,8 @@ import numpy as np
 import Matrix_io
 import neural_network
 import math
+import ensemble
+
 def cv_k_fold(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, test_set, batch_array, epochs,function_hidden,function_output, type_weight,type_problem, k_fold = 5):
     num_training = -1
     trials_per_model = 10
@@ -11,7 +13,7 @@ def cv_k_fold(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, t
     
     grid = list(itertools.product(vectors_units, vector_alfa, vector_lambda, vector_learning_rate, batch_array, function_hidden, function_output, type_weight))
     size_top_NN = 10 
-    top_NN = []
+    top_NN = ensemble.ensemble()
     
     for hyperparameter in grid:
         num_training += 1
@@ -32,16 +34,18 @@ def cv_k_fold(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, t
                 NN_trials[i] = neural_network.neural_network(hyperparameter[0], hyperparameter[1], hyperparameter[2], hyperparameter[3], (np.size(hyperparameter[0])-1), hyperparameter[5], hyperparameter[6], hyperparameter[7], type_problem)
                 #NN_trials[i].trainig(training_k, validation_k, hyperparameter[4], epochs, num_training)
             
-            #NN_k_fold[k] = list of tuple (neaural network, mean_error, dev_standard) it contains mean error btw NN_trials 
-            # and the best model (inside NN_trials) respect to its error
-            NN_k_fold.append((mean_NN(NN_trials, validation_k)))
+            #NN_k_fold[k] = list of tuple (neaural network, mean_mse, mean_mee, num_training) it contains mean mse btw NN_trials 
+            # and the best model (inside NN_trials) respect to its mse
+            model, mean_mse, mean_mee = mean_NN(NN_trials, validation_k)
+            NN_k_fold.append(ensemble.stat_model(model, mean_mse, mean_mee, num_training))
         
-        #best_NN_fold = tuple (neaural network, mean_error, dev_standard) it contains best model btw k models generated 
-        # and the mean error btw k models
-        best_NN_k_fold = mean_NN_k_fold(NN_k_fold) 
+        #best_NN_fold = tuple (neaural network, mean_mse, mean_mee, num_training) it contains best model btw k models generated 
+        # and the mean mse btw k models
+        NN_k_fold = ensemble.ensemble(NN_k_fold, [], k_fold)
+        best_NN_k_fold = NN_k_fold.mean_loss() 
         
-        if k_is_in_top(top_NN, best_NN_k_fold, size_top_NN):
-            top_NN.append(best_NN_k_fold)
+        if top_NN.k_is_in_top(best_NN_k_fold):
+            top_NN.add(best_NN_k_fold)
     
     #retraining with early stopping
     #
@@ -51,53 +55,31 @@ def cv_k_fold(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, t
     return top_NN
 
 
-#return the best NN inside array_of_NN, mean error, mean dev standard 
+#return the best NN inside array_of_NN, mean mse, mean dev standard 
 def mean_NN(array_of_NN, data_set):
     #AGGIUNGERE DEVIAZIONE STANDARD
-    mean_error = 0
+    mean_mse = 0
+    mean_mee = 0
     mean_accuracy = 0
-    best_error = + math.inf
+    best_mse = + math.inf
+    best_mee = + math.inf
     
     for NN in array_of_NN:
-        accuracy, error = NN.validation(data_set, penalty_term = 0)
+        accuracy, mse, mee = NN.validation(data_set, penalty_term = 0)
         
-        if error < best_error:
-            best_error = error
+        if mee < best_mee:
+            best_mee = mee
+            best_mse = mse
             best_NN = NN
 
-        mean_error += error 
+        mean_mee += mee
+        mean_mse += mse 
         mean_accuracy += accuracy
     
-    mean_error /= np.size(array_of_NN)
+    mean_mse /= np.size(array_of_NN)
+    mean_mee /= np.size(array_of_NN)
     mean_accuracy /= np.size(array_of_NN)
-    return (best_NN, mean_error)
 
+    return best_NN, mean_mse, mean_mee
 
-def mean_NN_k_fold(tuples_NN):
-    #AGGIUNGERE DEVIAZIONE STANDARD
-    mean_error = 0
-    best_error = + math.inf
-
-    for tuple_NN in tuples_NN:
-        if best_error > tuple_NN[1]:
-            best_error = tuple_NN[1]
-            best_NN = tuple_NN[0]
-
-        mean_error += tuple_NN[1] 
-    
-    mean_error /= np.size(tuples_NN)
-    return (best_NN, mean_error)
-
-def k_is_in_top(top_NN, best_NN_k_fold, limit):
-    
-    if len(top_NN) < limit:
-        return True
-    
-    top_NN = sorted(top_NN, key=lambda x:x[1])
-    worst_NN = top_NN[-1]
-    if worst_NN[1] > best_NN_k_fold[1]:
-        top_NN.pop()
-        return True
-    
-    return False
 

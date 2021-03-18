@@ -7,13 +7,13 @@ from graphycs import makegraph
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import math
-from function import der_loss, LOSS, _classification,  _derivate_activation_function, sign, accuracy
+from function import der_loss, LOSS, _classification,  _derivate_activation_function, sign, accuracy, MEE
 from concurrent.futures import ThreadPoolExecutor
 import backpropagation as bp
 
 class neural_network:
     
-    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, type_weight, type_problem = "Regression"):
+    def __init__(self, nj, alfa, v_lambda, learning_rate, numero_layer, function, fun_out, type_weight, type_problem = "Regression"):
 
         self.alfa = alfa
         self.v_lambda = v_lambda
@@ -92,7 +92,8 @@ class neural_network:
         training_set_output = training_set.output()
 
         #print("----------------------MEDIA OUTPUT TRAINING SET ----------------------------------\n", np.sum(training_set_output) / training_set_output.shape[0])
-        best_loss_validation=-1
+        best_loss_validation= + math.inf
+        best_mee = +math.inf
         validation_stop=3
 
         #variabili per il grafico training
@@ -133,7 +134,7 @@ class neural_network:
             
             if (i % 5 == 0):
                 #calcolo la loss sulla validazione e me la salvo nell'array
-                acc_validation, best_loss_validation = self.validation(validation_set, penalty_term)
+                acc_validation, best_loss_validation, best_mee = self.validation(validation_set, penalty_term)
                 validation_array=np.append(validation_array,best_loss_validation)
                 epoch_validation=np.append(epoch_validation,i)
        
@@ -255,8 +256,9 @@ class neural_network:
         self.ThreadPool_Forward(validation_set_input, 0, validation_set_input.shape[0], output_NN, True)
         loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0], penalty_term)
         acc = accuracy(self.type_problem,self.fun_out,validation_set_output, output_NN)
+        mee = MEE(output_NN, validation_set_output, validation_set_output.shape[0])
         
-        return acc, loss_validation
+        return acc, loss_validation, mee
 
     def penalty_NN(self):
         penalty = 0
