@@ -10,7 +10,7 @@ import CV_k_fold
 import result
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch = [1]
+num_epoch = [10]
 filename = "CUP\ML-CUP20-TR.csv"
 file_name_test = "CUP\ML-CUP20-TR.csv"
 dim_output = 2

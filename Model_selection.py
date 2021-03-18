@@ -2,17 +2,19 @@ import itertools
 from read_write_file import print_result
 import neural_network
 import numpy as np
+import os
 import math
 import ensemble
 from function import LOSS, accuracy,MEE
-from concurrent.futures import ThreadPoolExecutor
+from multiprocessing import Pool
+from joblib import Parallel, delayed
 
 def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_array, epoch_array,fun,fun_output, weight,type_problem):
     
     #inizializzo i parametri che mi serviranno per salvare i dati dopo il training (per la scelta del miglior modello)
     best_loss_validation=-1
     MEE=0
-    num_training=0
+    num_training=1
     # vettore dove salvo i migliori 10 modelli
     best_NN=np.empty(0,neural_network.neural_network)
     # file dove andrò a scrivere 
@@ -97,6 +99,7 @@ def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_un
     out_file.close()
     return best_model
 
+
 # funzioni per parallelizzare il calcolo con i 5 modelli in modo da fare la media finale
 def task(type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training):
     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
@@ -109,30 +112,30 @@ def task(type_problem,fun_out, NN,training_set,validation_set, batch_size, epoch
     else:
         MEE_tot=MEE(output_NN, validation_set.output(), validation_set.output().shape[0])
     
-    return loss_tot,MEE_tot
+    return loss_tot,MEE_tot,NN
     
 def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function):
     #creo il pool di thread
-    executor = ThreadPoolExecutor(5)
     loss_tot=0
     best_loss=+ math.inf
     MEE_tot=0
     best_NN=0
 
-    for i in range(0,5):
-        #creo la neural network con i parametri passati
-        NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, type_problem) 
-        loss,MEE=executor.submit(task,type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training).result()
+    #creo la neural network con i parametri passati
+    NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, type_problem) 
+    #result contiene il rislutato [(loss1,mess1,nn1),(loss2,mess2,nn2),(loss3,mess3,nn3)]
+    result= Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training+(i/10)) for i in range(5))
+
+    for i in range (0,5):
+        loss,mee,NN=result[i]
         print("loss ",i,":" ,loss)
-        print("MEE ",i,":", MEE)
+        print("MEE ",i,":", mee)
         if(loss<best_loss):
             best_loss=loss
             best_NN=NN
         best_loss=loss
         loss_tot = loss_tot + loss
-        MEE_tot= MEE_tot +MEE
-    
-    executor.shutdown(True)
+        MEE_tot= MEE_tot +mee
 
     loss_tot=np.divide(loss_tot,5)
     MEE_tot=np.divide(MEE_tot,5)

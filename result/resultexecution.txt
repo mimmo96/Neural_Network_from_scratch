@@ -1,20 +1,17 @@
-------------------------------INIZIO TRAINING 0-----------------------------
-epoch:1 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.01  layer:[10, 20, 2, 0] function:tanh weight:uniform
-RESULT:
-MEDIA LOSS:162.54618946519196 
-MEDIA MEE:16.700569526252817
-------------------------------FINE TRAINING 0-----------------------------
 ------------------------------INIZIO TRAINING 1-----------------------------
-epoch:1 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+epoch:10 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.01  layer:[10, 20, 2, 0] function:tanh weight:uniform
 RESULT:
-MEDIA LOSS:161.23043453009547 
-MEDIA MEE:16.601498904075147
-aggiorno l'errore! 
- vecchio errore:162.54618946519196
- nuovo errore:161.23043453009547
+MEDIA LOSS:12.895007588307731 
+MEDIA MEE:4.2365997411229115
 ------------------------------FINE TRAINING 1-----------------------------
+------------------------------INIZIO TRAINING 2-----------------------------
+epoch:10 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:14.329182183487585 
+MEDIA MEE:4.393228501752331
+------------------------------FINE TRAINING 2-----------------------------
 
 ************************* RESULT **************************
-parametri migliori:  epoch:1 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+parametri migliori:  epoch:10 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
 
-errore sul validation migliore: 161.23043453009547
+errore sul validation migliore: 12.895007588307731
