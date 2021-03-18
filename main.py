@@ -1,5 +1,5 @@
 import numpy as np
-import leggifile
+import read_write_file
 import function
 from Model_selection import model_selection
 from random import randint
@@ -7,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import Matrix_io
 import CV_k_fold
+import result
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
 num_epoch = 10
@@ -28,8 +29,8 @@ weight=["random"]
 
 #leggo i dati dal file e li salvo in una matrice
 
-training_set = leggifile.leggi(problem_type,filename)
-validation_set = leggifile.leggi(problem_type,filename)
+training_set = read_write_file.read_csv(problem_type,filename)
+validation_set = read_write_file.read_csv(problem_type,filename)
 test_set = validation_set
 
 #se sono nella classificazione utilizzo one-hot-coding
@@ -64,7 +65,7 @@ if(problem_type=="classification"):
     test_set = Matrix_io.Matrix_io(test_set, dim_output)
 
 else:
-    training_set, validation_set, test_set = leggifile.divide_exaples(training_set, dim_output)
+    training_set, validation_set, test_set = read_write_file.divide_exaples(training_set, dim_output)
 
 nj=[[dim_input,4,dim_output,0],[dim_input,3,dim_output,0]]
 batch_array=[32]
@@ -77,6 +78,7 @@ for i in batch_array:
 
 #model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
 
-top_k = CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
 
-print(top_k)
+top_k = CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
+result.write_result(top_k, r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\CUP\top_k.csv")
+#print(top_k)

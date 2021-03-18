@@ -1,0 +1,5 @@
+,Number_Model,Units_per_layer,learning_rate,lambda,alfa,function_hidden,inizialization_weights,Error_MSE
+0,0.12261904761904763,17,0.5,0,0.5,zero_one_h,random,0.12261904761904763
+1,0.12261904761904763,3,0.5,0,0.5,zero_one_h,random,0.12261904761904763
+2,0.12261904761904763,1,0.5,0,0.5,zero_one_h,random,0.12261904761904763
+3,0.12261904761904763,0,0.5,0,0.5,zero_one_h,random,0.12261904761904763

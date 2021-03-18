@@ -25,5 +25,5 @@ class ensemble:
     def loss_average(self):
         #calcolo la media degli output, mi restituisce un unico vettore di output
         output=self.output_average()
-        loss_test = LOSS(output, self.data.output(), self.data.output().shape[0],0)
+        loss_test = LOSS(output, self.data.output(), self.data.output().shape[0], penalty_term = 0)
         return loss_test

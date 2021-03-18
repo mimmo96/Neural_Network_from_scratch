@@ -4,6 +4,7 @@ import numpy as np
 import ensemble
 from function import LOSS, accuracy,MEE
 from concurrent.futures import ThreadPoolExecutor
+import math
 
 def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_array, epoch_array,fun,fun_output, weight,type_problem):
     
@@ -114,7 +115,7 @@ def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_s
     #creo il pool di thread
     executor = ThreadPoolExecutor(5)
     loss_tot=0
-    best_loss=100000000000000000
+    best_loss= + math.inf
     MEE_tot=0
     best_NN=0
 
