@@ -1,0 +1,896 @@
+------------------------------INIZIO TRAINING 1-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:101.92760292961067 
+MEDIA MEE:13.013142827437951
+------------------------------FINE TRAINING 1-----------------------------
+------------------------------INIZIO TRAINING 2-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:56.57104386712105 
+MEDIA MEE:9.415797039041184
+aggiorno l'errore! 
+ vecchio errore:101.92760292961067
+ nuovo errore:56.57104386712105
+------------------------------FINE TRAINING 2-----------------------------
+------------------------------INIZIO TRAINING 3-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:99.52178347460742 
+MEDIA MEE:12.69631727112277
+------------------------------FINE TRAINING 3-----------------------------
+------------------------------INIZIO TRAINING 4-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:56.403156562876305 
+MEDIA MEE:9.267137255257724
+aggiorno l'errore! 
+ vecchio errore:56.57104386712105
+ nuovo errore:56.403156562876305
+------------------------------FINE TRAINING 4-----------------------------
+------------------------------INIZIO TRAINING 5-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:82.34726945893061 
+MEDIA MEE:11.353110681271014
+------------------------------FINE TRAINING 5-----------------------------
+------------------------------INIZIO TRAINING 6-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:54.054042513235345 
+MEDIA MEE:9.105980579841521
+aggiorno l'errore! 
+ vecchio errore:56.403156562876305
+ nuovo errore:54.054042513235345
+------------------------------FINE TRAINING 6-----------------------------
+------------------------------INIZIO TRAINING 7-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:71.6520139599526 
+MEDIA MEE:10.857276309153308
+------------------------------FINE TRAINING 7-----------------------------
+------------------------------INIZIO TRAINING 8-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:52.1263805274878 
+MEDIA MEE:9.05999248745978
+aggiorno l'errore! 
+ vecchio errore:54.054042513235345
+ nuovo errore:52.1263805274878
+------------------------------FINE TRAINING 8-----------------------------
+------------------------------INIZIO TRAINING 9-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:92.37014899633256 
+MEDIA MEE:12.274132921441298
+------------------------------FINE TRAINING 9-----------------------------
+------------------------------INIZIO TRAINING 10-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:62.00859527178996 
+MEDIA MEE:9.930750626813836
+------------------------------FINE TRAINING 10-----------------------------
+------------------------------INIZIO TRAINING 11-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:82.3889891126663 
+MEDIA MEE:11.618571370630836
+------------------------------FINE TRAINING 11-----------------------------
+------------------------------INIZIO TRAINING 12-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:64.48402462390393 
+MEDIA MEE:10.111465876200048
+------------------------------FINE TRAINING 12-----------------------------
+------------------------------INIZIO TRAINING 13-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:102.70161244033143 
+MEDIA MEE:13.029679490621792
+------------------------------FINE TRAINING 13-----------------------------
+------------------------------INIZIO TRAINING 14-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:63.77091983967021 
+MEDIA MEE:10.140382839935029
+------------------------------FINE TRAINING 14-----------------------------
+------------------------------INIZIO TRAINING 15-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:103.85819406421312 
+MEDIA MEE:13.106125302861457
+------------------------------FINE TRAINING 15-----------------------------
+------------------------------INIZIO TRAINING 16-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:66.85323607262043 
+MEDIA MEE:10.301519007845792
+------------------------------FINE TRAINING 16-----------------------------
+------------------------------INIZIO TRAINING 17-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:204.6835750176876 
+MEDIA MEE:18.383796901166257
+------------------------------FINE TRAINING 17-----------------------------
+------------------------------INIZIO TRAINING 18-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:225.78182922204797 
+MEDIA MEE:18.717022914440342
+------------------------------FINE TRAINING 18-----------------------------
+------------------------------INIZIO TRAINING 19-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:376.34730400612506 
+MEDIA MEE:22.97592112504926
+------------------------------FINE TRAINING 19-----------------------------
+------------------------------INIZIO TRAINING 20-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:371.1967330909776 
+MEDIA MEE:23.561443972457475
+------------------------------FINE TRAINING 20-----------------------------
+------------------------------INIZIO TRAINING 21-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:268.72707993216386 
+MEDIA MEE:20.1718304905765
+------------------------------FINE TRAINING 21-----------------------------
+------------------------------INIZIO TRAINING 22-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:241.86750305191686 
+MEDIA MEE:19.217337974049464
+------------------------------FINE TRAINING 22-----------------------------
+------------------------------INIZIO TRAINING 23-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:263.4792944455667 
+MEDIA MEE:19.985746027834004
+------------------------------FINE TRAINING 23-----------------------------
+------------------------------INIZIO TRAINING 24-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:239.90371679122399 
+MEDIA MEE:19.37964746031338
+------------------------------FINE TRAINING 24-----------------------------
+------------------------------INIZIO TRAINING 25-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:628.3628602941969 
+MEDIA MEE:31.263710361336486
+------------------------------FINE TRAINING 25-----------------------------
+------------------------------INIZIO TRAINING 26-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:600.3203736983734 
+MEDIA MEE:30.921536053267925
+------------------------------FINE TRAINING 26-----------------------------
+------------------------------INIZIO TRAINING 27-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:307.3897910135619 
+MEDIA MEE:21.474026168684613
+------------------------------FINE TRAINING 27-----------------------------
+------------------------------INIZIO TRAINING 28-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:318.52251806831384 
+MEDIA MEE:22.039059134103212
+------------------------------FINE TRAINING 28-----------------------------
+------------------------------INIZIO TRAINING 29-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:171924593.3223346 
+MEDIA MEE:11786.643964071254
+------------------------------FINE TRAINING 29-----------------------------
+------------------------------INIZIO TRAINING 30-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:75460633.06582572 
+MEDIA MEE:10557.646337278686
+------------------------------FINE TRAINING 30-----------------------------
+------------------------------INIZIO TRAINING 31-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:97424273.8031323 
+MEDIA MEE:13109.917264482652
+------------------------------FINE TRAINING 31-----------------------------
+------------------------------INIZIO TRAINING 32-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:52642032.902652346 
+MEDIA MEE:9388.05288880759
+------------------------------FINE TRAINING 32-----------------------------
+------------------------------INIZIO TRAINING 33-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1737.798801199368 
+MEDIA MEE:56.60136749754459
+------------------------------FINE TRAINING 33-----------------------------
+------------------------------INIZIO TRAINING 34-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1713.7453694171381 
+MEDIA MEE:56.20782715625256
+------------------------------FINE TRAINING 34-----------------------------
+------------------------------INIZIO TRAINING 35-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1724.2973678635244 
+MEDIA MEE:56.36673663338636
+------------------------------FINE TRAINING 35-----------------------------
+------------------------------INIZIO TRAINING 36-----------------------------
+epoch:1 batch_size:16 alfa:0.6  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1725.8934994809024 
+MEDIA MEE:56.3943038049538
+------------------------------FINE TRAINING 36-----------------------------
+------------------------------INIZIO TRAINING 37-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1747.191191548056 
+MEDIA MEE:56.76583255091064
+------------------------------FINE TRAINING 37-----------------------------
+------------------------------INIZIO TRAINING 38-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1689.818971052824 
+MEDIA MEE:55.76606054587226
+------------------------------FINE TRAINING 38-----------------------------
+------------------------------INIZIO TRAINING 39-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1751.3150433767235 
+MEDIA MEE:56.84134374894044
+------------------------------FINE TRAINING 39-----------------------------
+------------------------------INIZIO TRAINING 40-----------------------------
+epoch:1 batch_size:16 alfa:0.5  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1705.3343406536046 
+MEDIA MEE:56.033360821817475
+------------------------------FINE TRAINING 40-----------------------------
+------------------------------INIZIO TRAINING 41-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1763.2088805302708 
+MEDIA MEE:57.049347130618365
+------------------------------FINE TRAINING 41-----------------------------
+------------------------------INIZIO TRAINING 42-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1712.3413967787485 
+MEDIA MEE:56.109450752413
+------------------------------FINE TRAINING 42-----------------------------
+------------------------------INIZIO TRAINING 43-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1760.065683587804 
+MEDIA MEE:57.00767415205128
+------------------------------FINE TRAINING 43-----------------------------
+------------------------------INIZIO TRAINING 44-----------------------------
+epoch:1 batch_size:16 alfa:0.1  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1683.2018223147484 
+MEDIA MEE:55.606556816826185
+------------------------------FINE TRAINING 44-----------------------------
+------------------------------INIZIO TRAINING 45-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1768.5586340709228 
+MEDIA MEE:57.17248993915391
+------------------------------FINE TRAINING 45-----------------------------
+------------------------------INIZIO TRAINING 46-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1723.8425121361888 
+MEDIA MEE:56.35556810851426
+------------------------------FINE TRAINING 46-----------------------------
+------------------------------INIZIO TRAINING 47-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1769.3813836227696 
+MEDIA MEE:57.1776961102244
+------------------------------FINE TRAINING 47-----------------------------
+------------------------------INIZIO TRAINING 48-----------------------------
+epoch:1 batch_size:16 alfa:0  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1726.5839075762117 
+MEDIA MEE:56.382887779499434
+------------------------------FINE TRAINING 48-----------------------------
+------------------------------INIZIO TRAINING 49-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:38.65065166314444 
+MEDIA MEE:7.724668634427914
+aggiorno l'errore! 
+ vecchio errore:52.1263805274878
+ nuovo errore:38.65065166314444
+------------------------------FINE TRAINING 49-----------------------------
+------------------------------INIZIO TRAINING 50-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:32.41999406393802 
+MEDIA MEE:6.634188489001396
+aggiorno l'errore! 
+ vecchio errore:38.65065166314444
+ nuovo errore:32.41999406393802
+------------------------------FINE TRAINING 50-----------------------------
+------------------------------INIZIO TRAINING 51-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:31.623563763216232 
+MEDIA MEE:6.814630936090248
+aggiorno l'errore! 
+ vecchio errore:32.41999406393802
+ nuovo errore:31.623563763216232
+------------------------------FINE TRAINING 51-----------------------------
+------------------------------INIZIO TRAINING 52-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:25.524809908571093 
+MEDIA MEE:6.104285163385844
+aggiorno l'errore! 
+ vecchio errore:31.623563763216232
+ nuovo errore:25.524809908571093
+------------------------------FINE TRAINING 52-----------------------------
+------------------------------INIZIO TRAINING 53-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:26.750342553434116 
+MEDIA MEE:6.124154841862962
+------------------------------FINE TRAINING 53-----------------------------
+------------------------------INIZIO TRAINING 54-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:22.777375865832788 
+MEDIA MEE:5.794054389991344
+aggiorno l'errore! 
+ vecchio errore:25.524809908571093
+ nuovo errore:22.777375865832788
+------------------------------FINE TRAINING 54-----------------------------
+------------------------------INIZIO TRAINING 55-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:28.426408763580252 
+MEDIA MEE:6.620771830599582
+------------------------------FINE TRAINING 55-----------------------------
+------------------------------INIZIO TRAINING 56-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:30.990811221813424 
+MEDIA MEE:6.705694947064228
+------------------------------FINE TRAINING 56-----------------------------
+------------------------------INIZIO TRAINING 57-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:32.46430685780739 
+MEDIA MEE:7.22945011660717
+------------------------------FINE TRAINING 57-----------------------------
+------------------------------INIZIO TRAINING 58-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:34.89961107761835 
+MEDIA MEE:7.383750705065381
+------------------------------FINE TRAINING 58-----------------------------
+------------------------------INIZIO TRAINING 59-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:34.545635682628095 
+MEDIA MEE:7.314015863468578
+------------------------------FINE TRAINING 59-----------------------------
+------------------------------INIZIO TRAINING 60-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:35.01828549478806 
+MEDIA MEE:7.291755823113819
+------------------------------FINE TRAINING 60-----------------------------
+------------------------------INIZIO TRAINING 61-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:37.848950750359414 
+MEDIA MEE:7.84880925310844
+------------------------------FINE TRAINING 61-----------------------------
+------------------------------INIZIO TRAINING 62-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:43.63039905694612 
+MEDIA MEE:8.38772337349697
+------------------------------FINE TRAINING 62-----------------------------
+------------------------------INIZIO TRAINING 63-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:35.77405304209037 
+MEDIA MEE:7.500708914596297
+------------------------------FINE TRAINING 63-----------------------------
+------------------------------INIZIO TRAINING 64-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:40.697660000335496 
+MEDIA MEE:7.995354679129051
+------------------------------FINE TRAINING 64-----------------------------
+------------------------------INIZIO TRAINING 65-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:590.0882375991166 
+MEDIA MEE:30.027409730911973
+------------------------------FINE TRAINING 65-----------------------------
+------------------------------INIZIO TRAINING 66-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:479.6487288277258 
+MEDIA MEE:26.906816773282934
+------------------------------FINE TRAINING 66-----------------------------
+------------------------------INIZIO TRAINING 67-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:456.43680797151154 
+MEDIA MEE:25.75439777427875
+------------------------------FINE TRAINING 67-----------------------------
+------------------------------INIZIO TRAINING 68-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:616.5387265907125 
+MEDIA MEE:31.355802548655554
+------------------------------FINE TRAINING 68-----------------------------
+------------------------------INIZIO TRAINING 69-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:401.7838429874543 
+MEDIA MEE:24.357003897380345
+------------------------------FINE TRAINING 69-----------------------------
+------------------------------INIZIO TRAINING 70-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:686.6324468885416 
+MEDIA MEE:31.7746943232659
+------------------------------FINE TRAINING 70-----------------------------
+------------------------------INIZIO TRAINING 71-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:532.5649846507165 
+MEDIA MEE:28.58217522587525
+------------------------------FINE TRAINING 71-----------------------------
+------------------------------INIZIO TRAINING 72-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:544.7795368801175 
+MEDIA MEE:28.57254423301284
+------------------------------FINE TRAINING 72-----------------------------
+------------------------------INIZIO TRAINING 73-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1316.119138310348 
+MEDIA MEE:48.11005177656666
+------------------------------FINE TRAINING 73-----------------------------
+------------------------------INIZIO TRAINING 74-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1485.5740165783961 
+MEDIA MEE:44.16667371182254
+------------------------------FINE TRAINING 74-----------------------------
+------------------------------INIZIO TRAINING 75-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:976.6033017447287 
+MEDIA MEE:38.778866838401576
+------------------------------FINE TRAINING 75-----------------------------
+------------------------------INIZIO TRAINING 76-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1063.4028631879723 
+MEDIA MEE:41.4828688760277
+------------------------------FINE TRAINING 76-----------------------------
+------------------------------INIZIO TRAINING 77-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1.5512926936644732e+25 
+MEDIA MEE:5265607416739.138
+------------------------------FINE TRAINING 77-----------------------------
+------------------------------INIZIO TRAINING 78-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1.6345743128890174e+25 
+MEDIA MEE:5283376837905.42
+------------------------------FINE TRAINING 78-----------------------------
+------------------------------INIZIO TRAINING 79-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1.8001736675840706e+25 
+MEDIA MEE:5492702916709.8545
+------------------------------FINE TRAINING 79-----------------------------
+------------------------------INIZIO TRAINING 80-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1.1253188774646345e+25 
+MEDIA MEE:3785233344651.6533
+------------------------------FINE TRAINING 80-----------------------------
+------------------------------INIZIO TRAINING 81-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1584.1335883457639 
+MEDIA MEE:53.84193502102223
+------------------------------FINE TRAINING 81-----------------------------
+------------------------------INIZIO TRAINING 82-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1557.3374186191154 
+MEDIA MEE:53.31994519289704
+------------------------------FINE TRAINING 82-----------------------------
+------------------------------INIZIO TRAINING 83-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1616.8740141456237 
+MEDIA MEE:54.42255409147502
+------------------------------FINE TRAINING 83-----------------------------
+------------------------------INIZIO TRAINING 84-----------------------------
+epoch:1 batch_size:4 alfa:0.6  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1473.9895610142398 
+MEDIA MEE:51.726569316599694
+------------------------------FINE TRAINING 84-----------------------------
+------------------------------INIZIO TRAINING 85-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1636.8710464158992 
+MEDIA MEE:54.78681045959594
+------------------------------FINE TRAINING 85-----------------------------
+------------------------------INIZIO TRAINING 86-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1533.0210033189337 
+MEDIA MEE:52.860091748949046
+------------------------------FINE TRAINING 86-----------------------------
+------------------------------INIZIO TRAINING 87-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1639.1849691970183 
+MEDIA MEE:54.84631595390637
+------------------------------FINE TRAINING 87-----------------------------
+------------------------------INIZIO TRAINING 88-----------------------------
+epoch:1 batch_size:4 alfa:0.5  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1586.1077001163328 
+MEDIA MEE:53.92344447017621
+------------------------------FINE TRAINING 88-----------------------------
+------------------------------INIZIO TRAINING 89-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1685.66216849413 
+MEDIA MEE:55.68112358508606
+------------------------------FINE TRAINING 89-----------------------------
+------------------------------INIZIO TRAINING 90-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1664.6119195502874 
+MEDIA MEE:55.27253907274714
+------------------------------FINE TRAINING 90-----------------------------
+------------------------------INIZIO TRAINING 91-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1716.2728184259395 
+MEDIA MEE:56.228813313352056
+------------------------------FINE TRAINING 91-----------------------------
+------------------------------INIZIO TRAINING 92-----------------------------
+epoch:1 batch_size:4 alfa:0.1  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1644.1995389926312 
+MEDIA MEE:54.93686996198053
+------------------------------FINE TRAINING 92-----------------------------
+------------------------------INIZIO TRAINING 93-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1705.1652998504098 
+MEDIA MEE:56.01980786069437
+------------------------------FINE TRAINING 93-----------------------------
+------------------------------INIZIO TRAINING 94-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1662.469029946388 
+MEDIA MEE:55.31646667979527
+------------------------------FINE TRAINING 94-----------------------------
+------------------------------INIZIO TRAINING 95-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1706.365906055268 
+MEDIA MEE:56.050612101256476
+------------------------------FINE TRAINING 95-----------------------------
+------------------------------INIZIO TRAINING 96-----------------------------
+epoch:1 batch_size:4 alfa:0  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1662.3421766525512 
+MEDIA MEE:55.25698317805675
+------------------------------FINE TRAINING 96-----------------------------
+------------------------------INIZIO TRAINING 97-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:43.41385717291176 
+MEDIA MEE:8.16247095948356
+------------------------------FINE TRAINING 97-----------------------------
+------------------------------INIZIO TRAINING 98-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:39.53592528235458 
+MEDIA MEE:7.779761775720916
+------------------------------FINE TRAINING 98-----------------------------
+------------------------------INIZIO TRAINING 99-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:47.01270396249171 
+MEDIA MEE:8.524297190697414
+------------------------------FINE TRAINING 99-----------------------------
+------------------------------INIZIO TRAINING 100-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:35.8724677340788 
+MEDIA MEE:7.401798504111632
+------------------------------FINE TRAINING 100-----------------------------
+------------------------------INIZIO TRAINING 101-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:41.21345226817251 
+MEDIA MEE:8.093732409148865
+------------------------------FINE TRAINING 101-----------------------------
+------------------------------INIZIO TRAINING 102-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:42.43078019264004 
+MEDIA MEE:8.090870664347975
+------------------------------FINE TRAINING 102-----------------------------
+------------------------------INIZIO TRAINING 103-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:42.50346147221792 
+MEDIA MEE:8.037742449511915
+------------------------------FINE TRAINING 103-----------------------------
+------------------------------INIZIO TRAINING 104-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:36.73010931400955 
+MEDIA MEE:7.4154110678405685
+------------------------------FINE TRAINING 104-----------------------------
+------------------------------INIZIO TRAINING 105-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:46.606229431537365 
+MEDIA MEE:8.590903578937134
+------------------------------FINE TRAINING 105-----------------------------
+------------------------------INIZIO TRAINING 106-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:46.82020197720327 
+MEDIA MEE:8.667645823611906
+------------------------------FINE TRAINING 106-----------------------------
+------------------------------INIZIO TRAINING 107-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:45.30247505119325 
+MEDIA MEE:8.39370431374974
+------------------------------FINE TRAINING 107-----------------------------
+------------------------------INIZIO TRAINING 108-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:42.381371416496606 
+MEDIA MEE:8.129963641804187
+------------------------------FINE TRAINING 108-----------------------------
+------------------------------INIZIO TRAINING 109-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:46.84478340429376 
+MEDIA MEE:8.538626348447014
+------------------------------FINE TRAINING 109-----------------------------
+------------------------------INIZIO TRAINING 110-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:45.56854697301321 
+MEDIA MEE:8.470930905465554
+------------------------------FINE TRAINING 110-----------------------------
+------------------------------INIZIO TRAINING 111-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:50.44787978495687 
+MEDIA MEE:8.964423007949687
+------------------------------FINE TRAINING 111-----------------------------
+------------------------------INIZIO TRAINING 112-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0.0001  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:49.38726837443774 
+MEDIA MEE:8.760440945801557
+------------------------------FINE TRAINING 112-----------------------------
+------------------------------INIZIO TRAINING 113-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:454.7051707615704 
+MEDIA MEE:26.19909005087073
+------------------------------FINE TRAINING 113-----------------------------
+------------------------------INIZIO TRAINING 114-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:295.57375780548057 
+MEDIA MEE:20.87732545870013
+------------------------------FINE TRAINING 114-----------------------------
+------------------------------INIZIO TRAINING 115-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:377.28690886158796 
+MEDIA MEE:23.727495871530444
+------------------------------FINE TRAINING 115-----------------------------
+------------------------------INIZIO TRAINING 116-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:489.45106626350787 
+MEDIA MEE:27.86616877481695
+------------------------------FINE TRAINING 116-----------------------------
+------------------------------INIZIO TRAINING 117-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:358.2479033703433 
+MEDIA MEE:23.219806959467963
+------------------------------FINE TRAINING 117-----------------------------
+------------------------------INIZIO TRAINING 118-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:528.5285234549109 
+MEDIA MEE:28.668236610842825
+------------------------------FINE TRAINING 118-----------------------------
+------------------------------INIZIO TRAINING 119-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:522.0647635506873 
+MEDIA MEE:27.93757009766651
+------------------------------FINE TRAINING 119-----------------------------
+------------------------------INIZIO TRAINING 120-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:394.8089151140413 
+MEDIA MEE:24.217544627722948
+------------------------------FINE TRAINING 120-----------------------------
+------------------------------INIZIO TRAINING 121-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1062.1958912414125 
+MEDIA MEE:39.583911822105875
+------------------------------FINE TRAINING 121-----------------------------
+------------------------------INIZIO TRAINING 122-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:391.69818406554134 
+MEDIA MEE:25.93882355921432
+------------------------------FINE TRAINING 122-----------------------------
+------------------------------INIZIO TRAINING 123-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:491.5978022901228 
+MEDIA MEE:27.508360117565825
+------------------------------FINE TRAINING 123-----------------------------
+------------------------------INIZIO TRAINING 124-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:575.1635461722469 
+MEDIA MEE:31.30269867838866
+------------------------------FINE TRAINING 124-----------------------------
+------------------------------INIZIO TRAINING 125-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:69228829389404.016 
+MEDIA MEE:9835677.911447152
+------------------------------FINE TRAINING 125-----------------------------
+------------------------------INIZIO TRAINING 126-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:39831995056773.39 
+MEDIA MEE:7608788.494567284
+------------------------------FINE TRAINING 126-----------------------------
+------------------------------INIZIO TRAINING 127-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:76233159998363.7 
+MEDIA MEE:10699428.382432776
+------------------------------FINE TRAINING 127-----------------------------
+------------------------------INIZIO TRAINING 128-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0.0001  learning_rate:0.1  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:109710854578644.66 
+MEDIA MEE:13014385.446648354
+------------------------------FINE TRAINING 128-----------------------------
+------------------------------INIZIO TRAINING 129-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1681.7777121017002 
+MEDIA MEE:55.61217270691672
+------------------------------FINE TRAINING 129-----------------------------
+------------------------------INIZIO TRAINING 130-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1629.848327869656 
+MEDIA MEE:54.628915927628995
+------------------------------FINE TRAINING 130-----------------------------
+------------------------------INIZIO TRAINING 131-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1704.806166421967 
+MEDIA MEE:56.02131952677528
+------------------------------FINE TRAINING 131-----------------------------
+------------------------------INIZIO TRAINING 132-----------------------------
+epoch:1 batch_size:8 alfa:0.6  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1597.5045356017822 
+MEDIA MEE:54.02471904008885
+------------------------------FINE TRAINING 132-----------------------------
+------------------------------INIZIO TRAINING 133-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1731.3757798035178 
+MEDIA MEE:56.49590154259238
+------------------------------FINE TRAINING 133-----------------------------
+------------------------------INIZIO TRAINING 134-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1629.4329145013135 
+MEDIA MEE:54.63133695734736
+------------------------------FINE TRAINING 134-----------------------------
+------------------------------INIZIO TRAINING 135-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1703.0205618478285 
+MEDIA MEE:55.99854266478907
+------------------------------FINE TRAINING 135-----------------------------
+------------------------------INIZIO TRAINING 136-----------------------------
+epoch:1 batch_size:8 alfa:0.5  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1660.1285954526943 
+MEDIA MEE:55.19150153152742
+------------------------------FINE TRAINING 136-----------------------------
+------------------------------INIZIO TRAINING 137-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1773.1749898090409 
+MEDIA MEE:57.21262919263751
+------------------------------FINE TRAINING 137-----------------------------
+------------------------------INIZIO TRAINING 138-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1696.3248224479412 
+MEDIA MEE:55.86545116867742
+------------------------------FINE TRAINING 138-----------------------------
+------------------------------INIZIO TRAINING 139-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1749.9971244265805 
+MEDIA MEE:56.81393288264494
+------------------------------FINE TRAINING 139-----------------------------
+------------------------------INIZIO TRAINING 140-----------------------------
+epoch:1 batch_size:8 alfa:0.1  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1690.6621224267114 
+MEDIA MEE:55.75851649174008
+------------------------------FINE TRAINING 140-----------------------------
+------------------------------INIZIO TRAINING 141-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1754.4119823508856 
+MEDIA MEE:56.8940143462828
+------------------------------FINE TRAINING 141-----------------------------
+------------------------------INIZIO TRAINING 142-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1740.4087132403558 
+MEDIA MEE:56.64143380248502
+------------------------------FINE TRAINING 142-----------------------------
+------------------------------INIZIO TRAINING 143-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:uniform
+RESULT:
+MEDIA LOSS:1749.0509117111953 
+MEDIA MEE:56.802512682090445
+------------------------------FINE TRAINING 143-----------------------------
+------------------------------INIZIO TRAINING 144-----------------------------
+epoch:1 batch_size:8 alfa:0  lamda:0.0001  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1679.9923584542005 
+MEDIA MEE:55.56117966575384
+------------------------------FINE TRAINING 144-----------------------------
+
+************************* RESULT **************************
+parametri migliori:  epoch:1 batch_size:8 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+
+errore sul validation migliore: 22.777375865832788

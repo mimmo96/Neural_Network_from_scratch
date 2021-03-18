@@ -3,6 +3,7 @@ import numpy as np
 import Layer
 import os
 import matplotlib
+from graphycs import makegraph
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import math
@@ -95,7 +96,7 @@ class neural_network:
         validation_stop=3
 
         #variabili per il grafico training
-        epoch_array=np.empty(0)
+        epoch_training=np.empty(0)
         loss_array=np.empty(0)
 
         #variabili per il grafico validation
@@ -128,7 +129,7 @@ class neural_network:
             #salvo nell'array i valori del training
             loss_array=np.append(loss_array,loss_training)
             accuracy_array=np.append(accuracy_array,acc)
-            epoch_array=np.append(epoch_array,i)
+            epoch_training=np.append(epoch_training,i)
             
             if (i % 5 == 0):
                 #calcolo la loss sulla validazione e me la salvo nell'array
@@ -149,40 +150,10 @@ class neural_network:
             titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc*100)) + "; acc_val: " + str(int(acc_validation*100))
         else:
             titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L: linear\nweight:"+str(self.type_weight)
-   
-        #grafico training
-        plt.title(titolo)
-        plt.xlabel("Epoch")
-        plt.ylabel("LOSS")
-        plt.plot(epoch_array,loss_array)
-
-        #grafico validation
-        plt.plot(epoch_validation,validation_array)     
-        plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
-        file='figure/training'+str(num_training)+".png"
-        if os.path.exists(file):
-            os.remove(file)
-        plt.savefig(file,format='png',dpi=200)
-        plt.close('all')
         
-        #--------------GRAFICO ACCURATEZZA-----------------------------
-        if(self.type_problem=="classification"):
-            titolo= "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight) + "; acc: "+ str(int(acc*100)) + "; acc_val: " + str(int(acc_validation*100))
-            #grafico training
-            plt.title(titolo)
-            plt.xlabel("Epoch")
-            plt.ylabel("ACCURATEZZA")
-            plt.plot(epoch_array,accuracy_array)
+        file='figure/training'+str(num_training)
+        makegraph (titolo,epoch_training,accuracy_array,loss_array,self.type_problem,epoch_validation,validation_array,file)
 
-            file='figure/training'+str(num_training)+"-accuratezza"+".png"
-            plt.savefig(file,format='png',dpi=200)
-            plt.close('all')
-        
-        #----------------------------------------------------------------
-
-       # output_NN = np.zeros(training_set_output.shape)
-       # self.ThreadPool_Forward(training_set_input, 0, training_set_input.shape[0], output_NN, True)
-    
     def backprogation(self, output_NN, training_set_output, batch_size):
         #parto dall'ultimo livello fino ad arrivare al primo
         for i in range(np.size(self.struct_layers) - 1, -1, -1):

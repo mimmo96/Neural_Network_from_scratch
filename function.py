@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
 import math
 from scipy.special import expit
 from scipy.spatial import distance
@@ -209,21 +210,21 @@ def normalize_input(x,dim_output):
 #w = matrice pesi dell'output layer
 def LOSS(output, output_expected, batch_size, penalty_term):
     #MSE
-    mse= np.subtract(output,output_expected)**2
-    mse = np.sum(mse,axis=0)
-    mse = np.sum(mse)
-    mse = np.divide(mse,2*batch_size)
+    mse = 0.5*(np.subtract(output,output_expected)) ** 2    
+    mse=np.sum (mse, axis=1)
+    mse=np.sum (mse, axis=0)
+    mse= mse/batch_size
     #thikonov
     mse += penalty_term
     return mse
 
 def MEE(output, output_expected, batch_size):
     #norma euclidea
-    mse=0
-    for i in range (0,output_expected.shape[1]):
-        mse+=distance.euclidean(output[:,i], output_expected[:,i])
-    mse = np.divide(mse,batch_size)
-    return mse
+    squares = (np.subtract(output,output_expected)) ** 2    
+    squares=np.sum (squares, axis=1)
+    squares=np.sqrt (squares)
+    squares=np.sum (squares, axis=0)
+    return squares/batch_size
 
 #sono due vettori
 def accuracy(type_problem,fun,output_expected, output_NN):
