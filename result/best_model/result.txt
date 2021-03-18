@@ -1,5 +1,4 @@
 ------------------------------MODEL 1-----------------------------
-parametri:  alfa:0.5  lamda:0  learning_rate:0.01  layer:[10, 20, 2, 0] function:tanh weight:uniform
-RESULT on TEST SET 10.005726329880465
+parametri:  alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT on TEST SET 9.488182150333392
 --------------------------------------------------------------------------------
-errore sui test:10.005726329880465

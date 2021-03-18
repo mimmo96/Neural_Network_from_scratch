@@ -1,4 +1,3 @@
-import itertools
 from read_write_file import print_result
 import neural_network
 import numpy as np
@@ -6,99 +5,7 @@ import os
 import math
 import ensemble
 from function import LOSS, accuracy,MEE
-from multiprocessing import Pool
 from joblib import Parallel, delayed
-
-def model_selection(vector_alfa, vector_learning_rate, vector_lambda, vectors_units, training_set, validation_set,test_set, batch_array, epoch_array,fun,fun_output, weight,type_problem):
-    
-    #inizializzo i parametri che mi serviranno per salvare i dati dopo il training (per la scelta del miglior modello)
-    best_loss_validation=-1
-    MEE=0
-    num_training=1
-    # vettore dove salvo i migliori 10 modelli
-    best_NN=np.empty(0,neural_network.neural_network)
-    # file dove andrò a scrivere 
-    out_file = open("result/resultexecution.txt","w")
-   
-    grid = list(itertools.product(epoch_array, batch_array, fun, fun_output, vectors_units, vector_learning_rate, vector_alfa, vector_lambda,weight))
-
-    for hyperparameter in grid:
-        #iperparametri
-        epochs=hyperparameter[0]
-        batch_size=hyperparameter[1]
-        function=hyperparameter[2]
-        fun_out=hyperparameter[3]
-        units=hyperparameter[4]
-        learning_rate=hyperparameter[5]
-        alfa=hyperparameter[6]
-        v_lambda=hyperparameter[7]
-        weig=hyperparameter[8]
-
-        print_result(out_file,"------------------------------INIZIO TRAINING "+str(num_training)+"-----------------------------")
-        print_result(out_file,"epoch:"+str(epochs)+" batch_size:"+str(batch_size)+" alfa:"+str(alfa)+ 
-        "  lamda:"+ str(v_lambda)+ "  learning_rate:"+str(learning_rate) +
-        "  layer:"+str(units)+ " function:"+str(function)+ " weight:"+ str(weig))
-        #salvo il numero di layer 
-        numero_layer=np.size(units)-2
-
-        #calcvolo la media dei 5 modelli generati e restituisco la loss e la MEE/accuratezza
-        loss_validation,MEE,NN=ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function)
-        #stampo il risultato di fine training
-        print_result(out_file,"RESULT:") 
-        print_result(out_file,"MEDIA LOSS:"+ str(loss_validation)+ " \nMEDIA MEE:"+ str(MEE))
-
-        if best_loss_validation == -1:
-            best_loss_validation = loss_validation
-            best_model = NN
-            best_NN=save(best_NN,NN)
-        else:
-            if loss_validation < best_loss_validation: 
-                print_result(out_file,"aggiorno l'errore! \n vecchio errore:"+ str(best_loss_validation)+
-                "\n nuovo errore:"+ str(loss_validation))
-                best_loss_validation = loss_validation
-                best_model = NN
-                best_NN=save(best_NN,best_model)
-            
-                #salvo il nuovo modello nell'array
-
-        print_result(out_file,"------------------------------FINE TRAINING "+str(num_training)+"-----------------------------")
-        num_training=num_training+1        
-
-    print_result(out_file,"\n************************* RESULT **************************")
-    print_result(out_file,"parametri migliori:  epoch:"+str(epochs)+" batch_size:"+str(batch_size)+" alfa:"+str(NN.alfa)+ "  lamda:"+ str(NN.v_lambda)+ "  learning_rate:"
-                +str(NN.learning_rate) +"  layer:"+str(NN.nj)+ " function:"+str(NN.function)+ " weight:"+str(NN.type_weight))
-    print_result(out_file,"\nerrore sul validation migliore: "+str(best_loss_validation)) 
-
-    #sui 10 migliori modelli trovati mi salvo i risultati
-    file = open("result/best_model/result.txt","w")
-    conta=1
-    losses = []
-
-    for neural in best_NN:
-        output_NN = np.zeros(test_set.output().shape)
-        neural.ThreadPool_Forward(test_set.input(), 0, test_set.input().shape[0], output_NN, True)
-        loss_test = LOSS(output_NN, test_set.output(), test_set.output().shape[0],0)
-        print_result(file,"------------------------------MODEL "+str(conta)+"-----------------------------")
-        print_result(file,"parametri:  alfa:"+str(neural.alfa)+ "  lamda:"+ str(neural.v_lambda)+ "  learning_rate:"
-                +str(neural.learning_rate) +"  layer:"+str(neural.nj)+ " function:"+str(neural.function)+ " weight:"+str(neural.type_weight))
-
-        print_result(file,"RESULT on TEST SET "+str(loss_test))
-        print_result(file,"--------------------------------------------------------------------------------")
-        conta=conta+1
-        losses.append ( loss_test )
-    
-    print("deviazione standard:",np.std(losses))
-    print("varianza:",np.var(losses))
-    #faccio ensamble sul test set
-    en=ensemble.ensemble(best_NN,test_set)
-    loss_ensemble=en.loss_average()
-    print_result(file,"errore sui test:" +str(loss_ensemble)) 
-
-    #chiudo i file
-    file.close()
-    out_file.close()
-    return best_model
-
 
 # funzioni per parallelizzare il calcolo con i 5 modelli in modo da fare la media finale
 def task(type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training):
@@ -146,9 +53,39 @@ def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_s
 # top_model=array contente i migliori 10 modelli
 # new_model= modello da inserire tra i 10
 # ogni migliori modello verrà inserito nella prima posizione e farà scorrerre gli altri, se supero la dimensione di 10 cancello l'ultimo inserito 
+
 def save(top_model,new_model):
     top_model=np.insert(top_model,0,new_model)
     if(np.size(top_model)>10):
         top_model=np.delete(top_model,-1)
     
     return top_model
+
+def save_test_model(best_NN,test_set):
+    #sui 10 migliori modelli trovati mi salvo i risultati
+    file = open("result/best_model/result.txt","w")
+    conta=1
+    losses = []
+
+    #stampo i risultati delle neural_network sui file
+    for neural in best_NN:
+        output_NN = np.zeros(test_set.output().shape)
+        neural.ThreadPool_Forward(test_set.input(), 0, test_set.input().shape[0], output_NN, True)
+        loss_test = LOSS(output_NN, test_set.output(), test_set.output().shape[0],0)
+        print_result(file,"------------------------------MODEL "+str(conta)+"-----------------------------")
+        print_result(file,"parametri:  alfa:"+str(neural.alfa)+ "  lamda:"+ str(neural.v_lambda)+ "  learning_rate:"
+                +str(neural.learning_rate) +"  layer:"+str(neural.nj)+ " function:"+str(neural.function)+ " weight:"+str(neural.type_weight))
+
+        print_result(file,"RESULT on TEST SET "+str(loss_test))
+        print_result(file,"--------------------------------------------------------------------------------")
+        conta=conta+1
+        losses.append ( loss_test )
+    
+    print("deviazione standard:",np.std(losses))
+    print("varianza:",np.var(losses))
+    
+    #faccio ensamble sul test set
+    en=ensemble.ensemble(best_NN,test_set)
+    loss_ensemble=en.loss_average()
+    print_result(file,"errore sui test:" +str(loss_ensemble)) 
+    file.close()

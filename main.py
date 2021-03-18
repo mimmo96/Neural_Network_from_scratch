@@ -1,16 +1,17 @@
 import numpy as np
 import read_write_file
 import function
-from Model_selection import model_selection
+from Hold_out import Hold_out
 from random import randint
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import Matrix_io
+import itertools
 import CV_k_fold
 import result
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch = [10]
+num_epoch = [50]
 filename = "CUP\ML-CUP20-TR.csv"
 file_name_test = "CUP\ML-CUP20-TR.csv"
 dim_output = 2
@@ -18,13 +19,13 @@ problem_type="Regression"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.01,0.0065]
+learning_rate = [0.0065]
 alfa = [0.5]
 v_lambda = [0]
 fun = ["tanh"]      
 #fun_out non sarà considerata in caso di regressione
 fun_out=["Regression"]
-weight=["uniform"]
+weight=["random"]
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
@@ -74,7 +75,9 @@ for i in batch_array:
         print("batch troppo grande!!!\nSTOPPO")
         exit()
 
-model_selection(alfa, learning_rate, v_lambda, nj, training_set, validation_set,test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
+grid = list(itertools.product(num_epoch, batch_array, fun, fun_out, nj, learning_rate, alfa, v_lambda,weight))
+
+Hold_out(grid,training_set, validation_set,test_set,problem_type)
 
 #top_k = CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
 #result.write_result(top_k, r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\CUP\top_k.csv")
