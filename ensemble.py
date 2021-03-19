@@ -13,15 +13,15 @@ class stat_model:
     
     def write_result(self, file_name):
         row_csv = {
-                'Number_Model' : [number_model],
-                'Units_per_layer' : [NN.nj[1:-1]],
-                'learning_rate' : [NN.learning_rate],
-                'lambda' : [NN.v_lambda],
-                'alfa' : [NN.alfa],
-                'function_hidden' : [NN.function],
-                'inizialization_weights' : [NN.type_weight],
-                'Error_MSE' : [mse],
-                'Error_MEE' : [mee]
+                'Number_Model' : [self.number_model],
+                'Units_per_layer' : [self.NN.nj[1:-1]],
+                'learning_rate' : [self.NN.learning_rate],
+                'lambda' : [self.NN.v_lambda],
+                'alfa' : [self.NN.alfa],
+                'function_hidden' : [self.NN.function],
+                'inizialization_weights' : [self.NN.type_weight],
+                'Error_MSE' : [self.mse],
+                'Error_MEE' : [self.mee]
             }
         df = pandas.DataFrame(row_csv)
         df.to_csv(file_name, mode='a')
@@ -32,7 +32,7 @@ class ensemble:
     
     #NN_array=array contenente le migliroi 10 Neural network
     #data= dati su cui testare
-    def __init__(self, NN_array =[], data = [], limit = 3):
+    def __init__(self, NN_array =[], data = [], limit = 1):
         self.NN_array=NN_array
         self.data=data
         self.limit = limit

@@ -18,7 +18,7 @@ problem_type="Regression"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.0065, 0.5]
+learning_rate = [0.0065, 0.00001]
 alfa = [0.5]
 v_lambda = [0]
 fun = ["tanh"]      
