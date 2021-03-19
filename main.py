@@ -8,10 +8,9 @@ from sklearn.preprocessing import OneHotEncoder
 import Matrix_io
 import itertools
 import CV_k_fold
-import result
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch = [50]
+num_epoch = 1
 filename = "CUP\ML-CUP20-TR.csv"
 file_name_test = "CUP\ML-CUP20-TR.csv"
 dim_output = 2
@@ -75,10 +74,10 @@ for i in batch_array:
         print("batch troppo grande!!!\nSTOPPO")
         exit()
 
-grid = list(itertools.product(num_epoch, batch_array, fun, fun_out, nj, learning_rate, alfa, v_lambda,weight))
+grid = list(itertools.product(batch_array, fun, fun_out, nj, learning_rate, alfa, v_lambda,weight))
 
-Hold_out(grid,training_set, validation_set,test_set,problem_type)
+#Hold_out(grid,training_set, validation_set,test_set,problem_type)
 
-#top_k = CV_k_fold.cv_k_fold(alfa, learning_rate, v_lambda, nj, training_set, test_set, batch_array, num_epoch,fun, fun_out, weight,problem_type)
-#result.write_result(top_k, r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\CUP\top_k.csv")
+top_k = CV_k_fold.cv_k_fold(grid, num_epoch, training_set, test_set, problem_type)
+top_k.write_result("ML_PROJECT\result\top_k.csv")
 #print(top_k)

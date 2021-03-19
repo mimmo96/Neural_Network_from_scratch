@@ -1,5 +1,0 @@
-,Number_Model,Units_per_layer,learning_rate,lambda,alfa,function_hidden,inizialization_weights,Error_MSE,Error_MEE
-0,1,10,0.0065,0,0.5,tanh,uniform,1754.2288336078036,56.885517659790096
-1,1,20,0.0065,0,0.5,tanh,uniform,1754.2288336078036,56.885517659790096
-2,1,2,0.0065,0,0.5,tanh,uniform,1754.2288336078036,56.885517659790096
-3,1,0,0.0065,0,0.5,tanh,uniform,1754.2288336078036,56.885517659790096

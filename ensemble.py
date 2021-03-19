@@ -66,18 +66,14 @@ class ensemble:
     def k_is_in_top(self, model):
     
         if len(self.NN_array) < self.limit:
-            return True
+            self.NN_array.append(model)
         
         NN_array = sorted(self.NN_array, key=lambda x : x.mee)
         worst_NN = NN_array[-1]
         if worst_NN.mee > model.mee:
             NN_array.pop()
-            return True
+            self.NN_array.append(model)
         
-        return False
-    
-    def add (self, model):
-        self.NN_array.append(model)
     
     def write_result(self, file_csv):
         for model in self.NN_array:
@@ -100,3 +96,5 @@ class ensemble:
             df = pandas.DataFrame(row_csv)
             df.to_csv(file_csv)
 
+    def print_top(self):
+        return self.NN_array[0].mee
