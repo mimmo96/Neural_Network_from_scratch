@@ -56,8 +56,7 @@ def cv_k_fold(grid, epochs, training_set, test_set, type_problem, k_fold = 4):
         NN_k_fold = ensemble.ensemble(NN_k_fold, [], k_fold)
         best_NN_k_fold = NN_k_fold.mean_loss() 
         
-        if top_NN.k_is_in_top(best_NN_k_fold):
-            top_NN.add(best_NN_k_fold)
+        top_NN.k_is_in_top(best_NN_k_fold)
     
     #retraining with early stopping
     #

@@ -79,5 +79,5 @@ grid = list(itertools.product(batch_array, fun, fun_out, nj, learning_rate, alfa
 #Hold_out(grid,training_set, validation_set,test_set,problem_type)
 
 top_k = CV_k_fold.cv_k_fold(grid, num_epoch, training_set, test_set, problem_type)
-top_k.write_result("ML_PROJECT\result\top_k.csv")
+top_k.write_result(r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\result\top_k.csv")
 #print(top_k)
