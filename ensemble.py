@@ -27,7 +27,7 @@ class stat_model:
                 'Error_MEE' : [self.mee]
             }
         df = pandas.DataFrame(row_csv)
-        df.to_csv(file_name, mode='a')
+        df.to_csv(file_name, mode='a', header = False)
 
     def getNN(self):
         return self.NN

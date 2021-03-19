@@ -8,23 +8,37 @@ from sklearn.preprocessing import OneHotEncoder
 import Matrix_io
 import itertools
 import CV_k_fold
+import pandas
+
+df = pandas.DataFrame(columns = ['Number_Model' ,
+                'Units_per_layer',
+                'learning_rate' ,
+                'lambda' ,
+                'alfa' ,
+                'function_hidden',
+                'inizialization_weights',
+                'Error_MSE' ,
+                'Error_MEE' ])
+df.to_csv("result/all_models.csv")
+
+
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
 num_epoch = 1
-filename = "CUP\ML-CUP20-TR.csv"
-file_name_test = "CUP\ML-CUP20-TR.csv"
-dim_output = 2
-problem_type="Regression"
+filename = "monks\monks1.train.csv"
+file_name_test = "monks\monks1.test.csv"
+dim_output = 1
+problem_type="classification"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.0065, 0.00001]
-alfa = [0.5]
+learning_rate = [0.01, 0.05, 0.1, 0.3, 0.4 ,0.5, 1, 4]
+alfa = [0.5, 0.65, 0.7, 0.75, 0.9]
 v_lambda = [0]
-fun = ["tanh"]      
+fun = ["sigmoidal", "zero_one_h", "relu", "tanh"]      
 #fun_out non sarà considerata in caso di regressione
-fun_out=["Regression"]
-weight=["random"]
+fun_out=["zero_one_h", "sigmoidal"]
+weight=["uniform"]
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
@@ -65,8 +79,8 @@ if(problem_type=="classification"):
 
 else:
     training_set, validation_set, test_set = read_write_file.divide_exaples_hold_out(training_set, dim_output)
-nj=[[dim_input,20,dim_output,0]]
-batch_array=[32]
+nj=[[dim_input,3,dim_output,0], [dim_input,4,dim_output,0]]
+batch_array=[training_set.input().shape[0]]
 
 #prima di fare la model selection controllo se il batch è di dimensione giusta
 for i in batch_array:
@@ -76,7 +90,7 @@ for i in batch_array:
 
 grid = list(itertools.product(batch_array, fun, fun_out, nj, learning_rate, alfa, v_lambda,weight))
 
-top_k=Hold_out(num_epoch,grid,training_set, validation_set,test_set,problem_type)
+top_k=Hold_out(num_epoch,grid,training_set, validation_set,problem_type)
 
 #top_k = CV_k_fold.cv_k_fold(grid, num_epoch, training_set, test_set, problem_type)
 top_k.write_result("result/top_k.csv")
