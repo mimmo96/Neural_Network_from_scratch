@@ -89,9 +89,9 @@ class ensemble:
         if len(self.NN_array) < self.limit:
             self.NN_array.append(model)
         else:
-            NN_array = sorted(self.NN_array, key=lambda x : x.mee)
+            NN_array = sorted(self.NN_array, key=lambda x : x.mse)
             worst_NN = NN_array[-1]
-            if worst_NN.mee > model.mee:
+            if worst_NN.mse > model.mse:
                 NN_array.pop()
                 self.NN_array.append(model)
         

@@ -239,7 +239,7 @@ def accuracy(type_problem,fun,output_expected, output_NN):
         if (result==0):
             count=count+1
     
-    return (np.divide(count,np.size(output_expected)))
+    return (np.divide(count,np.size(output_expected)))*100
 
 #restituisce un array di matrici
 #data: matrice

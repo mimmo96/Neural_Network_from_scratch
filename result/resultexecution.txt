@@ -1,14 +1,2 @@
 ------------------------------INIZIO TRAINING 1-----------------------------
-epoch:1 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
-RESULT:
-MEDIA LOSS:107.87024466912624 
-MEDIA MEE:13.460941647399256
-RESULT TOP K:13.460941647399256
-------------------------------FINE TRAINING 1-----------------------------
-------------------------------INIZIO TRAINING 2-----------------------------
-epoch:1 batch_size:32 alfa:0.5  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
-RESULT:
-MEDIA LOSS:1651.7081468013705 
-MEDIA MEE:55.074399274533235
-RESULT TOP K:13.460941647399256
-------------------------------FINE TRAINING 2-----------------------------
+epoch:500 batch_size:124 alfa:0.75  lamda:0  learning_rate:0.44  layer:[17, 3, 1, 0] function:sigmoidal weight:uniform

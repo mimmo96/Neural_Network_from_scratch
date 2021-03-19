@@ -10,7 +10,7 @@ def makegraph (titolo,epoch_training,accuracy_array,loss_array,type_problem,epoc
     plt.plot(epoch_training,loss_array)
 
     #grafico validation
-    plt.plot(epoch_validation,validation_array)     
+    plt.plot(epoch_validation,validation_array, "r--")     
     plt.legend(["LOSS TRAINING", "VALIDATION ERROR"])
     file=file+".png"
 
