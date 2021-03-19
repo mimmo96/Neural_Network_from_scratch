@@ -4,7 +4,7 @@ import Matrix_io
 import neural_network
 import math
 import ensemble
-from Model_selection import ThreadPool_average
+from Model_Selection import ThreadPool_average
 
 def cv_k_fold(grid, epochs, training_set, test_set, type_problem, k_fold = 4):
     num_training = -1

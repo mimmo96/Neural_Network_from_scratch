@@ -1,11 +1,14 @@
 ------------------------------INIZIO TRAINING 1-----------------------------
-epoch:50 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
+epoch:1 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
 RESULT:
-MEDIA LOSS:10.06517596004621 
-MEDIA MEE:3.525518615334799
+MEDIA LOSS:159.19975511820272 
+MEDIA MEE:16.488283064870444
+RESULT TOP K:16.488283064870444
 ------------------------------FINE TRAINING 1-----------------------------
-
-************************* RESULT **************************
-parametri migliori:  epoch:50 batch_size:32 alfa:0.5  lamda:0  learning_rate:0.0065  layer:[10, 20, 2, 0] function:tanh weight:random
-
-errore sul validation migliore: 10.06517596004621
+------------------------------INIZIO TRAINING 2-----------------------------
+epoch:1 batch_size:32 alfa:0.5  lamda:0  learning_rate:1e-05  layer:[10, 20, 2, 0] function:tanh weight:random
+RESULT:
+MEDIA LOSS:1763.9098155264296 
+MEDIA MEE:57.05829602132867
+RESULT TOP K:16.488283064870444
+------------------------------FINE TRAINING 2-----------------------------

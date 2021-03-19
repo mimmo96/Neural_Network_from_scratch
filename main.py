@@ -76,8 +76,23 @@ for i in batch_array:
 
 grid = list(itertools.product(batch_array, fun, fun_out, nj, learning_rate, alfa, v_lambda,weight))
 
-#Hold_out(grid,training_set, validation_set,test_set,problem_type)
+top_k=Hold_out(num_epoch,grid,training_set, validation_set,test_set,problem_type)
 
-top_k = CV_k_fold.cv_k_fold(grid, num_epoch, training_set, test_set, problem_type)
-top_k.write_result(r"C:\Users\Gerlando\PycharmProjects\pythonProject1\ML_PROJECT\result\top_k.csv")
+#top_k = CV_k_fold.cv_k_fold(grid, num_epoch, training_set, test_set, problem_type)
+top_k.write_result("result/top_k.csv")
 #print(top_k)
+
+'''
+#salvo 
+    #stampo il risultato con il miglior modello
+    NN=best_NN.best_model().NN
+    best_loss_validation=best_loss_validation
+    print_result(out_file,"\n************************* RESULT **************************")
+    print_result(out_file,"parametri migliori:  epoch:"+str(epochs)+" batch_size:"+str(batch_size)+" alfa:"+str(NN.alfa)+ "  lamda:"+ str(NN.v_lambda)+ "  learning_rate:"
+                +str(NN.learning_rate) +"  layer:"+str(NN.nj)+ " function:"+str(NN.function)+ " weight:"+str(NN.type_weight))
+    print_result(out_file,"\nerrore sul validation migliore: "+str(best_loss_validation)) 
+
+    #sui 10 migliori modelli trovati mi salvo i risultati e faccio ensamble
+    save_test_model(best_NN,test_set)
+
+'''

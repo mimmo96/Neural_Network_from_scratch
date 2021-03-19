@@ -3,6 +3,7 @@ from function import LOSS
 import math
 import pandas
 import neural_network
+
 class stat_model:
     def __init__(self, NN, mse = -1, mee = -1, number_model = 0):
 
@@ -25,6 +26,9 @@ class stat_model:
             }
         df = pandas.DataFrame(row_csv)
         df.to_csv(file_name, mode='a')
+
+    def getNN(self):
+        return self.NN
             
 
 
@@ -120,6 +124,8 @@ class ensemble:
             df = pandas.DataFrame(row_csv)
             df.to_csv(file_csv, mode='a', header = False)
             
-
     def print_top(self):
         return self.NN_array[0].mee
+
+    def best_model(self):
+        return self.NN_array[0]
