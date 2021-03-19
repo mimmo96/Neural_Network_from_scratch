@@ -38,7 +38,7 @@ class ensemble:
     
     #NN_array=array contenente le migliroi 10 Neural network
     #data= dati su cui testare
-    def __init__(self, NN_array =[], data = [], limit = 1):
+    def __init__(self, NN_array =[], data = [], limit = 10):
         self.NN_array=NN_array
         self.data=data
         self.limit = limit
@@ -65,21 +65,30 @@ class ensemble:
     def mean_loss(self):
         #AGGIUNGERE DEVIAZIONE STANDARD
         mean_mee = 0
-        mean_mse = 0
-        best_mse = + math.inf
         best_mee = + math.inf
 
+        mean_mse_vl = 0
+        mean_mse_tr = 0
+        
+        best_mse_tr = + math.inf
+        best_mse_vl = + math.inf
+        
+
         for model in self.NN_array:
-            if best_mee > model.mee:
+            if best_mse_vl > model.mse_vl:
                 best_mee = model.mee
-                best_mse = model.mse
+                best_mse_vl = model.mse_vl
+                best_mse_tr = model.mse_tr
                 best_NN = model
+            
             mean_mee += model.mee
-            mean_mse += model.mse 
+            mean_mse_vl += model.mse_vl 
+            mean_mse_tr += model.mse_tr 
         
         mean_mse /= np.size(self.NN_array)
         mean_mee /= np.size(self.NN_array)
-        best_NN.mse = mean_mse
+        best_NN.mse_vl = mean_mse_vl
+        best_NN.mse_tr = mean_mse_tr
         best_NN.mee = mean_mee
 
         return best_NN
@@ -89,9 +98,9 @@ class ensemble:
         if len(self.NN_array) < self.limit:
             self.NN_array.append(model)
         else:
-            NN_array = sorted(self.NN_array, key=lambda x : x.mse)
+            NN_array = sorted(self.NN_array, key=lambda x : x.mse_vl)
             worst_NN = NN_array[-1]
-            if worst_NN.mse > model.mse:
+            if worst_NN.mse_vl > model.mse_vl:
                 NN_array.pop()
                 self.NN_array.append(model)
         

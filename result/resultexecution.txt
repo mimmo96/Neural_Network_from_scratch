@@ -1,2 +1,2 @@
 ------------------------------INIZIO TRAINING 1-----------------------------
-epoch:500 batch_size:124 alfa:0.75  lamda:0  learning_rate:0.44  layer:[17, 3, 1, 0] function:sigmoidal weight:uniform
+epoch:500 batch_size:124 alfa:0.8  lamda:0  learning_rate:0.44  layer:[17, 2, 1, 0] function:sigmoidal weight:uniform
