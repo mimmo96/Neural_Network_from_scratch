@@ -10,20 +10,27 @@ from joblib import Parallel, delayed
 # funzioni per parallelizzare il calcolo con i 5 modelli in modo da fare la media finale
 def task(type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training):
     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
+    #LOSS TRAINING
+    output_NN = np.zeros(training_set.output().shape)
+    NN.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
+    loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0], penalty_term=0)
+
+    #LOSS VALIDATION
     output_NN = np.zeros(validation_set.output().shape)
     NN.ThreadPool_Forward(validation_set.input(), 0, validation_set.input().shape[0], output_NN, True)
-    penalty_term = NN.penalty_NN()
-    loss_tot = LOSS(output_NN, validation_set.output(), validation_set.output().shape[0], penalty_term)
+    loss_validation = LOSS(output_NN, validation_set.output(), validation_set.output().shape[0], penalty_term=0)
+
     if(type_problem=="classification"):
         MEE_tot=accuracy(type_problem,fun_out,validation_set.output(),output_NN)
     else:
         MEE_tot=MEE(output_NN, validation_set.output(), validation_set.output().shape[0])
     
-    return loss_tot,MEE_tot,NN
+    return loss_training,loss_validation,MEE_tot,NN
     
 def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function):
     #creo il pool di thread
-    loss_tot=0
+    loss_val_tot=0
+    loss_tr_tot=0
     best_loss=+ math.inf
     MEE_tot=0
     best_NN=0
@@ -34,20 +41,23 @@ def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_s
     result= Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training+(i/10)) for i in range(5))
 
     for i in range (0,5):
-        loss,mee,NN=result[i]
-        print("loss ",i,":" ,loss)
+        loss_tr,loss_vl,mee,NN=result[i]
+        print("loss training ",i,":" ,loss_tr)
+        print("loss validation ",i,":" ,loss_vl)
         print("MEE ",i,":", mee)
-        if(loss<best_loss):
-            best_loss=loss
+        if(loss_vl<best_loss):
+            best_loss=loss_vl
             best_NN=NN
-        best_loss=loss
-        loss_tot = loss_tot + loss
+        #best_loss=loss_vl
+        loss_val_tot = loss_val_tot + loss_vl
+        loss_tr_tot = loss_tr_tot + loss_tr
         MEE_tot= MEE_tot +mee
 
-    loss_tot=np.divide(loss_tot,5)
+    loss_tr_tot=np.divide(loss_tr_tot,5)
+    loss_val_tot=np.divide(loss_val_tot,5)
     MEE_tot=np.divide(MEE_tot,5)
 
-    return loss_tot,MEE_tot,best_NN
+    return loss_tr_tot,loss_val_tot,MEE_tot,best_NN
 
 
 # top_model=array contente i migliori 10 modelli

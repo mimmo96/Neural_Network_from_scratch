@@ -5,10 +5,11 @@ import pandas
 import neural_network
 
 class stat_model:
-    def __init__(self, NN, mse = -1, mee = -1, number_model = 0):
+    def __init__(self, NN, mse_tr = -1, mse_vl = -1 , mee = -1, number_model = 0):
 
         self.NN = NN
-        self.mse = mse
+        self.mse_tr = mse_tr
+        self.mse_vl = mse_vl
         self.mee = mee
         self.number_model = number_model
     
@@ -21,7 +22,8 @@ class stat_model:
                 'alfa' : [self.NN.alfa],
                 'function_hidden' : [self.NN.function],
                 'inizialization_weights' : [self.NN.type_weight],
-                'Error_MSE' : [self.mse],
+                'Error_MSE_tr' : [self.mse_tr],
+                'Error_MSE_vl' : [self.mse_vl],
                 'Error_MEE' : [self.mee]
             }
         df = pandas.DataFrame(row_csv)
@@ -106,26 +108,7 @@ class ensemble:
                 'Error_MEE' ])
         df.to_csv(file_csv)
         for model in self.NN_array:
-            NN = model.NN
-            mse = model.mse
-            mee = model.mee
-            number_model = model.number_model
-            row_csv = {
-                'Number_Model' : [number_model],
-                'Units_per_layer' : [NN.nj[1:-1]],
-                'learning_rate' : [NN.learning_rate],
-                'lambda' : [NN.v_lambda],
-                'alfa' : [NN.alfa],
-                'function_hidden' : [NN.function],
-                'inizialization_weights' : [NN.type_weight],
-                'Error_MSE' : [mse],
-                'Error_MEE' : [mee]
-            }
-            df = pandas.DataFrame(row_csv)
-            df.to_csv(file_csv, mode='a', header = False)
+            model.write_result(file_csv)
             
     def print_top(self):
         return self.NN_array[0].mee
-
-    def best_model(self):
-        return self.NN_array[0]
