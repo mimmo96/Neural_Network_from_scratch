@@ -39,7 +39,7 @@ def Hold_out(epochs,grid, training_set, validation_set,type_problem):
         #create model_stat 
         model_stat = ensemble.stat_model(NN, loss_training, loss_validation, MEE, num_training)
         #insert model_stat in best model if it is in K top model
-        best_NN.k_is_in_top(model_stat)
+        best_NN.k_is_in_top(model_stat, type_problem)
         model_stat.write_result("result/all_models.csv")
         #stampo il risultato di fine training
         print_result(out_file,"RESULT:") 

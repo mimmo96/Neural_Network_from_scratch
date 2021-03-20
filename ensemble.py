@@ -27,18 +27,27 @@ class stat_model:
                 'Error_MEE' : [self.mee]
             }
         df = pandas.DataFrame(row_csv)
-        df.to_csv(file_name, mode='a', header = False)
+        df.to_csv(file_name, mode='a', header = False, index=False)
 
     def getNN(self):
         return self.NN
-            
 
+    def greater_loss(self, model):          
+        if self.mse_vl > model.mse_vl:
+            return True
+        return False
+
+    def lesser_accuracy(self, model):          
+        if self.mee < model.mee:
+            return True
+        else:
+            self.greater_loss(model)
 
 class ensemble:
     
     #NN_array=array contenente le migliroi 10 Neural network
     #data= dati su cui testare
-    def __init__(self, NN_array =[], data = [], limit = 10):
+    def __init__(self, NN_array =[], data = [], limit = 3):
         self.NN_array=NN_array
         self.data=data
         self.limit = limit
@@ -85,23 +94,25 @@ class ensemble:
             mean_mse_vl += model.mse_vl 
             mean_mse_tr += model.mse_tr 
         
-        mean_mse /= np.size(self.NN_array)
+        mean_mse_tr /= np.size(self.NN_array)
+        mean_mse_vl /= np.size(self.NN_array)
         mean_mee /= np.size(self.NN_array)
+        
         best_NN.mse_vl = mean_mse_vl
         best_NN.mse_tr = mean_mse_tr
         best_NN.mee = mean_mee
 
         return best_NN
 
-    def k_is_in_top(self, model):
+    def k_is_in_top(self, model, type_problem):
     
         if len(self.NN_array) < self.limit:
             self.NN_array.append(model)
         else:
-            NN_array = sorted(self.NN_array, key=lambda x : x.mse_vl)
-            worst_NN = NN_array[-1]
-            if worst_NN.mse_vl > model.mse_vl:
-                NN_array.pop()
+            self.NN_array = sorted(self.NN_array, key=lambda x : x.mse_vl)
+            worst_NN = self.NN_array[-1]
+            if (((type_problem == "classification") and worst_NN.lesser_accuracy(model)) or ((type_problem == "Regression") and worst_NN.greater_loss(model))):
+                self.NN_array.pop()
                 self.NN_array.append(model)
         
     
