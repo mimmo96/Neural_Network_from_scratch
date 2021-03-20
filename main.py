@@ -17,8 +17,9 @@ df = pandas.DataFrame(columns = ['Number_Model' ,
                 'alfa' ,
                 'function_hidden',
                 'inizialization_weights',
-                'Error_MSE' ,
-                'Error_MEE' ])
+                'Error_MSE_tr' ,
+                'Error_MSE_vl' ,
+                'Error_MEE'])
 df.to_csv("result/all_models.csv")
 
 
@@ -38,12 +39,12 @@ v_lambda = [0]
 fun = ["sigmoidal", "zero_one_h", "relu", "tanh"]      
 #fun_out non sarà considerata in caso di regressione
 fun_out=["zero_one_h", "sigmoidal"]
-weight=["uniform"]
+weight=["uniform","random"]
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
 training_set = read_write_file.read_csv(problem_type,filename)
-validation_set = read_write_file.read_csv(problem_type,filename)
+validation_set = read_write_file.read_csv(problem_type,file_name_test)
 test_set = validation_set
 
 #se sono nella classificazione utilizzo one-hot-coding
@@ -66,7 +67,7 @@ if(problem_type=="classification"):
     tmp[:, -1] = label.fit_transform(test_set[:, -1])
     test_set = tmp
 
-training_set = function.normalize_input(training_set,dim_output)
+#♫training_set = function.normalize_input(training_set,dim_output)
 
 newInput=training_set[0]
 dim_input=np.size(newInput) - dim_output
@@ -79,6 +80,7 @@ if(problem_type=="classification"):
 
 else:
     training_set, validation_set, test_set = read_write_file.divide_exaples_hold_out(training_set, dim_output)
+
 nj=[[dim_input,2,dim_output,0], [dim_input,3,dim_output,0], [dim_input,4,dim_output,0]]
 batch_array=[training_set.input().shape[0]]
 

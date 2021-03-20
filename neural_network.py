@@ -1,14 +1,12 @@
 from os import fsdecode
 import numpy as np
 import Layer
-import os
 import matplotlib
 from graphycs import makegraph
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import math
 from function import der_loss, LOSS, _classification,  _derivate_activation_function, sign, accuracy, MEE
-from concurrent.futures import ThreadPoolExecutor
 import backpropagation as bp
 
 class neural_network:
@@ -65,7 +63,6 @@ class neural_network:
         
     def ThreadPool_Forward(self, matrix_input, index_matrix, batch_size, output, validation = False):
         #creo il pool di thread
-        executor = ThreadPoolExecutor(10)
         #indice massimo che posso raggiungere con la dimensione del batch
         max_i = batch_size + index_matrix
        
@@ -73,9 +70,7 @@ class neural_network:
         for i in range(index_matrix, max_i):
             #row_input va da 0 a batch_size-1
             row_input_layer = i % batch_size   
-            executor.submit(self.task_forwarding, matrix_input[i, :], i, output, row_input_layer, validation)
-
-        executor.shutdown(True)
+            self.task_forwarding(matrix_input[i, :], i, output, row_input_layer, validation)
 
         return output
     

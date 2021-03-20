@@ -124,7 +124,8 @@ class ensemble:
                 'alfa' ,
                 'function_hidden',
                 'inizialization_weights',
-                'Error_MSE' ,
+                'Error_MSE_tr' ,
+                'Error_MSE_vl' ,
                 'Error_MEE' ])
         df.to_csv(file_csv)
         for model in self.NN_array:
