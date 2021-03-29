@@ -40,7 +40,7 @@ def cv_k_fold(grid, epochs, training_set, test_set, type_problem, k_fold = 4):
             
             #for each model, train "trials_for_model" times with different initialization weights
             NN_trials = np.empty(trials_per_model, neural_network.neural_network)
-            mean_mse, mean_mee, model = ThreadPool_average(type_problem,fun_out,training_k,validation_k, batch_size, epochs, num_training,units, alfa, v_lambda, learning_rate, len(units) - 2, weig, function)
+            loss_training,loss_validation,MEE,std,model = ThreadPool_average(type_problem,fun_out,training_k,validation_k, batch_size, epochs, num_training,units, alfa, v_lambda, learning_rate, len(units) - 2, weig, function)
             
             #for i in range(trials_per_model):
                 #NN_trials[i] = neural_network.neural_network(hyperparameter[0], hyperparameter[1], hyperparameter[2], hyperparameter[3], (np.size(hyperparameter[0])-1), hyperparameter[5], hyperparameter[6], hyperparameter[7], type_problem)
@@ -49,8 +49,8 @@ def cv_k_fold(grid, epochs, training_set, test_set, type_problem, k_fold = 4):
             #NN_k_fold[k] = list of tuple (neaural network, mean_mse, mean_mee, num_training) it contains mean mse btw NN_trials 
             # and the best model (inside NN_trials) respect to its mse
             #model, mean_mse, mean_mee = mean_NN(NN_trials, validation_k)
-            NN_k_fold.append(ensemble.stat_model(model, mean_mse, mean_mee, num_training))
-        
+            NN_k_fold.append(ensemble.stat_model(model, loss_training,loss_validation,std, MEE, num_training))
+            
         #best_NN_fold = tuple (neaural network, mean_mse, mean_mee, num_training) it contains best model btw k models generated 
         # and the mean mse btw k models
         NN_k_fold = ensemble.ensemble(NN_k_fold, [], k_fold)

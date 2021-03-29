@@ -34,6 +34,7 @@ def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_s
     best_loss=+ math.inf
     MEE_tot=0
     best_NN=0
+    loss=[]
 
     #creo la neural network con i parametri passati
     NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, type_problem) 
@@ -42,6 +43,7 @@ def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_s
 
     for i in range (0,5):
         loss_tr,loss_vl,mee,NN=result[i]
+        loss.append(loss_vl)
         print("loss training ",i,":" ,loss_tr)
         print("loss validation ",i,":" ,loss_vl)
         print("MEE ",i,":", mee)
@@ -53,11 +55,13 @@ def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_s
         loss_tr_tot = loss_tr_tot + loss_tr
         MEE_tot= MEE_tot +mee
 
+    print("array loss:",loss)
+    std=np.std(loss)
     loss_tr_tot=np.divide(loss_tr_tot,5)
     loss_val_tot=np.divide(loss_val_tot,5)
     MEE_tot=np.divide(MEE_tot,5)
 
-    return loss_tr_tot,loss_val_tot,MEE_tot,best_NN
+    return loss_tr_tot,loss_val_tot,MEE_tot,std,best_NN
 
 
 # top_model=array contente i migliori 10 modelli

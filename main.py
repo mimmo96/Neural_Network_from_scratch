@@ -19,27 +19,28 @@ df = pandas.DataFrame(columns = ['Number_Model' ,
                 'inizialization_weights',
                 'Error_MSE_tr' ,
                 'Error_MSE_vl' ,
-                'Error_MEE'])
+                'Error_MEE',
+                'Variance' ])
 df.to_csv("result/all_models.csv")
 
 
 #----------------------------PARAMETRI DA ANALIZZARE----------------------
 
-num_epoch = 500
-filename = "monks\monks1.train.csv"
-file_name_test = "monks\monks1.test.csv"
-dim_output = 1
-problem_type="classification"
+num_epoch = 10
+filename = "CUP/ML-CUP20-TR.csv"
+file_name_test = "CUP/ML-CUP20-TR.csv"
+dim_output = 2
+problem_type="Regression"
 #mi crea i layer in questo modo: (num_input, num_units_layer1, num_units_layer_2, .... , num_output, 0)
 #nj=[ [10, 20, 1, 0], [10, 10, 2 , 0], [10, 30, 2 , 0],[10, 100, 2 , 0],[10, 50, 2 , 0],[10, 7, 2 , 0] ]
 
-learning_rate = [0.44, 0.5, 0.8]
-alfa = [0.8, 0.9]
+learning_rate = [0.01]
+alfa = [0.6]
 v_lambda = [0]
-fun = ["sigmoidal", "zero_one_h", "relu", "tanh"]      
+fun = ["tanh"]      
 #fun_out non sarà considerata in caso di regressione
-fun_out=["zero_one_h", "sigmoidal"]
-weight=["uniform","random"]
+fun_out=["Regression"]
+weight=["uniform"]
 #-------------------------------FINE PARAMETRI------------------------------
 
 #leggo i dati dal file e li salvo in una matrice
@@ -67,7 +68,8 @@ if(problem_type=="classification"):
     tmp[:, -1] = label.fit_transform(test_set[:, -1])
     test_set = tmp
 
-#♫training_set = function.normalize_input(training_set,dim_output)
+if(problem_type=="Regression"):
+    training_set = function.normalize_input(training_set,dim_output)
 
 newInput=training_set[0]
 dim_input=np.size(newInput) - dim_output
@@ -81,8 +83,8 @@ if(problem_type=="classification"):
 else:
     training_set, validation_set, test_set = read_write_file.divide_exaples_hold_out(training_set, dim_output)
 
-nj=[[dim_input,2,dim_output,0], [dim_input,3,dim_output,0], [dim_input,4,dim_output,0]]
-batch_array=[training_set.input().shape[0]]
+nj=[[dim_input,20,20,dim_output,0]]
+batch_array=[100]
 
 #prima di fare la model selection controllo se il batch è di dimensione giusta
 for i in batch_array:

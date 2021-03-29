@@ -34,16 +34,16 @@ def Hold_out(epochs,grid, training_set, validation_set,type_problem):
         numero_layer=np.size(units)-2
 
         #calcvolo la media dei 5 modelli generati e restituisco la loss e la MEE/accuratezza
-        loss_training,loss_validation,MEE,NN=ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function)
+        loss_training,loss_validation,MEE,std,NN=ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function)
         
         #create model_stat 
-        model_stat = ensemble.stat_model(NN, loss_training, loss_validation, MEE, num_training)
+        model_stat = ensemble.stat_model(NN, loss_training, loss_validation, std, MEE, num_training)
         #insert model_stat in best model if it is in K top model
         best_NN.k_is_in_top(model_stat, type_problem)
         model_stat.write_result("result/all_models.csv")
         #stampo il risultato di fine training
         print_result(out_file,"RESULT:") 
-        print_result(out_file,"MEDIA LOSS:"+ str(loss_validation)+ " \nMEDIA MEE:"+ str(MEE))
+        print_result(out_file,"MEDIA LOSS:"+ str(loss_validation)+ " \nMEDIA MEE:"+ str(MEE)+ " \nSTANDARD DEVIATION:"+ str(std))
         print_result(out_file,"RESULT TOP K:" + str(best_NN.print_top())) 
         
         print_result(out_file,"------------------------------FINE TRAINING "+str(num_training)+"-----------------------------")

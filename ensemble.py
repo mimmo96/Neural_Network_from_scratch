@@ -5,13 +5,14 @@ import pandas
 import neural_network
 
 class stat_model:
-    def __init__(self, NN, mse_tr = -1, mse_vl = -1 , mee = -1, number_model = 0):
+    def __init__(self, NN, mse_tr = -1, mse_vl = -1 ,std= -1, mee = -1, number_model = 0):
 
         self.NN = NN
         self.mse_tr = mse_tr
         self.mse_vl = mse_vl
         self.mee = mee
         self.number_model = number_model
+        self.std = std
     
     def write_result(self, file_name):
         row_csv = {
@@ -24,7 +25,8 @@ class stat_model:
                 'inizialization_weights' : [self.NN.type_weight],
                 'Error_MSE_tr' : [self.mse_tr],
                 'Error_MSE_vl' : [self.mse_vl],
-                'Error_MEE' : [self.mee]
+                'Error_MEE' : [self.mee],
+                'Variance' : [self.std]
             }
         df = pandas.DataFrame(row_csv)
         df.to_csv(file_name, mode='a', header = False, index=False)
@@ -126,7 +128,8 @@ class ensemble:
                 'inizialization_weights',
                 'Error_MSE_tr' ,
                 'Error_MSE_vl' ,
-                'Error_MEE' ])
+                'Error_MEE' ,
+                'Variance' ])
         df.to_csv(file_csv)
         for model in self.NN_array:
             model.write_result(file_csv)
