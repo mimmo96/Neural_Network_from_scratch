@@ -75,7 +75,7 @@ class ensemble:
     def loss_average(self):
         #calculate the average of the outputs, it gives me a single output vector
         output=self.output_average()
-        loss_test = LOSS(output, self.data.output(), self.data.output().shape[0], penalty_term = 0)
+        loss_test = LOSS(output, self.data.output(), penalty_term = 0)
         return loss_test
 
     def mean_loss(self):

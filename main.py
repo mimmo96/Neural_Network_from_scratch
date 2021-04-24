@@ -59,10 +59,10 @@ if(problem_type=="Regression"):
 # HYPERPARAMETERS #
 ###################
 nj=[[dim_input,20,20,dim_output,0]]
-batch_array=[16,32,64]
+batch_array=[16]
 learning_rate = [0.0068]
-alfa = [0.6,0,0.9]
-v_lambda = [0.00001,0]
+alfa = [0]
+v_lambda = [0]
 fun = ["zero_one_h"]      
 fun_out=["Regression"]
 weight=["Xavier Normal"]

@@ -17,12 +17,12 @@ def task(type_problem,fun_out, NN,training_set,validation_set, batch_size, epoch
     #LOSS TRAINING
     output_NN = np.zeros(training_set.output().shape)
     NN.Forwarding(training_set.input(), training_set.input().shape[0], output_NN, True)
-    loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0], penalty_term=0)
+    loss_training = LOSS(output_NN, training_set.output(), penalty_term=0)
 
     #LOSS VALIDATION
     output_NN = np.zeros(validation_set.output().shape)
     NN.Forwarding(validation_set.input(), validation_set.input().shape[0], output_NN, True)
-    loss_validation = LOSS(output_NN, validation_set.output(), validation_set.output().shape[0], penalty_term=0)
+    loss_validation = LOSS(output_NN, validation_set.output(), penalty_term=0)
 
     #MEE OR ACCURACY
     if(type_problem == "classification"):
@@ -95,7 +95,7 @@ def save_test_model(best_NN,test_set):
     for neural in best_NN:
         output_NN = np.zeros(test_set.output().shape)
         neural.Forwarding(test_set.input(), 0, test_set.input().shape[0], output_NN, True)
-        loss_test = LOSS(output_NN, test_set.output(), test_set.output().shape[0],0)
+        loss_test = LOSS(output_NN, test_set.output(), 0)
         print_result(file,"------------------------------MODEL "+str(conta)+"-----------------------------")
         print_result(file,"PARAMETERS:  alfa:"+str(neural.alfa)+ "  lamda:"+ str(neural.v_lambda)+ "  learning_rate:"
                 +str(neural.learning_rate) +"  layer:"+str(neural.nj)+ " function:"+str(neural.function)+ " weight:"+str(neural.type_weight))

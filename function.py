@@ -190,10 +190,9 @@ def _derivate_activation_function(nets,type_fun):
 ##################
 
 def der_loss( output_expected,output_layer):
-    
     return np.subtract(output_expected,output_layer)
 
-def LOSS(output, output_expected, batch_size, penalty_term=0):
+def LOSS(output, output_expected, penalty_term=0):
     mse=np.mean( np.square( output-output_expected ) )/2 
     mse += penalty_term
     return mse

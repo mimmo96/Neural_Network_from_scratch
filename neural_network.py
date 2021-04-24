@@ -100,7 +100,7 @@ class neural_network:
             #loss on all training set 
             output_NN = np.zeros(training_set.output().shape)
             self.Forwarding(training_set.input(), training_set.input().shape[0], output_NN, True)
-            loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0])
+            loss_training = LOSS(output_NN, training_set.output())
             loss_array_training=np.append(loss_array_training,loss_training)
 
             #loss on all validation set
@@ -186,7 +186,7 @@ class neural_network:
         output_NN = np.zeros(validation_set_output.shape)
         
         self.Forwarding(validation_set_input, validation_set_input.shape[0], output_NN, True)
-        loss_validation = LOSS(output_NN, validation_set_output, validation_set_output.shape[0])
+        loss_validation = LOSS(output_NN, validation_set_output)
 
         #mee = MEE(output_NN, validation_set_output, validation_set_output.shape[0])
         
