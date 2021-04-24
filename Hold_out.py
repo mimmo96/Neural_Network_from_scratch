@@ -30,7 +30,7 @@ def Hold_out(epochs,grid, training_set, validation_set,type_problem):
         "  layer:"+str(units)+ " function:"+str(function)+ " weight:"+ str(weig))
         
         num_layers=np.size(units) - 2
-        #calcvolo la media dei 5 modelli generati e restituisco la loss e la MEE/accuratezza
+        #calculate the average of the 5 generated models and return the loss and the MEE / accuracy
         loss_training,loss_validation,MEE,std,NN = ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, num_layers,weig,function, early_stopping)
         
         #create model_stat 
@@ -47,6 +47,5 @@ def Hold_out(epochs,grid, training_set, validation_set,type_problem):
         num_training=num_training+1        
 
     out_file.close()
- 
     return best_NN
 

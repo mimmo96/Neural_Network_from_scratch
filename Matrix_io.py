@@ -1,8 +1,10 @@
 import numpy as np
 
-#this class describe input-output dataset of a Neaural Network
+
 class Matrix_io:
-    
+    '''
+        this class describe input-output dataset of a Neaural Network
+    '''
     def __init__(self, matrix, len_output):
         self.matrix = matrix
         self.len_output = len_output
@@ -16,7 +18,7 @@ class Matrix_io:
     def get_len_output(self):
         return self.len_output        
     
-
+    #set new matrix to current
     def set(self, new_matrix):
         if self.matrix.shape == new_matrix.shape:
             self.matrix = new_matrix
@@ -24,10 +26,10 @@ class Matrix_io:
             raise ("self.matrix_input.shape != new_matrix_input.shape")
     
     def create_batch(self, batch_size):
-        #array di matrici contenente blocchi di dimensione batch_size
+        #array of arrays containing batch_size blocks
         np.random.shuffle(self.matrix)
         mini_batches = []
-        #definisce numero di batch
+        #define number of batch
         no_of_batches = self.matrix.shape[0] // batch_size
         
         for i in range(no_of_batches):
@@ -35,7 +37,7 @@ class Matrix_io:
             mini_batches.append(mini_batch)
         
         if self.matrix.shape[0] / batch_size != 0:
-            #matrice con le restanti righe di self.matrix
+            #matrix with the remaining lines of self.matrix
             mini_batch = Matrix_io(self.matrix[(i+1)*batch_size:], self.len_output)
             
             if mini_batch.matrix.shape[0] < batch_size:

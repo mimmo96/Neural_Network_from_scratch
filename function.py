@@ -52,7 +52,8 @@ def choose_weight_initialization(type_weight,fan_in,fan_out):
         return dist
 
     return np.random.uniform(-0.7, 0.7)
-    
+
+#function to initialize weight
 def init_w( dim_matrix,type_weight):
     w = np.zeros([dim_matrix[0], dim_matrix[1]])
     for i in range(dim_matrix[0]):
@@ -82,8 +83,6 @@ def _logistic (x):
     '''
         logistic activation function: logistic(x) = 1 / (1 + exp(-x))
     '''
-    # return 1 / ( 1 + math.exp(-x) )
-    #div=np.divide(1.0,1+np.exp(-x))
     return expit(x)
 
 def _tanh (x):
@@ -176,6 +175,7 @@ def choose_derivate_function(fun,net):
     if fun == "Regression":
         return 1
 
+#apply the derivate function to each nets
 def _derivate_activation_function(nets,type_fun):
     sig=np.empty(np.size(nets))
     i=0
@@ -190,9 +190,8 @@ def _derivate_activation_function(nets,type_fun):
 ##################
 
 def der_loss( output_expected,output_layer):
-    val = np.subtract(output_expected,output_layer)
-  
-    return val
+    
+    return np.subtract(output_expected,output_layer)
 
 def LOSS(output, output_expected, batch_size, penalty_term=0):
     mse=np.mean( np.square( output-output_expected ) )/2 

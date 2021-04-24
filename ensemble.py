@@ -5,6 +5,9 @@ import pandas
 import neural_network
 
 class stat_model:
+    '''
+        class used for saving result of one neuralnetwork and its iperparameters
+    '''
     def __init__(self, NN, mse_tr = -1, mse_vl = -1 ,std= -1, mee = -1, number_model = 0):
 
         self.NN = NN
@@ -46,15 +49,17 @@ class stat_model:
             self.greater_loss(model)
 
 class ensemble:
-    
-    #NN_array=array contenente le migliroi 10 Neural network
-    #data= dati su cui testare
+    '''
+        class used to contains the top 10 NeuralNetwork and some function for compute mean,loss,etc
+    '''
+    #NN_array=array containing the top 10 Neural networks
+    #data = data to test
     def __init__(self, NN_array =[], data = [], limit = 3):
         self.NN_array=NN_array
         self.data=data
         self.limit = limit
     
-    #mi restituisce la media degli output della rete sui dati
+    #gives me the average of the network outputs on the data 
     def output_average(self):
         output=0
         count=0
@@ -66,30 +71,24 @@ class ensemble:
         output=np.divide(output,count)
         return output
 
-    #loss carcolata sugli output della rete
+    #loss calculated on the network outputs
     def loss_average(self):
-        #calcolo la media degli output, mi restituisce un unico vettore di output
+        #calculate the average of the outputs, it gives me a single output vector
         output=self.output_average()
         loss_test = LOSS(output, self.data.output(), self.data.output().shape[0], penalty_term = 0)
         return loss_test
 
     def mean_loss(self):
-        #AGGIUNGERE DEVIAZIONE STANDARD
         mean_mee = 0
-        best_mee = + math.inf
-
         mean_mse_vl = 0
         mean_mse_tr = 0
         
-        best_mse_tr = + math.inf
+        #used to save a best mse on validation set
         best_mse_vl = + math.inf
-        
 
         for model in self.NN_array:
             if best_mse_vl > model.mse_vl:
-                best_mee = model.mee
                 best_mse_vl = model.mse_vl
-                best_mse_tr = model.mse_tr
                 best_NN = model
             
             mean_mee += model.mee
@@ -106,6 +105,7 @@ class ensemble:
 
         return best_NN
 
+    #add the model on top 10 if it has the best loss
     def k_is_in_top(self, model, type_problem):
     
         if len(self.NN_array) < self.limit:
@@ -117,7 +117,7 @@ class ensemble:
                 self.NN_array.pop()
                 self.NN_array.append(model)
         
-    
+    #write result of parameters on external file with csv format
     def write_result(self, file_csv):
         df = pandas.DataFrame(columns = ['Number_Model' ,
                 'Units_per_layer',
@@ -133,6 +133,7 @@ class ensemble:
         df.to_csv(file_csv)
         for model in self.NN_array:
             model.write_result(file_csv)
-            
+
+    #return the model with the best mee      
     def print_top(self):
         return self.NN_array[0].mee

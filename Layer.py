@@ -3,9 +3,9 @@ import numpy as np
 import function as sig
 
 class Layer:
-    #x numero di input 
-    # #nj=numero di nodi
-    #nj_plus nodi livello successivo
+    #x number of inputs
+    #nj = number of nodes
+    #nj_plus nodes next level
 
     def __init__(self, nj, nj_prec, type_weight, batch_size = 0):
         self.nj = nj
@@ -13,11 +13,11 @@ class Layer:
         self.w_matrix = init_w( [nj_prec+1,nj],type_weight)
         self.Delta_w_old = np.zeros(self.w_matrix.shape)
 
-    #net=W*X_input (singola componente)
+    #net=W*X_input (single component)
     def net(self, net_i, x_input):
         return np.dot(self.w_matrix[:, net_i], x_input)
     
-    #net=W*X_input di tutta la matrice
+    #net=W*X_input of the whole array
     def net_matrix(self, nodo_i):
         return np.dot(self.x, self.w_matrix[:, nodo_i])
 

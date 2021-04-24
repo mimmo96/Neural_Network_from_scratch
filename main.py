@@ -21,23 +21,28 @@ df = pandas.DataFrame(columns = ['Number_Model' ,
                 'Variance' ])
 df.to_csv("result/all_models.csv")
 
+########################
+# PARAMETERS TO ANALIZE#
+########################
 
-#----------------------------PARAMETRI DA ANALIZZARE----------------------
-num_epoch = 700
+num_epoch = 400
 filename = "CUP/ML-CUP20-TR.csv"
 file_name_test = "CUP/ML-CUP20-TR.csv"
 dim_output = 2
 problem_type="Regression"
-#-------------------------------FINE PARAMETRI------------------------------
 
-#leggo i dati dal file e li salvo in una matrice
+###########################################
+
+#read the data from the file and save it in a matrix
 training_set = read_write_file.read_csv(problem_type,filename)
 validation_set = read_write_file.read_csv(problem_type,file_name_test)
 test_set = validation_set
 dim_input=np.size(training_set[0]) - dim_output
 
+################################################################
+# APPLY ONEHOT FOR CLASSIFICATION OR NORMALIZZE FOR REGRESSION #
+################################################################
 if(problem_type=="classification"):
-
     training_set = function.one_hot_encoding(training_set)
     validation_set = function.one_hot_encoding(validation_set)
     test_set = function.one_hot_encoding(test_set)
@@ -54,10 +59,10 @@ if(problem_type=="Regression"):
 # HYPERPARAMETERS #
 ###################
 nj=[[dim_input,20,20,dim_output,0]]
-batch_array=[16]
-learning_rate = [0.00884]
-alfa = [0]
-v_lambda = [0.00001]
+batch_array=[16,32,64]
+learning_rate = [0.0068]
+alfa = [0.6,0,0.9]
+v_lambda = [0.00001,0]
 fun = ["zero_one_h"]      
 fun_out=["Regression"]
 weight=["Xavier Normal"]
