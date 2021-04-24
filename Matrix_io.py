@@ -1,5 +1,6 @@
 import numpy as np
 
+#this class describe input-output dataset of a Neaural Network
 class Matrix_io:
     
     def __init__(self, matrix, len_output):

@@ -2,15 +2,15 @@ import matplotlib.pyplot as plt
 import os
 
 #file=patch del file dove devo salvare il file
-def makegraph (titolo,epoch_training,accuracy_array,loss_array,type_problem,epoch_validation,validation_array,file):
+def graph (title,label_y, array_tr, array_vl, file):
     #grafico training
-    plt.title(titolo)
+    plt.title(title)
     plt.xlabel("Epoch")
-    plt.ylabel("LOSS")
-    plt.plot(epoch_training,loss_array)
+    plt.ylabel(label_y)
+    plt.plot(array_tr)
 
     #grafico validation
-    plt.plot(epoch_validation,validation_array, "r--")     
+    plt.plot(array_vl, "r--")     
     plt.legend(["TRAINING", "TEST"])
     file=file+".png"
 
@@ -19,16 +19,3 @@ def makegraph (titolo,epoch_training,accuracy_array,loss_array,type_problem,epoc
         os.remove(file)
     plt.savefig(file,format='png',dpi=200)
     plt.close('all')
-
-     #--------------GRAFICO ACCURATEZZA-----------------------------
-    if(type_problem=="classification"):
-        #grafico training
-        plt.title(titolo)
-        plt.xlabel("Epoch")
-        plt.ylabel("ACCURATEZZA")
-        plt.plot(epoch_training,accuracy_array)
-
-        file=file+"-accuratezza"+".png"
-        plt.savefig(file,format='png',dpi=200)
-        plt.close('all')
-        

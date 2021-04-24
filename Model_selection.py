@@ -12,22 +12,22 @@ def task(type_problem,fun_out, NN,training_set,validation_set, batch_size, epoch
     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
     #LOSS TRAINING
     output_NN = np.zeros(training_set.output().shape)
-    NN.ThreadPool_Forward(training_set.input(), 0, training_set.input().shape[0], output_NN, True)
+    NN.Forwarding(training_set.input(), training_set.input().shape[0], output_NN, True)
     loss_training = LOSS(output_NN, training_set.output(), training_set.output().shape[0], penalty_term=0)
 
     #LOSS VALIDATION
     output_NN = np.zeros(validation_set.output().shape)
-    NN.ThreadPool_Forward(validation_set.input(), 0, validation_set.input().shape[0], output_NN, True)
+    NN.Forwarding(validation_set.input(), validation_set.input().shape[0], output_NN, True)
     loss_validation = LOSS(output_NN, validation_set.output(), validation_set.output().shape[0], penalty_term=0)
 
-    if(type_problem=="classification"):
-        MEE_tot=accuracy(type_problem,fun_out,validation_set.output(),output_NN)
+    if(type_problem == "classification"):
+        MEE_tot = accuracy(fun_out,validation_set.output(),output_NN)
     else:
-        MEE_tot=MEE(output_NN, validation_set.output(), validation_set.output().shape[0])
+        MEE_tot = MEE(output_NN, validation_set.output(), validation_set.output().shape[0])
     
     return loss_training,loss_validation,MEE_tot,NN
     
-def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function):
+def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_size, epochs,num_training,units, alfa, v_lambda, learning_rate, numero_layer,weig,function, early_stopping):
     #creo il pool di thread
     loss_val_tot=0
     loss_tr_tot=0
@@ -37,7 +37,7 @@ def ThreadPool_average(type_problem,fun_out,training_set,validation_set, batch_s
     loss=[]
 
     #creo la neural network con i parametri passati
-    NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, type_problem) 
+    NN = neural_network.neural_network(units, alfa, v_lambda, learning_rate, numero_layer,function, fun_out, weig, type_problem, early_stopping) 
     #result contiene il rislutato [(loss1,mess1,nn1),(loss2,mess2,nn2),(loss3,mess3,nn3)]
     result= Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem,fun_out, NN,training_set,validation_set, batch_size, epochs,num_training+(i/10)) for i in range(5))
 
@@ -84,7 +84,7 @@ def save_test_model(best_NN,test_set):
     #stampo i risultati delle neural_network sui file
     for neural in best_NN:
         output_NN = np.zeros(test_set.output().shape)
-        neural.ThreadPool_Forward(test_set.input(), 0, test_set.input().shape[0], output_NN, True)
+        neural.Forwarding(test_set.input(), 0, test_set.input().shape[0], output_NN, True)
         loss_test = LOSS(output_NN, test_set.output(), test_set.output().shape[0],0)
         print_result(file,"------------------------------MODEL "+str(conta)+"-----------------------------")
         print_result(file,"parametri:  alfa:"+str(neural.alfa)+ "  lamda:"+ str(neural.v_lambda)+ "  learning_rate:"

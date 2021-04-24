@@ -1,8 +1,8 @@
 ------------------------------INIZIO TRAINING 1-----------------------------
-epoch:10 batch_size:100 alfa:0.6  lamda:0  learning_rate:0.01  layer:[10, 20, 20, 2, 0] function:tanh weight:uniform
+epoch:700 batch_size:16 alfa:0  lamda:1e-05  learning_rate:0.00884  layer:[10, 20, 20, 2, 0] function:zero_one_h weight:Xavier Normal
 RESULT:
-MEDIA LOSS:169.73144529906034 
-MEDIA MEE:17.01004743665944 
-STANDARD DEVIATION:0.5323868691379896
-RESULT TOP K:17.01004743665944
+MEDIA LOSS:7.103703731925885 
+MEDIA MEE:4.164227150514145 
+STANDARD DEVIATION:1.0673526999199505
+RESULT TOP K:4.164227150514145
 ------------------------------FINE TRAINING 1-----------------------------

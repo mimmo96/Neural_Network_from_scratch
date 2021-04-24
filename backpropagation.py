@@ -20,18 +20,7 @@ def _delta_hidden_layer(delta_liv_succ, w_liv_succ, net, type_function):
     derivata_corrente = choose_derivate_function(type_function, net)
     delta_coorente = np.multiply(delta_coorente, derivata_corrente)
     return delta_coorente
-    '''
-    k = np.size(delta_liv_succ) # delta_liv_succ.size == w_liv_succ
-    delta_corrente = 0
-
-    for i in range(k):
-        delta_corrente += (delta_liv_succ[i]*w_liv_succ[i])
-        #print("Siamo nel for di delta hidden layer")
-    #print("SIAMO IN _DELTA_HIDDEN_LAYER ", delta_corrente)
-    delta_corrente *= choose_derivate_function(type_function, net)
-    #print("val finale delta hidden ", delta_corrente)
-    return delta_corrente
-    '''
+    
 #type(delta_nodo_corrente) = value 
 #type(input_nodo_corrente) = vettore (output nodi precedenti: un valore = un output nodo precedente)
 def gradiente(delta_nodo_corrente, input_nodo_corrente):

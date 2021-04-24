@@ -4,8 +4,14 @@ from sklearn.metrics import mean_squared_error
 import math
 from scipy.special import expit
 from scipy.spatial import distance
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
+import Matrix_io
 
-def weight_initialization(type_weight,fan_in,fan_out):
+####################################
+# WEIGHTS INITIALIZATION FUNCTIONS #
+####################################
+def choose_weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
     if type_weight=="random":
         #[-intervallo,intervallo]
@@ -48,29 +54,12 @@ def weight_initialization(type_weight,fan_in,fan_out):
     return np.random.uniform(-0.7, 0.7)
     
 def init_w( dim_matrix,type_weight):
-    #intervallo = np.divide(np.sqrt(6), np.sqrt((nj+nj_plus)))
     w = np.zeros([dim_matrix[0], dim_matrix[1]])
     for i in range(dim_matrix[0]):
         for j in range(dim_matrix[1]):
             while abs(w[i,j]) < 0.0000001:
-                w[i, j] = weight_initialization(type_weight,dim_matrix[0],dim_matrix[1])
+                w[i, j] = choose_weight_initialization(type_weight,dim_matrix[0],dim_matrix[1])
     return w
-
-
-#############################
-#       TYPE PROBLEM        #
-#############################
-def _classification(nets, output_NN, output_expected, type_fun):
-    
-    delta = _derivate_activation_function(nets, type_fun)
-    derivate_loss = der_loss(output_expected, output_NN)
-    for k in range(np.size(delta)):
-        delta[k]=np.dot(delta[k],derivate_loss[k]) /2
-    
-    return delta
-
-
-
 
 
 ############################
@@ -109,6 +98,7 @@ def _zero_one_tanh (x):
     '''
     return (1 + np.tanh (x))/2
 
+
 ########################################
 #   ACTIVATION FUNCTIONS DERIVATIVES   #
 ########################################
@@ -144,6 +134,10 @@ def _zero_one_tanh_derivative (x):
     '''
     return 1/2 * ( 1 - (np.tanh (x))**2 )
 
+
+#####################
+# CHOOSING FUNCTION #
+#####################
 
 def choose_function(fun,net):
     if fun=="sigmoidal":
@@ -190,31 +184,18 @@ def _derivate_activation_function(nets,type_fun):
         i=i+1
     return sig
 
-# derivata loss
+
+##################
+# LOSS FUNCTIONS #
+##################
+
 def der_loss( output_expected,output_layer):
     val = np.subtract(output_expected,output_layer)
   
     return val
 
-def normalize_input(x,dim_output):
-    colonne = x.shape[1]
-    x_input = x[:, 0:(colonne-dim_output)]
-    max = x_input.max()
-    min = x_input.min()
-
-    x_input = (x_input - min)/(max -min)
-    x[:, 0:(colonne-dim_output)] = x_input
-    #print(x)
-    return x
-
-#w = matrice pesi dell'output layer
-def LOSS(output, output_expected, batch_size, penalty_term):
-    #MSE
-    mse = 0.5*(np.subtract(output,output_expected)) ** 2    
-    mse=np.sum (mse, axis=1)
-    mse=np.sum (mse, axis=0)
-    mse= mse/batch_size
-    #thikonov
+def LOSS(output, output_expected, batch_size, penalty_term=0):
+    mse=np.mean( np.square( output-output_expected ) )/2 
     mse += penalty_term
     return mse
 
@@ -226,39 +207,22 @@ def MEE(output, output_expected, batch_size):
     squares=np.sum (squares, axis=0)
     return squares/batch_size
 
-#sono due vettori
-def accuracy(type_problem,fun,output_expected, output_NN):
 
-    if(type_problem=="classification"):
-        output_NN=sign(fun,output_NN)
-    
-    a = output_expected - output_NN 
-    a = np.sum(a,axis=1)
-    count=0
-    for result in a:
+#####################
+# ACCURACY FUNCTION #
+#####################
+
+def accuracy(fun,output_expected, output_NN):
+
+    output_NN=sign(fun,output_NN)
+    diff = output_expected - output_NN 
+    #diff = np.sum(diff,axis=1)
+    count = 0
+    for result in diff:
         if (result==0):
-            count=count+1
+            count += 1
     
     return (np.divide(count,np.size(output_expected)))*100
-
-#restituisce un array di matrici
-#data: matrice
-#batch_size: dimensione di ogni batch
-def create_batch(data, batch_size):
-    #array di matrici contenente blocchi di dimensione batch_size
-    mini_batches = []
-    #definisce numero di batch
-    no_of_batches = data.shape[0] // batch_size
-    for i in range(no_of_batches):
-        mini_batch = data[i*batch_size:(i+1)*batch_size]
-        mini_batches.append(mini_batch)
-    if data.shape[0] / batch_size != 0:
-        #matrice con le restanti righe di data
-        mini_batch = data[(i+1)*batch_size:]
-        if mini_batch.shape[0] < batch_size:
-            mini_batch = np.append(mini_batch, data[0:batch_size-mini_batch.shape[0]], axis = 0)
-        mini_batches.append(mini_batch)
-    return mini_batches
 
 def sign(fun,vector):
     
@@ -283,3 +247,80 @@ def sign(fun,vector):
 
     return vector
 
+
+###################
+# BATCH FUNCTIONS #
+###################
+def create_batch(data, batch_size):
+    #array di matrici contenente blocchi di dimensione batch_size
+    mini_batches = []
+    #definisce numero di batch
+    no_of_batches = data.shape[0] // batch_size
+    for i in range(no_of_batches):
+        mini_batch = data[i*batch_size:(i+1)*batch_size]
+        mini_batches.append(mini_batch)
+    if data.shape[0] / batch_size != 0:
+        #matrice con le restanti righe di data
+        mini_batch = data[(i+1)*batch_size:]
+        if mini_batch.shape[0] < batch_size:
+            mini_batch = np.append(mini_batch, data[0:batch_size-mini_batch.shape[0]], axis = 0)
+        mini_batches.append(mini_batch)
+    return mini_batches
+
+
+###########################
+# EARLY STOPPING FUNCTION #
+###########################
+def fun_early_stopping(err, best_err):
+    treshold = 2
+    GL = 100* ((err / best_err) - 1)
+    if GL >= treshold:
+        return True
+    else:
+        return False
+
+
+##########################
+# NORMALIZATION FUNCTION #
+##########################
+
+def normalize_input(x,dim_output):
+    colonne = x.shape[1]
+    x_input = x[:, 0:(colonne-dim_output)]
+    max = x_input.max()
+    min = x_input.min()
+
+    x_input = (x_input - min)/(max -min)
+    x[:, 0:(colonne-dim_output)] = x_input
+
+    return x
+
+
+####################
+# ONE HOT ENCODING #
+####################
+
+def one_hot_encoding(data_set):
+
+    one = OneHotEncoder(sparse=False)
+    label=LabelEncoder()
+    data_set_X = one.fit_transform(data_set[:,:-1])
+    tmp = np.append(data_set_X,np.zeros([len(data_set_X),1]),1)
+    tmp[:, -1] = label.fit_transform(data_set[:, -1])
+    data_set = tmp 
+    return data_set
+
+
+#############################
+# DIVIDE EXAMPLES FUNCTIONS #
+#############################
+    
+def divide_exaples_hold_out(matrix_input, columns_output):
+    #divide 70% TR, 20% VL, 10% TS
+    rows = matrix_input.shape[0]
+    training_size = rows *70 //100
+    validation_size = rows *20 //100
+    training = Matrix_io.Matrix_io(matrix_input[0:training_size, :], columns_output)
+    validation = Matrix_io.Matrix_io(matrix_input[training_size:training_size+validation_size, :], columns_output)
+    test = Matrix_io.Matrix_io(matrix_input[training_size+validation_size:, :], columns_output)
+    return [training, validation, test]
