@@ -1,16 +1,16 @@
 import itertools
 import numpy as np
 import Matrix_io
-import neural_network
+import Neural_network
 import math
-import ensemble
+import Ensemble
 from Model_Selection import ThreadPool_average
 
 def cv_k_fold(grid, epochs, training_set, test_set, type_problem, k_fold = 4):
     num_training = -1
     #divide dataset into K distinct and equal D_1, ..., D_K
     size_validation = training_set.input().shape[0] // k_fold
-    top_NN = ensemble.ensemble()
+    top_NN = Ensemble.Ensemble()
     
     for hyperparameter in grid:
         num_training += 1
@@ -32,7 +32,7 @@ def cv_k_fold(grid, epochs, training_set, test_set, type_problem, k_fold = 4):
             
         #best_NN_fold = tuple (neaural network, mean_mse, mean_mee, num_training) it contains best model btw k models generated 
         # and the mean mse btw k models
-        NN_k_fold = ensemble.ensemble(NN_k_fold, [], k_fold)
+        NN_k_fold = Ensemble.Ensemble(NN_k_fold, [], k_fold)
         best_NN_k_fold = NN_k_fold.best_neural_network() 
         
         top_NN.k_is_in_top(best_NN_k_fold)

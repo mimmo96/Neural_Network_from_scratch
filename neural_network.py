@@ -2,15 +2,15 @@ from os import fsdecode
 import numpy as np
 import Layer
 import matplotlib
-from graphycs import graph
+from Graphycs import graph
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import math
-from function import der_loss, LOSS,  _derivate_activation_function, accuracy, MEE, fun_early_stopping
-import backpropagation as bp
+from Function import der_loss, LOSS,  _derivate_activation_function, accuracy, MEE, fun_early_stopping
+import Backpropagation as bp
 import copy
 
-class neural_network:
+class Neural_network:
     
     def __init__(self, units, alfa, v_lambda, learning_rate, num_layers, function, fun_out, type_weight, type_problem = "Regression", early_stopping = False):
 

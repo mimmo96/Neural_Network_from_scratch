@@ -1,6 +1,6 @@
 import numpy as np
-import read_write_file
-import function
+import Read_write_file
+import Function
 from Hold_out import Hold_out
 from random import randint
 import Matrix_io
@@ -13,7 +13,7 @@ df = pandas.DataFrame(columns = ['Number_Model',
                 'learning_rate' ,
                 'lambda',
                 'alfa',
-                'function_hidden',
+                'Function_hidden',
                 'inizialization_weights',
                 'Error_MSE_tr',
                 'Error_MSE_vl',
@@ -22,36 +22,37 @@ df = pandas.DataFrame(columns = ['Number_Model',
                 'Accuracy_tr',
                 'Accuracy_vl',
                 'Variance'])
+df.to_csv(fn.top_general_results)
 df.to_csv(fn.general_results)
 
 ########################
 # PARAMETERS TO ANALIZE#
 ########################
 
-num_epoch = 5
+num_epoch = 1
 dim_output = 2
 problem_type="Regression"
 
 ###########################################
 
 #read the data from the file and save it in a matrix
-training_set = read_write_file.read_csv(problem_type,fn.ML_cup)
-validation_set = read_write_file.read_csv(problem_type,fn.ML_cup)
+training_set = Read_write_file.read_csv(problem_type,fn.ML_cup)
+validation_set = Read_write_file.read_csv(problem_type,fn.ML_cup)
 test_set = validation_set
 dim_input=np.size(training_set[0]) - dim_output
 
 #One hot encoding
 if(problem_type == "classification"):
-    training_set = function.one_hot_encoding(training_set)
-    validation_set = function.one_hot_encoding(validation_set)
-    test_set = function.one_hot_encoding(test_set)
+    training_set = Function.one_hot_encoding(training_set)
+    validation_set = Function.one_hot_encoding(validation_set)
+    test_set = Function.one_hot_encoding(test_set)
     training_set = Matrix_io.Matrix_io(training_set, dim_output)
     validation_set = Matrix_io.Matrix_io(validation_set, dim_output)
     test_set = Matrix_io.Matrix_io(test_set, dim_output)
 #input normalization 
 if(problem_type == "Regression"):
-    training_set = function.normalize_input(training_set,dim_output)
-    training_set, validation_set, test_set = function.divide_exaples_hold_out(training_set, dim_output)
+    training_set = Function.normalize_input(training_set,dim_output)
+    training_set, validation_set, test_set = Function.divide_exaples_hold_out(training_set, dim_output)
 
 
 ###################
@@ -77,5 +78,5 @@ for i in batch_array:
 ###########################################
 
 grid = list(itertools.product(early_stopping, batch_array, fun, fun_out, hidden_units, learning_rate, alfa, v_lambda,weight))
-top_k=Hold_out(num_epoch,grid,training_set, validation_set,problem_type)
-top_k.write_result(fn.top_general_results)
+loss_Top_model=Hold_out(num_epoch,grid,training_set, validation_set, test_set, problem_type)
+print(loss_Top_model)

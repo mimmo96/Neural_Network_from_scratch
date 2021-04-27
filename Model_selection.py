@@ -1,10 +1,10 @@
-from read_write_file import print_result
-import neural_network
+from Read_write_file import print_result
+import Neural_network
 import numpy as np
 import os
 import math
-import ensemble
-from function import LOSS, accuracy,MEE
+import Ensemble
+from Function import LOSS, accuracy,MEE
 from joblib import Parallel, delayed
 
 ############################################
@@ -25,7 +25,7 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
     
     #hidden=sethidden(training_set,units)
     #print("hidden:",hidden)
-    NN = neural_network.neural_network(hidden, alfa, v_lambda, learning_rate, num_layers, function, fun_out, weig, type_problem, early_stopping)
+    NN = Neural_network.Neural_network(hidden, alfa, v_lambda, learning_rate, num_layers, function, fun_out, weig, type_problem, early_stopping)
     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
     
     #LOSS TRAINING
@@ -50,7 +50,7 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
     if(type_problem == "classification"):
         acc_tr = accuracy(fun_out,training_set.output(),output_NN)
         acc_vl = accuracy(fun_out,validation_set.output(),output_NN)
-    model = ensemble.stat_model(NN, loss_training, loss_validation, MEE_tr, MEE_vl, acc_tr, acc_vl, -1, num_training)
+    model = Ensemble.Stat_model(NN, loss_training, loss_validation, MEE_tr, MEE_vl, acc_tr, acc_vl, -1, num_training)
     return model
     
 ############################################
@@ -59,7 +59,7 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
 def ThreadPool_average(type_problem,training_set,validation_set, epochs,num_training,hyperparameter):
     #use your cpu core for parrallelize each operation and return the result of type [(loss1,mess1,nn1),(loss2,mess2,nn2),(loss3,mess3,nn3)]
     trials = Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem, training_set,validation_set,epochs,num_training+(i/10), hyperparameter) for i in range(5))
-    best_trial = ensemble.ensemble(trials, np.size(trials)).best_neural_network()
+    best_trial = Ensemble.Ensemble(trials, np.size(trials)).best_neural_network()
     
     return best_trial
 
@@ -71,7 +71,7 @@ def save_test_model(best_NN,test_set):
     conta=1
     losses = []
 
-    #print the results of the neural_networks on the file
+    #print the results of the Neural_networks on the file
     for neural in best_NN:
         output_NN = np.zeros(test_set.output().shape)
         neural.Forwarding(test_set.input(), output_NN, True)
@@ -89,9 +89,9 @@ def save_test_model(best_NN,test_set):
     print("varianza:",np.var(losses))
     
     #ensamble on test set
-    en=ensemble.ensemble(best_NN)
-    loss_ensemble=en.loss_average(test_set)
-    print_result(file,"errore sui test:" +str(loss_ensemble)) 
+    en=Ensemble.Ensemble(best_NN)
+    loss_Ensemble=en.loss_average(test_set)
+    print_result(file,"errore sui test:" +str(loss_Ensemble)) 
     file.close()
 
 '''

@@ -1,10 +1,10 @@
 import numpy as np
-from function import LOSS
+from Function import LOSS
 import math
 import pandas
-import neural_network
+import Neural_network
 
-class stat_model:
+class Stat_model:
     '''
         class used for saving result of one neuralnetwork and its iperparameters
     '''
@@ -54,7 +54,7 @@ class stat_model:
         else:
             self.greater_loss(model)
 
-class ensemble:
+class Ensemble:
     '''
         class used to contains the top 10 NeuralNetwork and some function for compute mean,loss,etc
     '''
@@ -66,20 +66,20 @@ class ensemble:
     
     #gives me the average of the network outputs on the data 
     def output_average(self, data_set):
-        output=0
+        output=np.zeros(data_set.output().shape)
         count=0
-        for NN in self.NN_array.NN:
+        for model in self.NN_array:
             output_NN = np.zeros(data_set.output().shape)
-            NN.ThreadPool_Forward(data_set.input(), 0, data_set.input().shape[0], output_NN, True)
-            output=output+output_NN
-            count=count+1
-        output=np.divide(output,count)
+            output = model.NN.Forwarding(data_set.input(), output_NN, True)
+            output += output_NN
+            count = count+1
+        output = np.divide(output,count)
         return output
 
     #loss calculated on the network outputs
     def loss_average(self, data_set):
         #calculate the average of the outputs, it gives me a single output vector
-        output=self.output_average(data_set)
+        output = self.output_average(data_set)
         loss_test = LOSS(output, data_set.output())
         return loss_test
 

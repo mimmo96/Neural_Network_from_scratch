@@ -1,4 +1,4 @@
-from function import choose_derivate_function
+from Function import choose_derivate_function
 import numpy as np
 import warnings
 
