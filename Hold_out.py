@@ -2,50 +2,26 @@ import itertools
 from read_write_file import print_result
 import neural_network
 import numpy as np
-from function import LOSS
-from Model_Selection import save,ThreadPool_average,save_test_model
+from Model_Selection import ThreadPool_average
 import ensemble
-
+import File_names as fn
 #return best K models
-def Hold_out(epochs,grid, training_set, validation_set,type_problem):
+def Hold_out(epochs, grid, training_set, validation_set,type_problem):
     num_training = 1
-    best_NN = ensemble.ensemble()
+    top_k_models = ensemble.ensemble()
     out_file = open("result/resultexecution.txt","w")
    
     for hyperparameter in grid:
         
-        early_stopping = hyperparameter[0]
-        batch_size=hyperparameter[1]
-        function=hyperparameter[2]
-        fun_out=hyperparameter[3]
-        units=hyperparameter[4]
-        learning_rate=hyperparameter[5]
-        alfa=hyperparameter[6]
-        v_lambda=hyperparameter[7]
-        weig=hyperparameter[8]
-        
-        print_result(out_file,"------------------------------INIZIO TRAINING "+str(num_training)+"-----------------------------")
-        print_result(out_file,"epoch:"+str(epochs)+" batch_size:"+str(batch_size)+" alfa:"+str(alfa)+ 
-        "  lamda:"+ str(v_lambda)+ "  learning_rate:"+str(learning_rate) +
-        "  layer:"+str(units)+ " function:"+str(function)+ " weight:"+ str(weig))
-        
         #num_layers=np.size(units) - 2
         #calculate the average of the 5 generated models and return the loss and the MEE / accuracy
         model_stat = ThreadPool_average(type_problem, training_set, validation_set, epochs, num_training, hyperparameter)
-        
-        #create model_stat 
-        #model_stat = ensemble.stat_model(model, loss_tr_tot, loss_vl_tot, MEE_tot_tr, MEE_tot_vl, acc_tot_tr, acc_tot_vl, std, num_training)
+    
         #insert model_stat in best model if it is in K top model
-        best_NN.k_is_in_top(model_stat, type_problem)
-        model_stat.write_result("result/all_models.csv")
-        
-        print_result(out_file,"RESULT:") 
-        print_result(out_file,"MEDIA LOSS:"+ str(model_stat.MSE_vl)+ " \nMEDIA MEE:"+ str(model_stat.MEE_vl)+ " \nSTANDARD DEVIATION:"+ str(model_stat.std))
-        print_result(out_file,"RESULT TOP K:" + str(best_NN.print_top())) 
-        
-        print_result(out_file,"------------------------------FINE TRAINING "+str(num_training)+"-----------------------------")
+        top_k_models.insert_model(model_stat, type_problem)
+        model_stat.write_result(fn.general_results)
         num_training += 1        
 
     out_file.close()
-    return best_NN
+    return top_k_models
 

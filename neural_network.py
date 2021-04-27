@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import math
 from function import der_loss, LOSS,  _derivate_activation_function, accuracy, MEE, fun_early_stopping
 import backpropagation as bp
+import copy
 
 class neural_network:
     
@@ -97,14 +98,18 @@ class neural_network:
                 self.Forwarding(batch.input(), output_NN)   
                 self.backprogation(output_NN, batch.output())
 
-            #loss on all training set 
+            #loss on all training set and validation
             output_NN = np.zeros(training_set.output().shape)
             self.Forwarding(training_set.input(), output_NN, True)
             loss_training = LOSS(output_NN, training_set.output())
-            loss_array_training=np.append(loss_array_training,loss_training)
-
-            #loss on all validation set
             output_val, loss_validation = self.validation(validation_set)
+           
+            #check if the value is Nan
+            if((math.isnan(loss_training)) | (math.isnan(loss_validation))):
+                print("is NaN!\n")
+                break
+
+            loss_array_training=np.append(loss_array_training,loss_training)
             loss_array_validation=np.append(loss_array_validation, loss_validation)
 
             if self.type_problem == "classification":
@@ -119,7 +124,7 @@ class neural_network:
 
             if loss_validation < best_loss_validation:
                 best_loss_validation = loss_validation
-                best_model = self.struct_layers
+                best_model = copy.deepcopy(self.struct_layers)
             
             #early stopping 
             if self.early_stopping:
@@ -128,12 +133,10 @@ class neural_network:
                 else:
                     validation_stop = 3
                     
-            if(validation_stop==0 | (math.isnan(best_loss_validation)) | (math.isnan(best_loss_validation)) | 
-               (math.isnan(loss_training)) | (math.isnan(loss_training))):
+            if(validation_stop==0):
                 self.epochs_retraining = i
                 print("Early stopping\n")
                 break
-        
         self.struct_layers = best_model
         
         #########################

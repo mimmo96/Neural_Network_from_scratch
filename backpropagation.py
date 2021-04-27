@@ -1,5 +1,6 @@
 from function import choose_derivate_function
 import numpy as np
+import warnings
 
 ######################
 # DELTA OUTPUT LAYER #
@@ -11,7 +12,9 @@ import numpy as np
 #type(type_function) = string
 def _delta_output_layer(output_expected, output_NN, net, type_function):
     derivata = choose_derivate_function(type_function, net)
-    return -derivata*(output_expected - output_NN)
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')  
+        return -derivata*(output_expected - output_NN)
 
 
 ######################
@@ -23,9 +26,11 @@ def _delta_output_layer(output_expected, output_NN, net, type_function):
 #type(net) = value
 #type(type_function) = string
 def _delta_hidden_layer(delta_liv_succ, w_liv_succ, net, type_function):
+    np.seterr(all='ignore') 
     delta_coorente = np.dot(delta_liv_succ, w_liv_succ)
     derivata_corrente = choose_derivate_function(type_function, net)
     delta_coorente = np.multiply(delta_coorente, derivata_corrente)
+    
     return delta_coorente
     
 #############
@@ -35,10 +40,9 @@ def _delta_hidden_layer(delta_liv_succ, w_liv_succ, net, type_function):
 #type(delta_nodo_corrente) = value 
 #type(input_nodo_corrente) = vector (previous node output: one value = one previous node output)
 def gradiente(delta_nodo_corrente, input_nodo_corrente):
-    #type(gradient) = vettore
-    gradient = np.dot(delta_nodo_corrente, input_nodo_corrente)
-    
-    return gradient
+        np.seterr(all='ignore') 
+        gradient = np.dot(delta_nodo_corrente, input_nodo_corrente)
+        return gradient
 
 #################
 # WEIGHT UPDATE #

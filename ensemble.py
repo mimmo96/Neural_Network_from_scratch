@@ -60,28 +60,27 @@ class ensemble:
     '''
     #NN_array=array containing the top 10 Neural networks
     #data = data to test
-    def __init__(self, NN_array =[], data = [], limit = 3):
+    def __init__(self, NN_array =[], limit = 3):
         self.NN_array=NN_array
-        self.data=data
         self.limit = limit
     
     #gives me the average of the network outputs on the data 
-    def output_average(self):
+    def output_average(self, data_set):
         output=0
         count=0
         for NN in self.NN_array.NN:
-            output_NN = np.zeros(self.data.output().shape)
-            NN.ThreadPool_Forward(self.data.input(), 0, self.data.input().shape[0], output_NN, True)
+            output_NN = np.zeros(data_set.output().shape)
+            NN.ThreadPool_Forward(data_set.input(), 0, data_set.input().shape[0], output_NN, True)
             output=output+output_NN
             count=count+1
         output=np.divide(output,count)
         return output
 
     #loss calculated on the network outputs
-    def loss_average(self):
+    def loss_average(self, data_set):
         #calculate the average of the outputs, it gives me a single output vector
-        output=self.output_average()
-        loss_test = LOSS(output, self.data.output())
+        output=self.output_average(data_set)
+        loss_test = LOSS(output, data_set.output())
         return loss_test
 
     #return best model and the mean
@@ -92,6 +91,7 @@ class ensemble:
         mean_MSE_tr = 0
         mean_accuracy_tr = 0
         mean_accuracy_vl = 0
+        MSE_vl_array=[]
         #used to save a best mse on validation set
         best_MSE_vl = + math.inf
 
@@ -106,6 +106,7 @@ class ensemble:
             mean_MSE_tr += model.MSE_tr 
             mean_accuracy_tr += model.accuracy_tr
             mean_accuracy_vl += model.accuracy_vl
+            MSE_vl_array.append(model.MSE_vl)
 
         mean_MSE_tr /= np.size(self.NN_array)
         mean_MSE_vl /= np.size(self.NN_array)
@@ -113,18 +114,19 @@ class ensemble:
         mean_MEE_vl /= np.size(self.NN_array)
         mean_accuracy_tr /= np.size(self.NN_array)
         mean_accuracy_vl /= np.size(self.NN_array)
-        
+
         best_NN.MSE_vl = mean_MSE_vl
         best_NN.MSE_tr = mean_MSE_tr
         best_NN.accuracy_vl = mean_accuracy_vl
         best_NN.accuracy_tr = mean_accuracy_tr
         best_NN.MEE_tr = mean_MEE_tr
         best_NN.MEE_vl = mean_MEE_vl
+        best_NN.std = np.std(MSE_vl_array)
 
         return best_NN
 
     #add the model on top 10 if it has the best loss
-    def k_is_in_top(self, model, type_problem):
+    def insert_model(self, model, type_problem):
     
         if len(self.NN_array) < self.limit:
             self.NN_array.append(model)
