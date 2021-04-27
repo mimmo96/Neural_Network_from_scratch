@@ -23,7 +23,7 @@ class stat_model:
     def write_result(self, file_name):
         row_csv = {
                 'Number_Model' : [self.number_model],
-                'Units_per_layer' : [self.NN.nj[1:-1]],
+                'Units_per_layer' : [self.NN.units[1:-1]],
                 'learning_rate' : [self.NN.learning_rate],
                 'lambda' : [self.NN.v_lambda],
                 'alfa' : [self.NN.alfa],

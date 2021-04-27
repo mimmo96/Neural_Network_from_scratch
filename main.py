@@ -57,7 +57,8 @@ if(problem_type == "Regression"):
 ###################
 # HYPERPARAMETERS #
 ###################
-nj=[[dim_input,20,20,dim_output,0]]
+
+hidden_units=[[dim_input,20,20,dim_output]]
 batch_array=[16]
 learning_rate = [1, 0.0068, 0.007, 0.05]
 alfa = [0.5]
@@ -75,6 +76,6 @@ for i in batch_array:
 ###########################################
 ###########################################
 
-grid = list(itertools.product(early_stopping, batch_array, fun, fun_out, nj, learning_rate, alfa, v_lambda,weight))
+grid = list(itertools.product(early_stopping, batch_array, fun, fun_out, hidden_units, learning_rate, alfa, v_lambda,weight))
 top_k=Hold_out(num_epoch,grid,training_set, validation_set,problem_type)
 top_k.write_result(fn.top_general_results)

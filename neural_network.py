@@ -12,7 +12,7 @@ import copy
 
 class neural_network:
     
-    def __init__(self, nj, alfa, v_lambda, learning_rate, num_layers, function, fun_out, type_weight, type_problem = "Regression", early_stopping = False):
+    def __init__(self, units, alfa, v_lambda, learning_rate, num_layers, function, fun_out, type_weight, type_problem = "Regression", early_stopping = False):
 
         self.alfa = alfa
         self.v_lambda = v_lambda
@@ -22,7 +22,7 @@ class neural_network:
         else:
             self.learning_rate=learning_rate
             self.tau = 0
-        self.nj=nj
+        self.units=units
         self.function=function
         self.fun_out = fun_out
         self.struct_layers = np.empty(num_layers, Layer.Layer)
@@ -30,11 +30,12 @@ class neural_network:
         self.type_weight=type_weight
         self.type_problem = type_problem
         self.early_stopping = early_stopping
-        self.units = []
-        for i in range(1,self.num_layers+1):
-            self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],type_weight)
-            self.units.append(nj[i])
+  
+        for i in range(0,self.num_layers):
+            self.struct_layers[i]=Layer.Layer(self.units[i+1],self.units[i],type_weight)
+ 
         self.epochs_retraining = -1
+
     ####################
     # FORWARDING PHASE #
     ####################
@@ -52,7 +53,7 @@ class neural_network:
             
             #output layer
             else:
-                output = np.zeros(layer.nj)
+                output = np.zeros(layer.units)
                 output = layer.output(self.fun_out, x_input)
                 
             i = i - 1
@@ -179,10 +180,10 @@ class neural_network:
         batch_size = training_set_output.shape[0]
         for i in range(np.size(self.struct_layers) - 1, -1, -1):
             layer = self.struct_layers[i]
-            delta = np.empty([layer.nj,batch_size],float)
+            delta = np.empty([layer.units,batch_size],float)
            
             #for all nodes of current layer
-            for j in range(0, layer.nj):
+            for j in range(0, layer.units):
                 nets_batch = layer.net_matrix(j)
                 #outputlayer
                 if i == (np.size(self.struct_layers) - 1):
