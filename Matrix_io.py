@@ -40,8 +40,7 @@ class Matrix_io:
             #matrix with the remaining lines of self.matrix
             mini_batch = Matrix_io(self.matrix[(i+1)*batch_size:], self.len_output)
             
-            if mini_batch.matrix.shape[0] < batch_size:
-                mini_batch.matrix = np.append(mini_batch.matrix, self.matrix[0:batch_size-mini_batch.matrix.shape[0]], axis = 0)
+    
             mini_batches.append(mini_batch)
         
         return mini_batches

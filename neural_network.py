@@ -33,7 +33,7 @@ class neural_network:
         for i in range(1,self.num_layers+1):
             self.struct_layers[i-1]=Layer.Layer(self.nj[i],self.nj[i-1],type_weight)
             self.units.append(nj[i])
-
+        self.epochs_retraining = -1
     ####################
     # FORWARDING PHASE #
     ####################
@@ -57,11 +57,10 @@ class neural_network:
             i = i - 1
         return output
         
-    def Forwarding(self, matrix_input, batch_size, output, validation = False):
-        
+    def Forwarding(self, matrix_input, output, validation = False):
+        batch_size = matrix_input.shape[0]
         for i in range(batch_size):
-            row_input_layer = i % batch_size   
-            output[i, :] = self.forward(matrix_input[i, :], row_input_layer, validation)
+            output[i, :] = self.forward(matrix_input[i, :], i, validation)
         
         return output
     
@@ -70,11 +69,9 @@ class neural_network:
     # TRAINING PHASE #
     ##################
 
-    def trainig(self, training_set, validation_set, batch_size, epochs,num_training):
+    def trainig(self, training_set, validation_set, batch_size, epochs, num_training):
         
-        for layer in self.struct_layers:
-            layer.set_x(batch_size)
-
+        self.epochs_retraining = epochs
         best_loss_validation= + math.inf
         best_model = self.struct_layers
         validation_stop = 3
@@ -87,19 +84,22 @@ class neural_network:
         for i in range(epochs):
             #create k mini-batchs of size batch_size
             mini_batch = training_set.create_batch(batch_size)
-            
             #if it's using variable learning rate then update it
             if self.tau != 0:
                 self.learning_rate = 1 / (1 + (i / self.tau))
 
             for batch in mini_batch:
+                
+                for layer in self.struct_layers:
+                    layer.set_x(batch.input().shape[0])
+                
                 output_NN = np.zeros(batch.output().shape)
-                self.Forwarding(batch.input(), batch_size, output_NN)   
-                self.backprogation(output_NN, batch.output(), batch_size)
+                self.Forwarding(batch.input(), output_NN)   
+                self.backprogation(output_NN, batch.output())
 
             #loss on all training set 
             output_NN = np.zeros(training_set.output().shape)
-            self.Forwarding(training_set.input(), training_set.input().shape[0], output_NN, True)
+            self.Forwarding(training_set.input(), output_NN, True)
             loss_training = LOSS(output_NN, training_set.output())
             loss_array_training=np.append(loss_array_training,loss_training)
 
@@ -130,6 +130,7 @@ class neural_network:
                     
             if(validation_stop==0 | (math.isnan(best_loss_validation)) | (math.isnan(best_loss_validation)) | 
                (math.isnan(loss_training)) | (math.isnan(loss_training))):
+                self.epochs_retraining = i
                 print("Early stopping\n")
                 break
         
@@ -147,7 +148,32 @@ class neural_network:
             graph (title,"Accuracy", accuracy_array_training,accuracy_array_validation,file_acc)
         graph(title,"Loss", loss_array_training,loss_array_validation,file_ls)
 
-    def backprogation(self, output_NN, training_set_output, batch_size):
+    def retraining(self, training_set, batch_size, num_training):
+        if self.epochs_retraining < 0:
+            print("Error epochs retraing")
+            return
+
+        for i in range(self.epochs_retraining):
+            #create k mini-batchs of size batch_size
+            mini_batch = training_set.create_batch(batch_size)
+            #if it's using variable learning rate then update it
+            if self.tau != 0:
+                self.learning_rate = 1 / (1 + (i / self.tau))
+
+            for batch in mini_batch:
+                
+                for layer in self.struct_layers:
+                    layer.set_x(batch.input().shape[0])
+                
+                output_NN = np.zeros(batch.output().shape)
+                self.Forwarding(batch.input(), output_NN)   
+                self.backprogation(output_NN, batch.output())
+
+    ###################
+    # BACKPROPAGATION #
+    ###################
+    def backprogation(self, output_NN, training_set_output):
+        batch_size = training_set_output.shape[0]
         for i in range(np.size(self.struct_layers) - 1, -1, -1):
             layer = self.struct_layers[i]
             delta = np.empty([layer.nj,batch_size],float)
@@ -185,7 +211,7 @@ class neural_network:
         
         output_NN = np.zeros(validation_set_output.shape)
         
-        self.Forwarding(validation_set_input, validation_set_input.shape[0], output_NN, True)
+        self.Forwarding(validation_set_input, output_NN, True)
         loss_validation = LOSS(output_NN, validation_set_output)
 
         #mee = MEE(output_NN, validation_set_output, validation_set_output.shape[0])

@@ -52,8 +52,7 @@ def choose_weight_initialization(type_weight,fan_in,fan_out):
         return dist
 
     return np.random.uniform(-0.7, 0.7)
-
-#function to initialize weight
+    
 def init_w( dim_matrix,type_weight):
     w = np.zeros([dim_matrix[0], dim_matrix[1]])
     for i in range(dim_matrix[0]):
@@ -83,6 +82,8 @@ def _logistic (x):
     '''
         logistic activation function: logistic(x) = 1 / (1 + exp(-x))
     '''
+    # return 1 / ( 1 + math.exp(-x) )
+    #div=np.divide(1.0,1+np.exp(-x))
     return expit(x)
 
 def _tanh (x):
@@ -175,7 +176,6 @@ def choose_derivate_function(fun,net):
     if fun == "Regression":
         return 1
 
-#apply the derivate function to each nets
 def _derivate_activation_function(nets,type_fun):
     sig=np.empty(np.size(nets))
     i=0
@@ -190,15 +190,18 @@ def _derivate_activation_function(nets,type_fun):
 ##################
 
 def der_loss( output_expected,output_layer):
-    return np.subtract(output_expected,output_layer)
+    val = np.subtract(output_expected,output_layer)
+  
+    return val
 
 def LOSS(output, output_expected, penalty_term=0):
     mse=np.mean( np.square( output-output_expected ) )/2 
     mse += penalty_term
     return mse
 
-def MEE(output, output_expected, batch_size):
+def MEE(output, output_expected):
     #norma euclidea
+    batch_size = output.shape[0]
     squares = (np.subtract(output,output_expected)) ** 2    
     squares=np.sum (squares, axis=1)
     squares=np.sqrt (squares)
@@ -250,15 +253,12 @@ def sign(fun,vector):
 # BATCH FUNCTIONS #
 ###################
 def create_batch(data, batch_size):
-    #array di matrici contenente blocchi di dimensione batch_size
     mini_batches = []
-    #definisce numero di batch
     no_of_batches = data.shape[0] // batch_size
     for i in range(no_of_batches):
         mini_batch = data[i*batch_size:(i+1)*batch_size]
         mini_batches.append(mini_batch)
     if data.shape[0] / batch_size != 0:
-        #matrice con le restanti righe di data
         mini_batch = data[(i+1)*batch_size:]
         if mini_batch.shape[0] < batch_size:
             mini_batch = np.append(mini_batch, data[0:batch_size-mini_batch.shape[0]], axis = 0)

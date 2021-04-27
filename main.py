@@ -8,24 +8,27 @@ import itertools
 import CV_k_fold
 import pandas
 
-df = pandas.DataFrame(columns = ['Number_Model' ,
+df = pandas.DataFrame(columns = ['Number_Model',
                 'Units_per_layer',
                 'learning_rate' ,
-                'lambda' ,
-                'alfa' ,
+                'lambda',
+                'alfa',
                 'function_hidden',
                 'inizialization_weights',
-                'Error_MSE_tr' ,
-                'Error_MSE_vl' ,
-                'Error_MEE',
-                'Variance' ])
+                'Error_MSE_tr',
+                'Error_MSE_vl',
+                'Error_MEE_tr',
+                'Error_MEE_vl',
+                'Accuracy_tr',
+                'Accuracy_vl',
+                'Variance'])
 df.to_csv("result/all_models.csv")
 
 ########################
 # PARAMETERS TO ANALIZE#
 ########################
 
-num_epoch = 400
+num_epoch = 20
 filename = "CUP/ML-CUP20-TR.csv"
 file_name_test = "CUP/ML-CUP20-TR.csv"
 dim_output = 2
@@ -39,9 +42,7 @@ validation_set = read_write_file.read_csv(problem_type,file_name_test)
 test_set = validation_set
 dim_input=np.size(training_set[0]) - dim_output
 
-################################################################
-# APPLY ONEHOT FOR CLASSIFICATION OR NORMALIZZE FOR REGRESSION #
-################################################################
+#One hot encoding
 if(problem_type=="classification"):
     training_set = function.one_hot_encoding(training_set)
     validation_set = function.one_hot_encoding(validation_set)
@@ -49,7 +50,7 @@ if(problem_type=="classification"):
     training_set = Matrix_io.Matrix_io(training_set, dim_output)
     validation_set = Matrix_io.Matrix_io(validation_set, dim_output)
     test_set = Matrix_io.Matrix_io(test_set, dim_output)
-
+#input normalization 
 if(problem_type=="Regression"):
     training_set = function.normalize_input(training_set,dim_output)
     training_set, validation_set, test_set = function.divide_exaples_hold_out(training_set, dim_output)
@@ -60,8 +61,8 @@ if(problem_type=="Regression"):
 ###################
 nj=[[dim_input,20,20,dim_output,0]]
 batch_array=[16]
-learning_rate = [0.0068]
-alfa = [0]
+learning_rate = [0.0068, 0.007, 0.05]
+alfa = [0.5]
 v_lambda = [0]
 fun = ["zero_one_h"]      
 fun_out=["Regression"]
