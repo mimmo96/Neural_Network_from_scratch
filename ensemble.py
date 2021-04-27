@@ -60,19 +60,19 @@ class Ensemble:
     '''
     #NN_array=array containing the top 10 Neural networks
     #data = data to test
-    def __init__(self, NN_array =[], limit = 3):
+    def __init__(self, NN_array =[], limit = 2):
         self.NN_array=NN_array
         self.limit = limit
     
     #gives me the average of the network outputs on the data 
     def output_average(self, data_set):
-        output=np.zeros(data_set.output().shape)
-        count=0
+        output = np.zeros(data_set.output().shape)
+        count = 0
         for model in self.NN_array:
             output_NN = np.zeros(data_set.output().shape)
-            output = model.NN.Forwarding(data_set.input(), output_NN, True)
+            model.NN.Forwarding(data_set.input(), output_NN, True)
             output += output_NN
-            count = count+1
+            count += 1
         output = np.divide(output,count)
         return output
 
@@ -80,8 +80,8 @@ class Ensemble:
     def loss_average(self, data_set):
         #calculate the average of the outputs, it gives me a single output vector
         output = self.output_average(data_set)
-        loss_test = LOSS(output, data_set.output())
-        return loss_test
+        loss = LOSS(output, data_set.output())
+        return loss
 
     #return best model and the mean
     def best_neural_network(self):

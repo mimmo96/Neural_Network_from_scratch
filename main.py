@@ -29,7 +29,7 @@ df.to_csv(fn.general_results)
 # PARAMETERS TO ANALIZE#
 ########################
 
-num_epoch = 1
+num_epoch = 20
 dim_output = 2
 problem_type="Regression"
 
@@ -61,8 +61,8 @@ if(problem_type == "Regression"):
 
 hidden_units=[[dim_input,20,20,dim_output]]
 batch_array=[16]
-learning_rate = [1, 0.0068, 0.007, 0.05]
-alfa = [0.5]
+learning_rate = [0.054, 0.0068, 0.007, 0.05]
+alfa = [0.5, 0.9]
 v_lambda = [0]
 fun = ["zero_one_h"]      
 fun_out=["Regression"]
