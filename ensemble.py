@@ -165,3 +165,6 @@ class Ensemble:
     #return the model with the best mee      
     def print_top(self):
         return self.NN_array[0].MEE_vl
+    
+    def getNN(self):
+        return self.NN_array

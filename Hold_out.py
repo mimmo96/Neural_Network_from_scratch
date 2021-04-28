@@ -22,4 +22,4 @@ def Hold_out(epochs, grid, training_set, validation_set, test_set, type_problem)
     top_k_models.write_result(fn.top_general_results)
     top_k_models.loss_average(test_set,fn.top_result_test)
 
-    return top_k_models
+    return top_k_models.getNN()
