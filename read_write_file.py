@@ -1,6 +1,3 @@
-import numpy as np
-import csv
-import Matrix_io
 import pandas
 
 
@@ -27,6 +24,15 @@ def read_csv(type_problem,file_name):
         
         matrix = file_csv.to_numpy()
 
+    elif (type_problem == "blind_test"):
+
+        file_csv = pandas.read_csv(file_name, delimiter = ',', 
+                                    names = ["data", "x_1", "x_2","x_3", "x_4","x_5", "x_6","x_7", "x_8","x_9", "x_10"], 
+                                    skiprows= 7)
+
+        file_csv = file_csv.drop(["data"], axis = 1)
+        
+        matrix = file_csv.to_numpy()
     #add new cases below..
 
     return matrix

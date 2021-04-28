@@ -1,12 +1,10 @@
-from os import fsdecode
 import numpy as np
 import Layer
 import matplotlib
 from Graphycs import graph
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 import math
-from Function import der_loss, LOSS,  _derivate_activation_function, accuracy, MEE, fun_early_stopping
+from Function import  LOSS, accuracy, fun_early_stopping
 import Backpropagation as bp
 import copy
 

@@ -2,7 +2,6 @@ from Read_write_file import print_result
 import Neural_network
 import numpy as np
 import os
-import math
 import Ensemble
 from Function import LOSS, accuracy,MEE
 from joblib import Parallel, delayed
@@ -93,20 +92,3 @@ def save_test_model(best_NN,test_set):
     loss_Ensemble=en.loss_average(test_set)
     print_result(file,"errore sui test:" +str(loss_Ensemble)) 
     file.close()
-
-'''
-def sethidden(training_set,units):
-        
-    hidden=[]
-
-    dim_input=training_set.input().shape[1]
-    dim_output=training_set.output().shape[1]
-
-    hidden.append(dim_input)
-    for i in units:
-        hidden.append(i)
-    hidden.append(dim_output)
-    hidden.append(0)
-
-    return hidden
-'''

@@ -1,9 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error
-import math
 from scipy.special import expit
-from scipy.spatial import distance
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import Matrix_io
@@ -322,3 +318,7 @@ def divide_exaples_hold_out(matrix_input, columns_output):
     validation = Matrix_io.Matrix_io(matrix_input[training_size:training_size+validation_size, :], columns_output)
     test = Matrix_io.Matrix_io(matrix_input[training_size+validation_size:, :], columns_output)
     return [training, validation, test]
+
+def setBlind(matrix_input, columns_output):
+    blind = Matrix_io.Matrix_io(matrix_input, columns_output)
+    return blind

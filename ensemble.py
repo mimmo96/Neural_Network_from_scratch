@@ -1,14 +1,16 @@
+from itertools import count
+from os import write
+from Function import MEE
 import numpy as np
 from Function import LOSS
 import math
 import pandas
-import Neural_network
 
 class Stat_model:
     '''
         class used for saving result of one neuralnetwork and its iperparameters
     '''
-    def __init__(self, NN, MSE_tr = -1, MSE_vl = -1 , MEE_tr = -1, MEE_vl = -1, accuracy_tr = -1, accuracy_vl = -1, std= -1, number_model = 0):
+    def __init__(self, NN, MSE_tr = -1, MSE_vl = -1 , MEE_tr = -1, MEE_vl = -1, accuracy_tr = -1, accuracy_vl = -1, std= -1, number_model = 0, MSE_ts=-1 ,MEE_ts=-1):
 
         self.NN = NN
         self.MSE_tr = MSE_tr
@@ -19,6 +21,8 @@ class Stat_model:
         self.accuracy_vl = accuracy_vl
         self.number_model = number_model
         self.std = std
+        self.MSE_ts= MSE_ts
+        self.MEE_ts= MEE_ts
     
     def write_result(self, file_name):
         row_csv = {
@@ -40,6 +44,16 @@ class Stat_model:
         df = pandas.DataFrame(row_csv)
         df.to_csv(file_name, mode='a', header = False, index=False)
 
+    def write_cost(self,file_name):
+        row_csv = {
+                'Number_Model' : [self.number_model],
+                'Error_MSE_ts' : [self.MSE_ts],
+                'Error_MEE_ts' : [self.MEE_ts]
+        }
+        
+        df = pandas.DataFrame(row_csv)
+        df.to_csv(file_name, mode='a', header = False, index=False)
+
     def getNN(self):
         return self.NN
 
@@ -58,30 +72,35 @@ class Ensemble:
     '''
         class used to contains the top 10 NeuralNetwork and some function for compute mean,loss,etc
     '''
-    #NN_array=array containing the top 10 Neural networks
+    #NN_array=array containing the top 10 Neural networks of type stat_model
     #data = data to test
     def __init__(self, NN_array =[], limit = 2):
         self.NN_array=NN_array
         self.limit = limit
     
-    #gives me the average of the network outputs on the data 
-    def output_average(self, data_set):
+    #gives me the average of the network outputs on the data and save the loss/mee
+    def output_average(self, data_set,file_name):
         output = np.zeros(data_set.output().shape)
         count = 0
         for model in self.NN_array:
             output_NN = np.zeros(data_set.output().shape)
             model.NN.Forwarding(data_set.input(), output_NN, True)
+            model.MSE_ts = LOSS(output_NN, data_set.output())
+            model.MEE_ts= MEE(output_NN, data_set.output())
+            model.write_cost(file_name)
             output += output_NN
             count += 1
         output = np.divide(output,count)
         return output
 
     #loss calculated on the network outputs
-    def loss_average(self, data_set):
+    def loss_average(self, data_set,file_name):
         #calculate the average of the outputs, it gives me a single output vector
-        output = self.output_average(data_set)
+        output = self.output_average(data_set,file_name)
         loss = LOSS(output, data_set.output())
-        return loss
+        mee= MEE(output, data_set.output())
+        return loss,mee
+    
 
     #return best model and the mean
     def best_neural_network(self):
@@ -141,6 +160,7 @@ class Ensemble:
     def write_result(self, file_csv):
         for model in self.NN_array:
             model.write_result(file_csv)
+    
 
     #return the model with the best mee      
     def print_top(self):
