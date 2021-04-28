@@ -17,7 +17,8 @@ class Matrix_io:
     
     def get_len_output(self):
         return self.len_output        
-    
+    def get_len_input(self):
+        return self.matrix.shape[1] - self.len_output
     #set new matrix to current
     def set(self, new_matrix):
         if self.matrix.shape == new_matrix.shape:

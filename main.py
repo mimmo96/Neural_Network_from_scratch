@@ -35,31 +35,37 @@ dp.to_csv(fn.top_result_test)
 # PARAMETERS TO ANALIZE#
 ########################
 
-num_epoch = 20
-dim_output = 2
-problem_type="Regression"
+num_epoch = 1
+dim_output = 1
+type_problem="classification"
 
 ###########################################
 
-#read the data from the file and save it in a matrix
-training_set = Read_write_file.read_csv(problem_type,fn.ML_cup)
-validation_set = Read_write_file.read_csv(problem_type,fn.ML_cup)
-blind_set = Read_write_file.read_csv("blind_test",fn.blind_test)
-test_set = validation_set
-dim_input=np.size(training_set[0]) - dim_output
 
 #One hot encoding
-if(problem_type == "classification"):
+if(type_problem == "classification"):
+    training_set = Read_write_file.read_csv(type_problem,fn.Monk_1_tr)
+    validation_set = Read_write_file.read_csv(type_problem,fn.Monk_1_ts)
+    test_set = validation_set
+    
     training_set = Function.one_hot_encoding(training_set)
     validation_set = Function.one_hot_encoding(validation_set)
     test_set = Function.one_hot_encoding(test_set)
+    
     training_set = Matrix_io.Matrix_io(training_set, dim_output)
     validation_set = Matrix_io.Matrix_io(validation_set, dim_output)
     test_set = Matrix_io.Matrix_io(test_set, dim_output)
 #input normalization 
-if(problem_type == "Regression"):
+if(type_problem == "Regression"):
+
+    training_set = Read_write_file.read_csv(type_problem,fn.ML_cup)
+    blind_set = Read_write_file.read_csv("blind_test",fn.blind_test)
+
     training_set = Function.normalize_input(training_set,dim_output)
     training_set, validation_set, test_set = Function.divide_exaples_hold_out(training_set, dim_output)
+
+
+dim_input = training_set.get_len_input()
 
 ###################
 # HYPERPARAMETERS #
@@ -84,23 +90,19 @@ for i in batch_array:
 ###########################################
 
 grid = list(itertools.product(early_stopping, batch_array, fun, fun_out, hidden_units, learning_rate, alfa, v_lambda,weight))
-top_model=Hold_out(num_epoch,grid,training_set, validation_set, test_set, problem_type)
+top_models = Hold_out(num_epoch,grid,training_set, validation_set, test_set, type_problem)
+
 
 ##############
 # BLIND TEST #
 ##############
-count=0
+if type_problem == "Regression":
+    output = np.zeros((blind_set.shape[0],training_set.output().shape[1]))
 
-output = np.zeros((blind_set.shape[0],training_set.output().shape[1]))
+    for model in top_models:
+        output_NN = np.zeros((blind_set.shape[0],training_set.output().shape[1]))
+        model.NN.Forwarding(blind_set, output_NN, True)
+        output += output_NN
+    output = np.divide(output,np.size(top_models))
 
-for model in top_model:
-    output_NN = np.zeros((blind_set.shape[0],training_set.output().shape[1]))
-    model.NN.Forwarding(blind_set, output_NN, True)
-    output += output_NN
-    count += 1
-output = np.divide(output,count)
-
-gg = pandas.DataFrame(output)
-gg.to_csv(fn.result_blind_test, mode='a', header = False)
-
-print("END")
+    pandas.DataFrame(output).to_csv(fn.result_blind_test, mode='a', header = False)

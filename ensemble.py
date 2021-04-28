@@ -97,9 +97,14 @@ class Ensemble:
     def loss_average(self, data_set,file_name):
         #calculate the average of the outputs, it gives me a single output vector
         output = self.output_average(data_set,file_name)
-        loss = LOSS(output, data_set.output())
-        mee= MEE(output, data_set.output())
-        return loss,mee
+        mse = LOSS(output, data_set.output())
+        mee = MEE(output, data_set.output())
+        row_csv = {
+                'Error_MSE_ts' : [mse],
+                'Error_MEE_ts' : [mee]
+        }
+        pandas.DataFrame(row_csv).to_csv(file_name, mode='a', header = False, index=False)
+        return mse, mee
     
 
     #return best model and the mean
