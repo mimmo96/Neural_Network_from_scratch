@@ -28,27 +28,27 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
     
     #LOSS TRAINING
-    output_NN = np.zeros(training_set.output().shape)
-    NN.Forwarding(training_set.input(), output_NN, True)
-    loss_training = LOSS(output_NN, training_set.output(), penalty_term=0)
+    output_tr = np.zeros(training_set.output().shape)
+    NN.Forwarding(training_set.input(), output_tr, True)
+    loss_training = LOSS(output_tr, training_set.output(), penalty_term=0)
 
     #MEE TRAINING
-    MEE_tr = MEE(output_NN, training_set.output())
+    MEE_tr = MEE(output_tr, training_set.output())
 
     #LOSS VALIDATION
-    output_NN = np.zeros(validation_set.output().shape)
-    NN.Forwarding(validation_set.input(), output_NN, True)
-    loss_validation = LOSS(output_NN, validation_set.output(), penalty_term=0)
+    output_vl = np.zeros(validation_set.output().shape)
+    NN.Forwarding(validation_set.input(), output_vl, True)
+    loss_validation = LOSS(output_vl, validation_set.output(), penalty_term=0)
     
     #MEE VALIDATION
-    MEE_vl = MEE(output_NN, validation_set.output())
+    MEE_vl = MEE(output_vl, validation_set.output())
     print("MSE ", loss_training)
     #ACCURACY
     acc_tr = -1
     acc_vl = -1
     if(type_problem == "classification"):
-        acc_tr = accuracy(fun_out,training_set.output(),output_NN)
-        acc_vl = accuracy(fun_out,validation_set.output(),output_NN)
+        acc_tr = accuracy(fun_out,training_set.output(),output_tr)
+        acc_vl = accuracy(fun_out,validation_set.output(),output_vl)
     model = Ensemble.Stat_model(NN, loss_training, loss_validation, MEE_tr, MEE_vl, acc_tr, acc_vl, -1, num_training)
     return model
     
@@ -57,7 +57,12 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
 ############################################
 def ThreadPool_average(type_problem,training_set,validation_set, epochs,num_training,hyperparameter):
     #use your cpu core for parrallelize each operation and return the result of type [(loss1,mess1,nn1),(loss2,mess2,nn2),(loss3,mess3,nn3)]
-    trials = Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem, training_set,validation_set,epochs,num_training+(i/10), hyperparameter) for i in range(5))
+    #trials = Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem, training_set,validation_set,epochs,num_training+(i/10), hyperparameter) for i in range(5))
+    trials =[]
+
+    for i in range(5):
+        trials.append(task(type_problem, training_set,validation_set,epochs,num_training+(i/10), hyperparameter))
+    
     best_trial = Ensemble.Ensemble(trials, np.size(trials)).best_neural_network()
     
     return best_trial

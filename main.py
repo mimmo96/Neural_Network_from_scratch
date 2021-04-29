@@ -71,14 +71,14 @@ dim_input = training_set.get_len_input()
 # HYPERPARAMETERS #
 ###################
 
-hidden_units=[[dim_input,20,20,dim_output]]
-batch_array=[16]
-learning_rate = [0.054, 0.0068, 0.007, 0.088]
-alfa = [0,0.5]
+hidden_units=[[dim_input,3,dim_output]]
+batch_array=[124]
+learning_rate = [0.8]
+alfa = [0.8]
 v_lambda = [0]
-fun = ["zero_one_h"]      
+fun = ["sigmoidal"]      
 fun_out=["Regression"]
-weight=["Xavier Normal"]
+weight=["random"]
 early_stopping = [True]
 
 for i in batch_array:

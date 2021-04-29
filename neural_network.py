@@ -81,6 +81,8 @@ class Neural_network:
         accuracy_array_training = np.empty(0)
         accuracy_array_validation = np.empty(0)
 
+        acc_tr=0
+        acc_vl =0
         for i in range(epochs):
             #create k mini-batchs of size batch_size
             mini_batch = training_set.create_batch(batch_size)
