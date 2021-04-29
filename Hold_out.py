@@ -11,6 +11,7 @@ def Hold_out(epochs, grid, training_set, validation_set, test_set, type_problem)
         
         #calculate the average of the 5 generated models and return the loss and the MEE / accuracy
         model_stat = ThreadPool_average(type_problem, training_set, validation_set, epochs, num_training, hyperparameter)
+
         #insert model_stat in best model if it is in K top model
         top_k_models.insert_model(model_stat, type_problem)
         model_stat.write_result(fn.general_results)

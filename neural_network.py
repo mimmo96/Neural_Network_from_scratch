@@ -145,7 +145,7 @@ class Neural_network:
         file_ls='figure/training'+str(num_training)
         file_acc='figure/accuracy'+str(num_training)
         
-        if(self.type_problem == "classification"):
+        if(self.type_problem=="classification"):
             title += "; acc: "+ str(int(acc_tr)) + "; acc_val: " + str(int(acc_vl))    
             graph (title,"Accuracy", accuracy_array_training,accuracy_array_validation,file_acc)
         graph(title,"Loss", loss_array_training,loss_array_validation,file_ls)

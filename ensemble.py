@@ -10,7 +10,7 @@ class Stat_model:
     '''
         class used for saving result of one neuralnetwork and its iperparameters
     '''
-    def __init__(self, NN, MSE_tr = -1, MSE_vl = -1 , MEE_tr = -1, MEE_vl = -1, accuracy_tr = 0, accuracy_vl = 0, std= -1, number_model = 0, MSE_ts=-1 ,MEE_ts=-1):
+    def __init__(self, NN, MSE_tr = -1, MSE_vl = -1 , MEE_tr = -1, MEE_vl = -1, accuracy_tr = -1, accuracy_vl = -1, std= -1, number_model = 0, MSE_ts=-1 ,MEE_ts=-1):
 
         self.NN = NN
         self.MSE_tr = MSE_tr

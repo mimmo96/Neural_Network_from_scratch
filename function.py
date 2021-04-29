@@ -11,7 +11,7 @@ def choose_weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
     if type_weight=="random":
         #[-intervallo,intervallo]
-        return np.random.uniform(-0.25, 0.25)
+        return np.random.uniform(-0.7, 0.7)
 
     if type_weight=="uniform":
         #[-1/sqrt(fan-in),1/sqrt(fan-out)]
@@ -80,7 +80,6 @@ def _logistic (x):
     '''
     # return 1 / ( 1 + math.exp(-x) )
     #div=np.divide(1.0,1+np.exp(-x))
-    print(expit(x))
     return expit(x)
 
 def _tanh (x):
@@ -140,42 +139,38 @@ def choose_function(fun,net):
     if fun=="sigmoidal":
         return _logistic(net)
     
-    elif fun=="tanh":
+    if fun=="tanh":
         return _tanh(net)
     
-    elif fun=="relu":
+    if fun=="relu":
         return _relu(net)
     
-    elif fun=="identity":
+    if fun=="identity":
         return _identity(net)
     
-    elif fun=="zero_one_h":
+    if fun=="zero_one_h":
         return _zero_one_tanh(net)
-    elif fun == "Regression":
+    if fun == "Regression":
         return net
-    else:
-        print("FUNZIONE NON PRESENTE")
 
 def choose_derivate_function(fun,net):
     if fun=="sigmoidal":
         return _logistic_derivative(net)
     
-    elif fun=="tanh":
+    if fun=="tanh":
         return _tanh_derivative(net)
     
-    elif fun=="relu":
+    if fun=="relu":
         return _relu_derivative(net)
     
-    elif fun=="identity":
+    if fun=="identity":
         return _identity_derivative(net)
     
-    elif fun=="zero_one_h":
+    if fun=="zero_one_h":
         return _zero_one_tanh_derivative(net)
    
-    elif fun == "Regression":
+    if fun == "Regression":
         return 1
-    else:
-        print("FUNZIONE NON PRESENTE")
 
 def _derivate_activation_function(nets,type_fun):
     sig=np.empty(np.size(nets))
@@ -246,8 +241,7 @@ def sign(fun,vector):
                 vector[i]= 1
             else:
                 vector[i]= 0
-        else:
-            print("FUNZIONE NON PRESENTE")
+
     return vector
 
 

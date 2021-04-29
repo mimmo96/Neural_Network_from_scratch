@@ -26,13 +26,11 @@ def _delta_output_layer(output_expected, output_NN, net, type_function):
 #type(net) = value
 #type(type_function) = string
 def _delta_hidden_layer(delta_liv_succ, w_liv_succ, net, type_function):
-    #np.seterr(all='ignore') 
+    np.seterr(all='ignore') 
     delta_coorente = np.dot(delta_liv_succ, w_liv_succ)
-    print("delta corrente incompleto ", delta_coorente)
     derivata_corrente = choose_derivate_function(type_function, net)
-    print("derivata corrente", delta_coorente)
     delta_coorente = np.multiply(delta_coorente, derivata_corrente)
-    print("delta corrente finale", delta_coorente)    
+    
     return delta_coorente
     
 #############

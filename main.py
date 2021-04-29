@@ -35,7 +35,7 @@ dp.to_csv(fn.top_result_test)
 # PARAMETERS TO ANALIZE#
 ########################
 
-num_epoch = 500
+num_epoch = 1
 dim_output = 1
 type_problem="classification"
 
@@ -66,18 +66,19 @@ if(type_problem == "Regression"):
 
 
 dim_input = training_set.get_len_input()
+
 ###################
 # HYPERPARAMETERS #
 ###################
 
-hidden_units=[[dim_input,4,dim_output]]
-batch_array=[124]
-learning_rate = [0.76]
-alfa = [0.83]
+hidden_units=[[dim_input,20,20,dim_output]]
+batch_array=[16]
+learning_rate = [0.054, 0.0068, 0.007, 0.088]
+alfa = [0,0.5]
 v_lambda = [0]
-fun = ["relu"]      
-fun_out=["sigmoidal"]
-weight=["random"]
+fun = ["zero_one_h"]      
+fun_out=["Regression"]
+weight=["Xavier Normal"]
 early_stopping = [True]
 
 for i in batch_array:
