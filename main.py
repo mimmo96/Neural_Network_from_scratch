@@ -35,7 +35,7 @@ dp.to_csv(fn.top_result_test)
 # PARAMETERS TO ANALIZE#
 ########################
 
-num_epoch = 20
+num_epoch = 500
 dim_output = 1
 type_problem="classification"
 
@@ -71,7 +71,7 @@ dim_input = training_set.get_len_input()
 # HYPERPARAMETERS #
 ###################
 
-hidden_units=[[dim_input,3,dim_output]]
+hidden_units=[[dim_input,15,dim_output]]
 batch_array=[124]
 learning_rate = [0.8]
 alfa = [0.8]
