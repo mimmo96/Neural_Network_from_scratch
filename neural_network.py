@@ -136,7 +136,7 @@ class Neural_network:
                     
             if(validation_stop==0):
                 self.epochs_retraining = i
-                print("Early stopping\n")
+                print("Early stopping")
                 break
         self.struct_layers = best_model
         

@@ -3,6 +3,8 @@ from scipy.special import expit
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import Matrix_io
+import pandas
+import File_names as fn
 
 ####################################
 # WEIGHTS INITIALIZATION FUNCTIONS #
@@ -321,3 +323,28 @@ def divide_exaples_hold_out(matrix_input, columns_output):
 def setBlind(matrix_input, columns_output):
     blind = Matrix_io.Matrix_io(matrix_input, columns_output)
     return blind
+
+
+def setPandas():
+    df = pandas.DataFrame(columns = ['Number_Model',
+                'Units_per_layer',
+                'learning_rate' ,
+                'lambda',
+                'alfa',
+                'Function_hidden',
+                'inizialization_weights',
+                'Error_MSE_tr',
+                'Error_MSE_vl',
+                'Error_MEE_tr',
+                'Error_MEE_vl',
+                'Accuracy_tr',
+                'Accuracy_vl',
+                'Variance'])
+
+    dp = pandas.DataFrame(columns = ['Number_Model',
+                    'Error_MSE_ts',
+                    'Error_MEE_ts'])
+
+    df.to_csv(fn.top_general_results)
+    df.to_csv(fn.general_results)
+    dp.to_csv(fn.top_result_test)
