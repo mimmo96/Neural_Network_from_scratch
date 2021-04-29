@@ -37,7 +37,7 @@ class Matrix_io:
             mini_batch = Matrix_io(self.matrix[i*batch_size:(i+1)*batch_size], self.len_output)
             mini_batches.append(mini_batch)
         
-        if self.matrix.shape[0] / batch_size != 0:
+        if self.matrix.shape[0] % batch_size != 0:
             #matrix with the remaining lines of self.matrix
             mini_batch = Matrix_io(self.matrix[(i+1)*batch_size:], self.len_output)
             

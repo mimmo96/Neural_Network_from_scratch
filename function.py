@@ -187,7 +187,6 @@ def _derivate_activation_function(nets,type_fun):
 
 def der_loss( output_expected,output_layer):
     val = np.subtract(output_expected,output_layer)
-  
     return val
 
 def LOSS(output, output_expected, penalty_term=0):

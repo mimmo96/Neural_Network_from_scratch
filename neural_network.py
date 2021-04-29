@@ -178,20 +178,23 @@ class Neural_network:
     ###################
     def backprogation(self, output_NN, training_set_output):
         batch_size = training_set_output.shape[0]
+
         for i in range(np.size(self.struct_layers) - 1, -1, -1):
             layer = self.struct_layers[i]
             delta = np.empty([layer.units,batch_size],float)
-           
+
             #for all nodes of current layer
             for j in range(0, layer.units):
                 nets_batch = layer.net_matrix(j)
                 #outputlayer
                 if i == (np.size(self.struct_layers) - 1):
-                        delta[j,:] = bp._delta_output_layer(training_set_output[:,j], output_NN[:,j], nets_batch, self.fun_out)
+                    delta[j,:] = bp._delta_output_layer(training_set_output[:,j], output_NN[:,j], nets_batch, self.fun_out)
                 #hiddenlayer
                 else:
+                    #                                      ([],[nan],[],relu)
                     delta[j, :] = bp._delta_hidden_layer(delta_layer_succesivo.T, self.struct_layers[i + 1].w_matrix[j, :], nets_batch, self.function)
-                
+
+              
                 gradient = -np.dot(delta[j,:],layer.x)
                 gradient = np.divide(gradient,batch_size)
                 
@@ -204,7 +207,8 @@ class Neural_network:
 
                 #update weights
                 layer.w_matrix[:, j],  layer.Delta_w_old[:,j] = bp.update_weights(layer.w_matrix[:, j], self.learning_rate, gradient, regularizer, momentum)
-            delta_layer_succesivo = delta
+           
+            delta_layer_succesivo = copy.deepcopy(delta)
 
     ####################
     # VALIDATION PHASE #

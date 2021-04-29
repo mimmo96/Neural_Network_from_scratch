@@ -35,7 +35,7 @@ dp.to_csv(fn.top_result_test)
 # PARAMETERS TO ANALIZE#
 ########################
 
-num_epoch = 1
+num_epoch = 20
 dim_output = 1
 type_problem="classification"
 
@@ -76,8 +76,8 @@ batch_array=[124]
 learning_rate = [0.8]
 alfa = [0.8]
 v_lambda = [0]
-fun = ["sigmoidal"]      
-fun_out=["Regression"]
+fun = ["relu"]      
+fun_out=["sigmoidal"]
 weight=["random"]
 early_stopping = [True]
 

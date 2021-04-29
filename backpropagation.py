@@ -30,7 +30,6 @@ def _delta_hidden_layer(delta_liv_succ, w_liv_succ, net, type_function):
     delta_coorente = np.dot(delta_liv_succ, w_liv_succ)
     derivata_corrente = choose_derivate_function(type_function, net)
     delta_coorente = np.multiply(delta_coorente, derivata_corrente)
-    
     return delta_coorente
     
 #############
