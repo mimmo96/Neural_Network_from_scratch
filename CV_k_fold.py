@@ -1,8 +1,9 @@
 import numpy as np
 import Ensemble
 from Model_Selection import ThreadPool_average
+import File_names as fn
 
-def cv_k_fold(grid, epochs, training_set, test_set, type_problem, k_fold = 4):
+def cv_k_fold(epochs, grid, training_set, test_set, type_problem, k_fold = 4):
     num_training = -1
     #divide dataset into K distinct and equal D_1, ..., D_K
     size_validation = training_set.input().shape[0] // k_fold
@@ -33,9 +34,9 @@ def cv_k_fold(grid, epochs, training_set, test_set, type_problem, k_fold = 4):
         
         top_NN.k_is_in_top(best_NN_k_fold)
     
-    #retraining with early stopping
-    #
-    #           write here
-    #
-    #   
-    return top_NN
+    #top_k_models contiene Ensemble di 10 migliori modelli e write_result stampa nel file csv tutti i miglioir 10 modelli e i loro parametri
+    #Ensamble on 10 top models on test set
+    top_NN.write_result(fn.top_general_results)
+    top_NN.loss_average(test_set,fn.top_result_test)
+
+    return top_NN.getNN()

@@ -42,7 +42,7 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
     
     #MEE VALIDATION
     MEE_vl = MEE(output_vl, validation_set.output())
-    print("MSE ", loss_training)
+    print("MEE_vl ", MEE_vl)
     #ACCURACY
     acc_tr = -1
     acc_vl = -1
@@ -57,11 +57,7 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
 ############################################
 def ThreadPool_average(type_problem,training_set,validation_set, epochs,num_training,hyperparameter):
     #use your cpu core for parrallelize each operation and return the result of type [(loss1,mess1,nn1),(loss2,mess2,nn2),(loss3,mess3,nn3)]
-    #trials = Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem, training_set,validation_set,epochs,num_training+(i/10), hyperparameter) for i in range(5))
-    trials =[]
-
-    for i in range(5):
-        trials.append(task(type_problem, training_set,validation_set,epochs,num_training+(i/10), hyperparameter))
+    trials = Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem, training_set,validation_set,epochs,num_training+(i/10), hyperparameter) for i in range(5))
     
     best_trial = Ensemble.Ensemble(trials, np.size(trials)).best_neural_network()
     

@@ -4,6 +4,7 @@ import Function
 from Hold_out import Hold_out
 import Matrix_io
 import itertools
+from CV_k_fold import cv_k_fold
 import pandas
 import File_names as fn
 
@@ -12,7 +13,7 @@ class Regression:
         class used for regression problem
     '''
     def __init__(self,num_epoch,dim_output,hidden_units,batch_array,learning_rate,alfa,v_lambda,
-                        fun,fun_out,weight,early_stopping):
+                        fun,fun_out,weight,early_stopping,tot):
 
         self.type_problem="Regression"
         self.num_epoch = num_epoch
@@ -22,6 +23,7 @@ class Regression:
         self.training_set = Function.normalize_input( self.training_set,self.dim_output)
         self.training_set, self.validation_set, self.test_set = Function.divide_exaples_hold_out( self.training_set, self.dim_output)
         self.dim_input = self. training_set.get_len_input()
+        self.tot=tot
         
         ###################
         # HYPERPARAMETERS #
@@ -49,7 +51,9 @@ class Regression:
         ############
         # HOLD-OUT #
         ############
-        top_models = Hold_out(self.num_epoch,self.grid,self.training_set, self.validation_set, self.test_set, self.type_problem)
+        top_models = Hold_out(self.num_epoch,self.grid,self.training_set, self.validation_set, self.test_set, self.type_problem,self.tot)
+        #top_models = top_models = cv_k_fold(self.num_epoch,self.grid,self.training_set, self.test_set, self.type_problem)
+
 
         ##############
         # BLIND TEST #
@@ -71,14 +75,15 @@ class Classification:
         class used for regression problem
     '''
     def __init__(self,num_epoch,dim_output,hidden_units,batch_array,learning_rate,alfa,v_lambda,
-                        fun,fun_out,weight,early_stopping):
+                        fun,fun_out,weight,early_stopping,tot):
 
         self.type_problem="classification"
         self.num_epoch = num_epoch
         self.dim_output = dim_output
-        self.training_set = Read_write_file.read_csv(self.type_problem,fn.Monk_1_tr)
-        self.validation_set = Read_write_file.read_csv(self.type_problem,fn.Monk_1_ts)
+        self.training_set = Read_write_file.read_csv(self.type_problem,fn.Monk_3_tr)
+        self.validation_set = Read_write_file.read_csv(self.type_problem,fn.Monk_3_ts)
         self.test_set = self.validation_set
+        self.tot=tot
         
         self.training_set = Function.one_hot_encoding(self.training_set)
         self.validation_set = Function.one_hot_encoding(self.validation_set)
@@ -114,4 +119,4 @@ class Classification:
                 print("batch.size out of bounded\n")
                 exit()
 
-        top_models = Hold_out(self.num_epoch,self.grid,self.training_set, self.validation_set, self.test_set, self.type_problem)
+        top_models = Hold_out(self.num_epoch,self.grid,self.training_set, self.validation_set, self.test_set, self.type_problem,  self.tot)

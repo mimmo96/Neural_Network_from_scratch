@@ -74,7 +74,7 @@ class Ensemble:
     '''
     #NN_array=array containing the top 10 Neural networks of type stat_model
     #data = data to test
-    def __init__(self, NN_array =[], limit = 2):
+    def __init__(self, NN_array =[], limit = 5):
         self.NN_array=NN_array
         self.limit = limit
     
