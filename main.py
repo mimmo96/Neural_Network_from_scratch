@@ -13,7 +13,7 @@ dim_output = 1
 dim_input= 17
 
 hidden_units=[[dim_input,2,dim_output],[dim_input,3,dim_output],[dim_input,4,dim_output]]
-batch_array=[124]
+batch_array=[16]
 learning_rate = [0.44,0.5,0.8]
 alfa = [0.8,0.9]
 v_lambda = [0]

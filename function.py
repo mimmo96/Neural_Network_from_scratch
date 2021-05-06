@@ -246,22 +246,6 @@ def sign(fun,vector):
     return vector
 
 
-###################
-# BATCH FUNCTIONS #
-###################
-def create_batch(data, batch_size):
-    mini_batches = []
-    no_of_batches = data.shape[0] // batch_size
-    for i in range(no_of_batches):
-        mini_batch = data[i*batch_size:(i+1)*batch_size]
-        mini_batches.append(mini_batch)
-    if data.shape[0] / batch_size != 0:
-        mini_batch = data[(i+1)*batch_size:]
-        if mini_batch.shape[0] < batch_size:
-            mini_batch = np.append(mini_batch, data[0:batch_size-mini_batch.shape[0]], axis = 0)
-        mini_batches.append(mini_batch)
-    return mini_batches
-
 
 ###########################
 # EARLY STOPPING FUNCTION #
