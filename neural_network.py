@@ -72,6 +72,7 @@ class Neural_network:
     def trainig(self, training_set, validation_set, batch_size, epochs, num_training):
         
         self.epochs_retraining = epochs
+        self.batch_size = batch_size
         best_loss_validation= + math.inf
         best_model = self.struct_layers
         validation_stop = 3
@@ -88,8 +89,8 @@ class Neural_network:
             mini_batch = training_set.create_batch(batch_size)
             #if it's using variable learning rate then update it
             if self.tau != 0:
-                self.learning_rate = 1 / (1 + (i / self.tau))
-
+                self.learning_rate = 1 / (1 + ((i+1) / self.tau))
+            #print(self.learning_rate)
             for batch in mini_batch:
                 
                 for layer in self.struct_layers:

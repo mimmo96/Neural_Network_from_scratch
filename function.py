@@ -304,12 +304,22 @@ def divide_exaples_hold_out(matrix_input, columns_output):
     test = Matrix_io.Matrix_io(matrix_input[training_size+validation_size:, :], columns_output)
     return [training, validation, test]
 
+   
+def divide_exaples_k_fold(matrix_input, columns_output):
+    #divide 70% TR, 20% VL, 10% TS
+    rows = matrix_input.shape[0]
+    training_size = rows *85 //100
+    training = Matrix_io.Matrix_io(matrix_input[0:training_size, :], columns_output)
+    test = Matrix_io.Matrix_io(matrix_input[training_size:, :], columns_output)
+    return [training, test]
+
 def setBlind(matrix_input, columns_output):
     blind = Matrix_io.Matrix_io(matrix_input, columns_output)
     return blind
 
 
 def setPandas():
+
     df = pandas.DataFrame(columns = ['Number_Model',
                 'Units_per_layer',
                 'learning_rate' ,
@@ -317,6 +327,7 @@ def setPandas():
                 'alfa',
                 'Function_hidden',
                 'inizialization_weights',
+                'batch_size',
                 'Error_MSE_tr',
                 'Error_MSE_vl',
                 'Error_MEE_tr',

@@ -2,12 +2,8 @@ from Model_Selection import task
 import Function
 import Task
 import numpy as np
-
+import File_names as fn
 Function.setPandas()
-
-def computedim(hidden_units,batch_array,learning_rate,alfa,v_lambda ,fun,fun_out,weight ):
-    return np.size(hidden_units,0)* np.size(batch_array,0)* np.size(learning_rate,0)* np.size(alfa,0)* np.size(v_lambda,0)* np.size(fun,0)* np.size(fun_out,0)* np.size(weight,0)
-
 
 '''
 ##########################
@@ -48,27 +44,27 @@ classification.startexecution()
 # REGRESSION PROBLEM #
 ######################
 
-num_epoch = 500
+num_epoch = 10
 dim_output = 2
 dim_input= 10
 
-hidden_units=[[dim_input,12,dim_output]]
-batch_array=[16]
-learning_rate = [0.003154814]
-alfa = [0.6]
-v_lambda = [0]
-fun = ["zero_one_h"]      
+hidden_units=[[dim_input, 6, dim_output], [dim_input,12,dim_output], [dim_input, 25, dim_output], 
+                [dim_input, 6, 13, dim_output], [dim_input, 10, 10, dim_output], [dim_input, 25, 25, dim_output]]
+batch_array=[16, 32, 124]
+learning_rate = [0.04, 0.00345, 0.00075, 0.15]
+
+alfa = [0.5, 0.8]
+v_lambda = [0.0001, 0.00001]
+fun = ["sigmoidal", "tanh"]      
 fun_out=["Regression"]    
-weight=["Xavier Normal"]
-early_stopping = [False]
+weight=["random", "uniform", "Xavier Normal"]
+early_stopping = [False, True]
 
 ########################
 # EXECUTION REGRESSION #
 ########################
 
-tot=computedim(hidden_units,batch_array,learning_rate,alfa,v_lambda ,fun,fun_out,weight)
+Regression = Task.Regression(fn.ML_cup, num_epoch, dim_output,hidden_units,batch_array,learning_rate,alfa,v_lambda,
+                                fun,weight,early_stopping)
 
-Regression = Task.Regression(num_epoch,dim_output,hidden_units,batch_array,learning_rate,alfa,v_lambda,
-                                fun,fun_out,weight,early_stopping,tot)
-
-Regression.startexecution()
+Regression.startexecution_k_fold()

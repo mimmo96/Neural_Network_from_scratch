@@ -32,7 +32,6 @@ class Matrix_io:
         mini_batches = []
         #define number of batch
         no_of_batches = self.matrix.shape[0] // batch_size
-        print("stampati")
         for i in range(no_of_batches):
             mini_batch = Matrix_io(self.matrix[i*batch_size:(i+1)*batch_size], self.len_output)
             mini_batches.append(mini_batch)

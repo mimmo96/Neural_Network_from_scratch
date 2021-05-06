@@ -33,6 +33,7 @@ class Stat_model:
                 'alfa' : [self.NN.alfa],
                 'function_hidden' : [self.NN.function],
                 'inizialization_weights' : [self.NN.type_weight],
+                'batch_size' : [self.NN.batch_size],
                 'Error_MSE_tr' : [self.MSE_tr],
                 'Error_MSE_vl' : [self.MSE_vl],
                 'Error_MEE_tr' : [self.MEE_tr],
