@@ -59,7 +59,7 @@ fun = ["sigmoidal", "tanh"]
 fun_out=["Regression"]    
 weight=["random", "uniform", "Xavier Normal"]
 early_stopping = [False, True]
-type_learning_rate = ["variable"]
+type_learning_rate = ["fixed"]
 ########################
 # EXECUTION REGRESSION #
 ########################

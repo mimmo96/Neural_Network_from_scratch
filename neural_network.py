@@ -91,7 +91,6 @@ class Neural_network:
             if ((self.type_learning_rate == "variable") and tau >= i) :
                 alfa_lr = i / tau
                 self.learning_rate = (1 - alfa_lr)*self.learning_rate_init + alfa_lr*learning_rate_tau
-                print(self.learning_rate)
 
             for batch in mini_batch:
                 
