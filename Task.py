@@ -12,8 +12,8 @@ class Regression:
     '''
         class used for regression problem
     '''
-    def __init__(self,file_data, num_epoch,dim_output,hidden_units,batch_array,learning_rate,alfa,v_lambda,
-                        fun,weight,early_stopping):
+    def __init__(self, file_data, num_epoch, dim_output, hidden_units, batch_array, learning_rate_init, type_learning_rate, alfa, v_lambda,
+                        fun, weight, early_stopping):
 
         self.type_problem="Regression"
         self.num_epoch = num_epoch
@@ -27,7 +27,8 @@ class Regression:
         #HYPERPARAMETERS
         self.hidden_units=hidden_units
         self.batch_array=batch_array
-        self.learning_rate = learning_rate
+        self.learning_rate_init = learning_rate_init
+        self.type_learning_rate = type_learning_rate
         self.alfa = alfa
         self.v_lambda = v_lambda
         self.fun = fun      
@@ -35,7 +36,7 @@ class Regression:
         self.weight=weight
         self.early_stopping = early_stopping
 
-        self.grid = list(itertools.product(self.early_stopping, self.batch_array, self.fun, self.fun_out, self.hidden_units, self.learning_rate, self.alfa, self.v_lambda,self.weight))
+        self.grid = list(itertools.product(self.early_stopping, self.batch_array, self.type_learning_rate, self.fun, self.fun_out, self.hidden_units, self.learning_rate_init, self.alfa, self.v_lambda,self.weight))
         self.dimension_grid = len(self.grid)
 
     ############
@@ -88,7 +89,7 @@ class Classification:
     '''
         class used for classification problem
     '''
-    def __init__(self,file_data_tr, file_data_ts, num_epoch,dim_output,hidden_units,batch_array,learning_rate,alfa,v_lambda,
+    def __init__(self,file_data_tr, file_data_ts, num_epoch,dim_output,hidden_units,batch_array,learning_rate_init,alfa,v_lambda,
                         fun,fun_out,weight,early_stopping):
 
         self.type_problem="classification"
@@ -113,7 +114,7 @@ class Classification:
         
         self.hidden_units=hidden_units
         self.batch_array=batch_array
-        self.learning_rate = learning_rate
+        self.learning_rate_init = learning_rate_init
         self.alfa = alfa
         self.v_lambda = v_lambda
         self.fun = fun      
@@ -121,7 +122,7 @@ class Classification:
         self.weight=weight
         self.early_stopping = early_stopping
 
-        self.grid = list(itertools.product(self.early_stopping, self.batch_array, self.fun, self.fun_out, self.hidden_units, self.learning_rate, self.alfa, self.v_lambda,self.weight))
+        self.grid = list(itertools.product(self.early_stopping, self.batch_array, self.fun, self.fun_out, self.hidden_units, self.learning_rate_init, self.alfa, self.v_lambda,self.weight))
         self.dimension_grid = len(self.grid)
 
 

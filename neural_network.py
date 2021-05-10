@@ -10,16 +10,13 @@ import copy
 
 class Neural_network:
     
-    def __init__(self, units, alfa, v_lambda, learning_rate, num_layers, function, fun_out, type_weight, type_problem = "Regression", early_stopping = False):
+    def __init__(self, units, alfa, v_lambda, learning_rate_init, type_learning_rate, num_layers, function, fun_out, type_weight, type_problem = "Regression", early_stopping = False):
 
         self.alfa = alfa
         self.v_lambda = v_lambda
-        
-        if (learning_rate >= 1) | (learning_rate == 0):
-            self.tau = np.power(2, learning_rate)
-        else:
-            self.learning_rate=learning_rate
-            self.tau = 0
+        self.learning_rate_init = learning_rate_init
+        self.learning_rate = learning_rate_init
+        self.type_learning_rate = type_learning_rate
         self.units=units
         self.function=function
         self.fun_out = fun_out
@@ -84,13 +81,18 @@ class Neural_network:
 
         acc_tr=0
         acc_vl =0
+        if self.type_learning_rate == "variable":
+            learning_rate_tau = self.learning_rate_init / 100
+            tau = 200
+
         for i in range(epochs):
             #create k mini-batchs of size batch_size
             mini_batch = training_set.create_batch(batch_size)
-            #if it's using variable learning rate then update it
-            if self.tau != 0:
-                self.learning_rate = 1 / (1 + ((i+1) / self.tau))
-            #print(self.learning_rate)
+            if ((self.type_learning_rate == "variable") and tau >= i) :
+                alfa_lr = i / tau
+                self.learning_rate = (1 - alfa_lr)*self.learning_rate_init + alfa_lr*learning_rate_tau
+                print(self.learning_rate)
+
             for batch in mini_batch:
                 
                 for layer in self.struct_layers:

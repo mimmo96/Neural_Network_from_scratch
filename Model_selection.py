@@ -13,18 +13,19 @@ from joblib import Parallel, delayed
 def task(type_problem,training_set,validation_set, epochs,num_training, hyperparameter):
     early_stopping = hyperparameter[0]
     batch_size=hyperparameter[1]
-    function=hyperparameter[2]
-    fun_out=hyperparameter[3]
-    hidden=hyperparameter[4]
-    learning_rate=hyperparameter[5]
-    alfa=hyperparameter[6]
-    v_lambda=hyperparameter[7]
-    weig=hyperparameter[8]
-    num_layers=np.size(hidden) -1
+    type_learning_rate = hyperparameter[2]
+    function=hyperparameter[3]
+    fun_out=hyperparameter[4]
+    hidden=hyperparameter[5]
+    learning_rate=hyperparameter[6]
+    alfa=hyperparameter[7]
+    v_lambda=hyperparameter[8]
+    weig=hyperparameter[9]
+    num_layers = np.size(hidden) - 1
     
     #hidden=sethidden(training_set,units)
     #print("hidden:",hidden)
-    NN = Neural_network.Neural_network(hidden, alfa, v_lambda, learning_rate, num_layers, function, fun_out, weig, type_problem, early_stopping)
+    NN = Neural_network.Neural_network(hidden, alfa, v_lambda, learning_rate, type_learning_rate, num_layers, function, fun_out, weig, type_problem, early_stopping)
     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
     
     #LOSS TRAINING
@@ -90,6 +91,6 @@ def save_test_model(best_NN,test_set):
     
     #ensamble on test set
     en=Ensemble.Ensemble(best_NN)
-    loss_Ensemble=en.loss_average(test_set)
+    loss_Ensemble=en.loss_average(test_set, file)
     print_result(file,"errore sui test:" +str(loss_Ensemble)) 
     file.close()
