@@ -44,22 +44,21 @@ classification.startexecution()
 # REGRESSION PROBLEM #
 ######################
 
-num_epoch = 10
+num_epoch = 100
 dim_output = 2
 dim_input= 10
 
-hidden_units=[[dim_input, 6, dim_output], [dim_input,12,dim_output], [dim_input, 25, dim_output], 
-                [dim_input, 6, 13, dim_output], [dim_input, 10, 10, dim_output], [dim_input, 25, 25, dim_output]]
-batch_array=[16, 32, 124]
-learning_rate_init = [0.04, 0.00345, 0.00075, 0.15]
+hidden_units=[ [dim_input, 20, 20, dim_output]]
+batch_array=[200]
+learning_rate_init = [0.0005]
 
-alfa = [0.5, 0.8]
-v_lambda = [0.0001, 0.00001]
-fun = ["sigmoidal", "tanh"]      
+alfa = [0.7]
+v_lambda = [0.00001]
+fun = ["leaky_relu"]      
 fun_out=["Regression"]    
-weight=["random", "uniform", "Xavier Normal"]
+weight=["random"]
 early_stopping = [False, True]
-type_learning_rate = ["fixed"]
+type_learning_rate = ["variable"]
 ########################
 # EXECUTION REGRESSION #
 ########################

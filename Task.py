@@ -20,7 +20,7 @@ class Regression:
         self.dim_output = dim_output
         self.data_set = Read_write_file.read_csv(self.type_problem,file_data)
         #self.blind_set = Read_write_file.read_csv("blind_test",fn.blind_test)
-        #self.training_set = Function.normalize_input( self.training_set,self.dim_output)
+        self.data_set = Function.normalize_input(self.data_set,self.dim_output)
         #self.training_set, self.validation_set, self.test_set = Function.divide_exaples_hold_out( self.training_set, self.dim_output)
         #self.dim_input = self. training_set.get_len_input()
 

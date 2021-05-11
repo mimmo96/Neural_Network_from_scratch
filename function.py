@@ -96,6 +96,12 @@ def _zero_one_tanh (x):
     '''
     return (1 + np.tanh (x))/2
 
+def _leaky_relu (x):
+    '''
+        leaky_relu activation function: _leaky_relu(x) = x if x>0 else 0.01*x
+    '''
+    return np.maximum(0.01*x,x)
+
 
 ########################################
 #   ACTIVATION FUNCTIONS DERIVATIVES   #
@@ -132,6 +138,14 @@ def _zero_one_tanh_derivative (x):
     '''
     return 1/2 * ( 1 - (np.tanh (x))**2 )
 
+def _leaky_relu_derivative (x):
+    '''
+        zero-one tanh activation function derivatives: tanh'(x) = 1/2 * ( 1 - (tanh(x))**2 )
+    '''
+    x[x > 0] = 1.
+    x[x <= 0] = 0.01
+    return x
+
 
 #####################
 # CHOOSING FUNCTION #
@@ -152,6 +166,10 @@ def choose_function(fun,net):
     
     if fun=="zero_one_h":
         return _zero_one_tanh(net)
+
+    if fun=="leaky_relu":
+        return _leaky_relu(net)
+
     if fun == "Regression":
         return net
 
@@ -170,6 +188,9 @@ def choose_derivate_function(fun,net):
     
     if fun=="zero_one_h":
         return _zero_one_tanh_derivative(net)
+    
+    if fun=="leaky_relu":
+        return _leaky_relu_derivative(net)
    
     if fun == "Regression":
         return 1

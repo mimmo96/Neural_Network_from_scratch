@@ -88,7 +88,7 @@ class Neural_network:
         for i in range(epochs):
             #create k mini-batchs of size batch_size
             mini_batch = training_set.create_batch(batch_size)
-            if ((self.type_learning_rate == "variable") and tau >= i) :
+            if ((self.type_learning_rate == "variable") and tau > i) :
                 alfa_lr = i / tau
                 self.learning_rate = (1 - alfa_lr)*self.learning_rate_init + alfa_lr*learning_rate_tau
 
@@ -193,7 +193,6 @@ class Neural_network:
                     delta[j,:] = bp._delta_output_layer(training_set_output[:,j], output_NN[:,j], nets_batch, self.fun_out)
                 #hiddenlayer
                 else:
-                    #                                      ([],[nan],[],relu)
                     delta[j, :] = bp._delta_hidden_layer(delta_layer_succesivo.T, self.struct_layers[i + 1].w_matrix[j, :], nets_batch, self.function)
 
               
