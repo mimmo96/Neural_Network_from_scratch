@@ -19,8 +19,9 @@ class Regression:
         self.num_epoch = num_epoch
         self.dim_output = dim_output
         self.data_set = Read_write_file.read_csv(self.type_problem,file_data)
+        self.test_set = [[]]
         #self.blind_set = Read_write_file.read_csv("blind_test",fn.blind_test)
-        self.data_set = Function.normalize_input(self.data_set,self.dim_output)
+        #self.data_set = Function.normalize_input(self.data_set,self.dim_output)
         #self.training_set, self.validation_set, self.test_set = Function.divide_exaples_hold_out( self.training_set, self.dim_output)
         #self.dim_input = self. training_set.get_len_input()
 
@@ -35,7 +36,7 @@ class Regression:
         self.fun_out=["Regression"]
         self.weight=weight
         self.early_stopping = early_stopping
-
+        self.top_models = []
         self.grid = list(itertools.product(self.early_stopping, self.batch_array, self.type_learning_rate, self.fun, self.fun_out, self.hidden_units, self.learning_rate_init, self.alfa, self.v_lambda,self.weight))
         self.dimension_grid = len(self.grid)
 
@@ -44,7 +45,7 @@ class Regression:
     ############
 
     def startexecution_Hold_out(self,):
-        training_set, validation_set, test_set = Function.divide_exaples_hold_out(self.data_set, self.dim_output)
+        training_set, validation_set, self.test_set = Function.divide_exaples_hold_out(self.data_set, self.dim_output)
         self.dim_input = training_set.get_len_input()
         
         for i in self.batch_array:
@@ -52,38 +53,44 @@ class Regression:
                 print("batch.size out of bounded\n")
                 exit()
 
-        top_models = Hold_out(self.num_epoch, self.grid,training_set, validation_set, test_set, self.type_problem, self.dimension_grid)
-        return top_models
+        self.top_models = Hold_out(self.num_epoch, self.grid,training_set, validation_set, self.test_set, self.type_problem, self.dimension_grid)
+        return self.top_models
     
     #############
     # CV-K-FOLD #
     #############
     
     def startexecution_k_fold(self,):
-        training_set, test_set = Function.divide_exaples_k_fold(self.data_set, self.dim_output)
-        self.dim_input = training_set.get_len_input()
+        self.devolopment_set, self.test_set = Function.divide_exaples_k_fold(self.data_set, self.dim_output)
+        self.dim_input = self.devolopment_set.get_len_input()
         
         for i in self.batch_array:
-            if(i > training_set.input().shape[0]):
+            if(i > self.devolopment_set.input().shape[0]):
                 print("batch.size out of bounded\n")
                 exit()
 
-        top_models = top_models = cv_k_fold(self.num_epoch, self.grid, training_set, test_set, self.type_problem)
-        return top_models
+        self.top_models = self.top_models = cv_k_fold(self.num_epoch, self.grid, self.devolopment_set, self.test_set, self.type_problem)
+        return self.top_models
     
         ##############
         # BLIND TEST #
         ##############
-    def blind_test(self, top_models, file_name):
+    def blind_test(self, file_name):
         blind_set = Read_write_file.read_csv("blind_test", file_name)
         output = np.zeros((blind_set.shape[0], self.dim_output ))
-        for model in top_models:
+        for model in self.top_models:
             output_NN = np.zeros((blind_set.shape[0], self.dim_output))
             model.NN.Forwarding(blind_set, output_NN, True)
             output += output_NN
-        output = np.divide(output,np.size(top_models))
+        output = np.divide(output,np.size(self.top_models))
 
-        pandas.DataFrame(output).to_csv(fn.result_blind_test, mode='a', header = False)
+        pandas.DataFrame(output).to_csv(fn.result_blind_test, mode='a', header = True)
+    
+    def retraining (self, models):
+        mee_results = []
+        for model in models:
+            mee_results.append(model.NN.retraining(self.devolopment_set))
+        return models, mee_results
 
 class Classification:
     '''
@@ -133,5 +140,5 @@ class Classification:
                 print("batch.size out of bounded\n")
                 exit()
 
-        top_models = Hold_out(self.num_epoch,self.grid,self.training_set, self.validation_set, self.test_set, self.type_problem,  self.dimension_grid)
-        return top_models
+        self.top_models = Hold_out(self.num_epoch,self.grid,self.training_set, self.validation_set, self.test_set, self.type_problem,  self.dimension_grid)
+        return self.top_models

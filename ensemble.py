@@ -1,5 +1,7 @@
 from itertools import count
 from os import write
+
+from numpy.lib.function_base import insert
 from Function import MEE
 import numpy as np
 from Function import LOSS
@@ -75,9 +77,12 @@ class Ensemble:
     '''
     #NN_array=array containing the top 10 Neural networks of type stat_model
     #data = data to test
-    def __init__(self, NN_array =[], limit = 5):
-        self.NN_array=NN_array
+    def __init__(self, NN_array =[], limit = 8, type_problem = "Regression"):
+        self.NN_array=[]
         self.limit = limit
+        self.type_problem = type_problem
+        for elm in NN_array:
+            self.insert_model(elm)
     
     #gives me the average of the network outputs on the data and save the loss/mee
     def output_average(self, data_set,file_name):
@@ -151,14 +156,14 @@ class Ensemble:
         return best_NN
 
     #add the model on top 10 if it has the best loss
-    def insert_model(self, model, type_problem):
+    def insert_model(self, model):
     
         if len(self.NN_array) < self.limit:
             self.NN_array.append(model)
         else:
             self.NN_array = sorted(self.NN_array, key=lambda x : x.MSE_vl)
             worst_NN = self.NN_array[-1]
-            if (((type_problem == "classification") and worst_NN.lesser_accuracy(model)) or ((type_problem == "Regression") and worst_NN.greater_loss(model))):
+            if (((self.type_problem == "classification") and worst_NN.lesser_accuracy(model)) or ((self.type_problem == "Regression") and worst_NN.greater_loss(model))):
                 self.NN_array.pop()
                 self.NN_array.append(model)
         

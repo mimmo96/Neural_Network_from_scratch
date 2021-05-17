@@ -4,7 +4,7 @@ import matplotlib
 from Graphycs import graph
 matplotlib.use('Agg')
 import math
-from Function import  LOSS, accuracy, fun_early_stopping
+from Function import  LOSS, MEE, accuracy, fun_early_stopping
 import Backpropagation as bp
 import copy
 
@@ -27,7 +27,7 @@ class Neural_network:
         self.early_stopping = early_stopping
   
         for i in range(0,self.num_layers):
-            self.struct_layers[i]=Layer.Layer(self.units[i+1],self.units[i],type_weight)
+            self.struct_layers[i] = Layer.Layer(self.units[i+1],self.units[i],type_weight)
  
         self.epochs_retraining = -1
 
@@ -83,7 +83,7 @@ class Neural_network:
         acc_vl =0
         if self.type_learning_rate == "variable":
             learning_rate_tau = self.learning_rate_init / 100
-            tau = 200
+            tau = 100
 
         for i in range(epochs):
             #create k mini-batchs of size batch_size
@@ -128,6 +128,7 @@ class Neural_network:
             if loss_validation < best_loss_validation:
                 best_loss_validation = loss_validation
                 best_model = copy.deepcopy(self.struct_layers)
+                self.epochs_retraining = i
             
             #early stopping 
             if self.early_stopping:
@@ -137,7 +138,7 @@ class Neural_network:
                     validation_stop = 3
                     
             if(validation_stop==0):
-                self.epochs_retraining = i
+                self.epochs_retraining = i 
                 print("Early stopping")
                 break
         self.struct_layers = best_model
@@ -154,18 +155,26 @@ class Neural_network:
             graph (title,"Accuracy", accuracy_array_training,accuracy_array_validation,file_acc)
         graph(title,"Loss", loss_array_training,loss_array_validation,file_ls)
 
-    def retraining(self, training_set, batch_size, num_training):
+    def retraining(self, training_set):
+        
         if self.epochs_retraining < 0:
             print("Error epochs retraing")
             return
+        
+        for i in range(0,self.num_layers):
+            self.struct_layers[i] = Layer.Layer(self.units[i+1],self.units[i],self.type_weight)
+ 
+        if self.type_learning_rate == "variable":
+            learning_rate_tau = self.learning_rate_init / 100
+            tau = 100
 
         for i in range(self.epochs_retraining):
             #create k mini-batchs of size batch_size
-            mini_batch = training_set.create_batch(batch_size)
+            mini_batch = training_set.create_batch(self.batch_size)
             #if it's using variable learning rate then update it
-            if self.tau != 0:
-                self.learning_rate = 1 / (1 + (i / self.tau))
-
+            if ((self.type_learning_rate == "variable") and tau > i) :
+                alfa_lr = i / tau
+                self.learning_rate = (1 - alfa_lr)*self.learning_rate_init + alfa_lr*learning_rate_tau
             for batch in mini_batch:
                 
                 for layer in self.struct_layers:
@@ -174,7 +183,9 @@ class Neural_network:
                 output_NN = np.zeros(batch.output().shape)
                 self.Forwarding(batch.input(), output_NN)   
                 self.backprogation(output_NN, batch.output())
-
+        output_NN = np.zeros(training_set.output().shape)
+        output_NN = self.Forwarding(training_set.input(), output_NN, True)
+        return MEE(output_NN, training_set.output())
     ###################
     # BACKPROPAGATION #
     ###################

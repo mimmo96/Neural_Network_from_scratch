@@ -1,4 +1,7 @@
 import numpy as np
+from numpy import random
+from numpy.core.defchararray import mod
+from numpy.core.fromnumeric import shape
 from scipy.special import expit
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
@@ -13,7 +16,7 @@ def choose_weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
     if type_weight=="random":
         #[-intervallo,intervallo]
-        return np.random.uniform(-0.25, 0.25)
+        return np.random.uniform(-0.7, 0.7)
 
     if type_weight=="uniform":
         #[-1/sqrt(fan-in),1/sqrt(fan-out)]
@@ -364,3 +367,20 @@ def setPandas():
     df.to_csv(fn.top_general_results)
     df.to_csv(fn.general_results)
     dp.to_csv(fn.top_result_test)
+
+
+def pertubation (hidden_units , batch_array ,learning_rate_init , alfa, v_lambda ):
+    
+    for units in hidden_units:
+        for i in range(1, len(units) -1 ):
+            units[i] += np.random.randint(-3, 3 + 1)
+    pertubation_batch = np.random.randint(-15, 15 + 1, len(batch_array))
+    batch_array += pertubation_batch
+    pertubation_lr = np.random.normal(-0.0005, 0.0005, len(learning_rate_init))
+    learning_rate_init += pertubation_lr
+    pertubation_alfa = np.random.normal(-0.1, 0.1, len(alfa))
+    alfa += pertubation_alfa
+    pertubation_lambda = np.random.normal(-0.000001, 0.000001, len(v_lambda))
+    v_lambda += pertubation_lambda
+
+    return hidden_units, batch_array, learning_rate_init, alfa, v_lambda
