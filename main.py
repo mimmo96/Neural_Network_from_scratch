@@ -54,7 +54,7 @@ dim_input= 10
 
 hidden_units=[[dim_input, 12, dim_output], [dim_input, 50, dim_output], [dim_input, 20, dim_output]]
 batch_array=[16, 128, 256]
-learning_rate_init = [0.003156, 0.002, 0.005, 0.0065, 0.008]
+learning_rate_init = [0.003156, 0.002, 0.005, 0.0065, 0.00046]
 alfa = [0.648629, 0.8]
 v_lambda = [0.00000001, 0.0000001]
 fun = ["sigmoidal", "tanh", "leaky_relu", "zero_one_h"]      
