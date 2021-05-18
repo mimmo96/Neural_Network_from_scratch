@@ -47,7 +47,7 @@ class Regression:
     def startexecution_Hold_out(self,):
         training_set, validation_set, self.test_set = Function.divide_exaples_hold_out(self.data_set, self.dim_output)
         self.dim_input = training_set.get_len_input()
-        
+        training_set = Matrix_io.Matrix_io(Function.normalize_input(training_set.matrix,self.dim_output), self.dim_output)
         for i in self.batch_array:
             if(i > training_set.input().shape[0]):
                 print("batch.size out of bounded\n")

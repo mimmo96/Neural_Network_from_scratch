@@ -56,18 +56,18 @@ classification.startexecution()
 # REGRESSION PROBLEM #
 ######################
 
-num_epoch = 500
+num_epoch = 1
 dim_output = 2
 dim_input= 10
 
-hidden_units=[[dim_input, 40, dim_output], [dim_input, 20, dim_output],[dim_input, 12, dim_output]]
-batch_array=[32, 128]
-learning_rate_init = [0.003156, 0.002, 0.005, 0.0065, 0.00046]
-alfa = [0.648629, 0.8]
+hidden_units=[[dim_input, 30, dim_output], [dim_input, 12, dim_output], [dim_input, 20, 20, dim_output]]
+batch_array=[16, 128]
+learning_rate_init = [0.007, 0.003156]
+alfa = [0.64, 0.8]
 v_lambda = [0.0000001]
-fun = ["sigmoidal", "tanh", "leaky_relu"]      
+fun = ["sigmoidal", "tanh"]      
 fun_out=["Regression"]    
-weight=["uniform"]
+weight=["random"]
 early_stopping = [True]
 type_learning_rate = ["fixed"]
 ########################
