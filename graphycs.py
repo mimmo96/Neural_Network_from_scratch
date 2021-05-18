@@ -12,6 +12,7 @@ def graph (title,label_y, array_tr, array_vl, file):
     plt.xlabel("Epoch")
     plt.ylabel(label_y)
     plt.plot(array_tr)
+    plt.grid(True)
 
     #plot validation graph
     plt.plot(array_vl, "r--")     

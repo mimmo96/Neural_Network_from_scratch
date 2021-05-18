@@ -6,8 +6,16 @@ import Function
 import pandas
 import Task
 import numpy as np
+import shutil
+import os
 import File_names as fn
 Function.setPandas()
+
+def savefigure():
+    shutil.rmtree("figure_prec")
+    os.makedirs("figure_prec")
+    shutil.move("figure","figure_prec")
+    os.makedirs("figure")
 
 '''
 ##########################
@@ -52,14 +60,14 @@ num_epoch = 500
 dim_output = 2
 dim_input= 10
 
-hidden_units=[[dim_input, 12, dim_output], [dim_input, 50, dim_output], [dim_input, 20, dim_output]]
-batch_array=[16, 128, 256]
+hidden_units=[[dim_input, 40, dim_output], [dim_input, 20, dim_output],[dim_input, 12, dim_output]]
+batch_array=[32, 128]
 learning_rate_init = [0.003156, 0.002, 0.005, 0.0065, 0.00046]
 alfa = [0.648629, 0.8]
-v_lambda = [0.00000001, 0.0000001]
-fun = ["sigmoidal", "tanh", "leaky_relu", "zero_one_h"]      
+v_lambda = [0.0000001]
+fun = ["sigmoidal", "tanh", "leaky_relu"]      
 fun_out=["Regression"]    
-weight=["random", "uniform"]
+weight=["uniform"]
 early_stopping = [True]
 type_learning_rate = ["fixed"]
 ########################
@@ -96,6 +104,9 @@ for model in top_models:
 Random_Regression = Task.Regression(fn.ML_cup, num_epoch, dim_output, random_hidden_units, random_batch_array,
                                     random_learning_rate_init, type_learning_rate, random_alfa, random_v_lambda,
                                     fun, weight, early_stopping)
+
+#save all the precedent figure and create a new empty folder for write new graphs
+savefigure()
 
 random_top_models = Random_Regression.startexecution_k_fold()
 

@@ -69,7 +69,7 @@ class Regression:
                 print("batch.size out of bounded\n")
                 exit()
 
-        self.top_models = self.top_models = cv_k_fold(self.num_epoch, self.grid, self.devolopment_set, self.test_set, self.type_problem)
+        self.top_models = cv_k_fold(self.num_epoch, self.grid, self.devolopment_set, self.test_set, self.type_problem)
         return self.top_models
     
         ##############
