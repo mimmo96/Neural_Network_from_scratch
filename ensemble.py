@@ -97,7 +97,8 @@ class Ensemble:
             output += output_NN
             count += 1
         output = np.divide(output,count)
-        return output
+        mee=MEE(output, data_set.output())
+        return output,mee
 
     #loss calculated on the network outputs
     def loss_average(self, data_set,file_name):

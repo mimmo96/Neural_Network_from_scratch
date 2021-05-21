@@ -103,6 +103,7 @@ for model in top_models:
     if not (model.NN.v_lambda in random_v_lambda):
         random_v_lambda.append(model.NN.v_lambda)
 
+random_hidden_units,random_batch_array,random_learning_rate_init,random_alfa,random_v_lambda=Function.pertubation(random_hidden_units,random_batch_array,random_learning_rate_init,random_alfa,random_v_lambda)
 Random_Regression = Task.Regression(fn.ML_cup, num_epoch, dim_output, random_hidden_units, random_batch_array,
                                     random_learning_rate_init, type_learning_rate, random_alfa, random_v_lambda,
                                     fun, weight, early_stopping)
@@ -133,8 +134,13 @@ top_models, mee_result = Regression.retraining(ensamble.getNN())
 print("Risultati MEE sul devolpment set dopo il retraining:", mee_result)
 ensamble = Ensemble(top_models, 8)
 
+output,mee=ensamble.output_average(Regression.devolopment_set, fn.top_result_test_retraing)
+print("MEE ENSEMBLE devolopment_set:",mee)
+
 #test set prima del retraining
-ensamble.output_average(Regression.test_set, fn.top_result_test_retraing)
+output,mee=ensamble.output_average(Regression.test_set, fn.top_result_test_retraing)
+print("MEE ENSEMBLE test_set:",mee)
+
 
 #BLIND TEST da fare dopo vediamo come va il retraing 
 Regression.top_models = ensamble.getNN()
