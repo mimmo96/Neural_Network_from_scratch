@@ -18,7 +18,7 @@ def graph (title,label_y, array_tr, array_vl, file):
     plt.plot(array_vl, "r--")     
     plt.legend(["TRAINING", "TEST"])
     file=file+".png"
-    plt.ylim(0, 20)
+    #plt.ylim(0, 20)
     #overwrite the file if it already exists
     if os.path.exists(file):
         os.remove(file)

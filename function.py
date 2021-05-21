@@ -16,7 +16,7 @@ def choose_weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
     if type_weight=="random":
         #[-intervallo,intervallo]
-        return np.random.uniform(-0.7, 0.7)
+        return np.random.uniform(-0.25, 0.25)
 
     if type_weight=="uniform":
         #[-1/sqrt(fan-in),1/sqrt(fan-out)]
@@ -173,7 +173,7 @@ def choose_function(fun,net):
     if fun=="leaky_relu":
         return _leaky_relu(net)
 
-    if fun == "Regression":
+    if fun == "linear":
         return net
 
 def choose_derivate_function(fun,net):
@@ -195,7 +195,7 @@ def choose_derivate_function(fun,net):
     if fun=="leaky_relu":
         return _leaky_relu_derivative(net)
    
-    if fun == "Regression":
+    if fun == "linear":
         return 1
 
 def _derivate_activation_function(nets,type_fun):
@@ -330,7 +330,7 @@ def divide_exaples_hold_out(matrix_input, columns_output):
 
    
 def divide_exaples_k_fold(matrix_input, columns_output):
-    #divide 70% TR, 20% VL, 10% TS
+    #divide DV 85%, 15% TS
     rows = matrix_input.shape[0]
     training_size = rows *85 //100
     training = Matrix_io.Matrix_io(matrix_input[0:training_size, :], columns_output)

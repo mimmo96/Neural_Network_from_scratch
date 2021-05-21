@@ -17,7 +17,7 @@ def savefigure():
     shutil.move("figure","figure_prec")
     os.makedirs("figure")
 
-'''
+
 ##########################
 # CLASSIFICATION PROBLEM #
 ##########################
@@ -26,28 +26,30 @@ num_epoch = 500
 dim_output = 1
 dim_input= 17
 
-hidden_units=[[dim_input,4,dim_output]]
-batch_array=[122]
-learning_rate_init = [0.8]
-alfa = [0.8]
-v_lambda = [0,0.001,0.005,0.01,0.007]
+hidden_units=[[dim_input,3,dim_output], [dim_input,4,dim_output]]
+batch_array=[124]
+learning_rate_init = [0.44, 0.65, 0.8]
+alfa = [0.65, 0.8, 0.9]
+v_lambda = [0]
 #0.005
-fun = ["relu"]      
-fun_out=["sigmoidal"]
+fun = ["tanh", "sigmoidal"]      
+fun_out=["sigmoidal", "relu"]
 weight=["random"]
-early_stopping = [False]
+early_stopping = [True]
+type_learning_rate = ["fixed"]
 
 ############################
 # EXECUTION CLASSIFICATION #
 ############################
 
-tot=computedim(hidden_units,batch_array,learning_rate_init,alfa,v_lambda ,fun,fun_out,weight)
 
-classification = Task.Classification(num_epoch,dim_output,hidden_units,batch_array,learning_rate_init,alfa,v_lambda,
-                                fun,fun_out,weight,early_stopping,tot)
+classification = Task.Classification(fn.Monk_1_tr, fn.Monk_1_ts, num_epoch,dim_output,hidden_units,batch_array,learning_rate_init,type_learning_rate, alfa,v_lambda,
+                                fun,fun_out,weight,early_stopping)
 
-classification.startexecution()
+top_models = classification.startexecution()
 
+ensamble = Ensemble(top_models, 8)
+ensamble.write_result(fn.top_result_monk_1)
 
 ##############################################################################################################
 
@@ -56,15 +58,15 @@ classification.startexecution()
 # REGRESSION PROBLEM #
 ######################
 
-num_epoch = 1
+num_epoch = 500
 dim_output = 2
 dim_input= 10
 
-hidden_units=[[dim_input, 30, dim_output], [dim_input, 12, dim_output], [dim_input, 20, 20, dim_output]]
-batch_array=[16, 128]
-learning_rate_init = [0.007, 0.003156]
-alfa = [0.64, 0.8]
-v_lambda = [0.0000001]
+hidden_units=[[dim_input, 10, 10, 10, dim_output]]
+batch_array=[256]
+learning_rate_init = [0.0065465, 0.00035]
+alfa = [0.54]
+v_lambda = [0.00001]
 fun = ["sigmoidal", "tanh"]      
 fun_out=["Regression"]    
 weight=["random"]
@@ -77,7 +79,7 @@ type_learning_rate = ["fixed"]
 Regression = Task.Regression(fn.ML_cup, num_epoch, dim_output,hidden_units,batch_array,learning_rate_init, type_learning_rate, alfa,v_lambda,
                                 fun,weight,early_stopping)
 
-top_models = Regression.startexecution_k_fold()
+top_models = Regression.startexecution_Hold_out()
 
 
 ##############################
@@ -142,3 +144,4 @@ Regression.blind_test(fn.blind_test)
 #GENERAL_RESULT ci sono tutti i risultati (con la random search vengono sovrascritti i precedenti)
 #TOP_RESULT_TEST  i migliori modelli dopo aver finito anche la random grid search sul TEST SET
 #top_result_test_retraing i migliori modelli dopo il retraining con i relativi errori sul TEST SET (gli errori del devolopment set sono stampati a video)
+'''

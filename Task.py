@@ -47,7 +47,7 @@ class Regression:
     def startexecution_Hold_out(self,):
         training_set, validation_set, self.test_set = Function.divide_exaples_hold_out(self.data_set, self.dim_output)
         self.dim_input = training_set.get_len_input()
-        training_set = Matrix_io.Matrix_io(Function.normalize_input(training_set.matrix,self.dim_output), self.dim_output)
+        
         for i in self.batch_array:
             if(i > training_set.input().shape[0]):
                 print("batch.size out of bounded\n")
@@ -96,15 +96,15 @@ class Classification:
     '''
         class used for classification problem
     '''
-    def __init__(self,file_data_tr, file_data_ts, num_epoch,dim_output,hidden_units,batch_array,learning_rate_init,alfa,v_lambda,
+    def __init__(self,file_data_tr, file_data_ts, num_epoch,dim_output,hidden_units,batch_array,learning_rate_init, learning_rate_type, alfa,v_lambda,
                         fun,fun_out,weight,early_stopping):
 
         self.type_problem="classification"
         self.num_epoch = num_epoch
         self.dim_output = dim_output
         self.training_set = Read_write_file.read_csv(self.type_problem,file_data_tr)
-        self.test_set = Read_write_file.read_csv(self.type_problem,file_data_ts)
-        #self.test_set = self.validation_set
+        self.validation_set = Read_write_file.read_csv(self.type_problem,file_data_ts)
+        self.test_set = self.validation_set
         
         self.training_set = Function.one_hot_encoding(self.training_set)
         self.validation_set = Function.one_hot_encoding(self.validation_set)
@@ -122,6 +122,7 @@ class Classification:
         self.hidden_units=hidden_units
         self.batch_array=batch_array
         self.learning_rate_init = learning_rate_init
+        self.learning_rate_type = learning_rate_type
         self.alfa = alfa
         self.v_lambda = v_lambda
         self.fun = fun      
@@ -129,7 +130,7 @@ class Classification:
         self.weight=weight
         self.early_stopping = early_stopping
 
-        self.grid = list(itertools.product(self.early_stopping, self.batch_array, self.fun, self.fun_out, self.hidden_units, self.learning_rate_init, self.alfa, self.v_lambda,self.weight))
+        self.grid = list(itertools.product(self.early_stopping, self.batch_array, self.learning_rate_type, self.fun, self.fun_out, self.hidden_units, self.learning_rate_init, self.alfa, self.v_lambda,self.weight))  
         self.dimension_grid = len(self.grid)
 
 
@@ -140,5 +141,5 @@ class Classification:
                 print("batch.size out of bounded\n")
                 exit()
 
-        self.top_models = Hold_out(self.num_epoch,self.grid,self.training_set, self.validation_set, self.test_set, self.type_problem,  self.dimension_grid)
+        self.top_models = Hold_out(self.num_epoch, self.grid, self.training_set, self.validation_set, self.test_set, self.type_problem, self.dimension_grid)
         return self.top_models
