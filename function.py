@@ -16,7 +16,7 @@ def choose_weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
     if type_weight=="random":
         #[-intervallo,intervallo]
-        return np.random.uniform(-0.25, 0.25)
+        return np.random.uniform(-0.1, 0.1)
 
     if type_weight=="uniform":
         #[-1/sqrt(fan-in),1/sqrt(fan-out)]
@@ -380,7 +380,7 @@ def pertubation (hidden_units , batch_array ,learning_rate_init , alfa, v_lambda
     learning_rate_init += pertubation_lr
     pertubation_alfa = np.random.normal(-0.1, 0.1, len(alfa))
     alfa += pertubation_alfa
-    pertubation_lambda = np.random.normal(-0.000001, 0.000001, len(v_lambda))
+    pertubation_lambda = np.random.normal(-0.000000001, 0.000000001, len(v_lambda))
     v_lambda += pertubation_lambda
 
     return hidden_units, batch_array, learning_rate_init, alfa, v_lambda

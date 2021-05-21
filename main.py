@@ -28,12 +28,11 @@ dim_input= 17
 
 hidden_units=[[dim_input,3,dim_output], [dim_input,4,dim_output]]
 batch_array=[124]
-learning_rate_init = [0.44, 0.65, 0.8]
-alfa = [0.65, 0.8, 0.9]
+learning_rate_init = [0.8]
+alfa = [0.8, 0.9]
 v_lambda = [0]
-#0.005
-fun = ["tanh", "sigmoidal"]      
-fun_out=["sigmoidal", "relu"]
+fun = ["relu", "tanh"]      
+fun_out=["sigmoidal"]
 weight=["random"]
 early_stopping = [True]
 type_learning_rate = ["fixed"]

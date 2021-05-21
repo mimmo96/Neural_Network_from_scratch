@@ -98,14 +98,13 @@ class Ensemble:
             count += 1
         output = np.divide(output,count)
         mee=MEE(output, data_set.output())
-        return output,mee
+        mse=LOSS(output, data_set.output())
+        return output,mse,mee
 
     #loss calculated on the network outputs
     def loss_average(self, data_set,file_name):
         #calculate the average of the outputs, it gives me a single output vector
-        output = self.output_average(data_set,file_name)
-        mse = LOSS(output, data_set.output())
-        mee = MEE(output, data_set.output())
+        output,mee,mse = self.output_average(data_set,file_name)
         row_csv = {
                 'Error_MSE_ts' : [mse],
                 'Error_MEE_ts' : [mee]
