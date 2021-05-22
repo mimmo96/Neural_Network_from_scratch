@@ -13,7 +13,7 @@ class Regression:
         class used for regression problem
     '''
     def __init__(self, file_data, num_epoch, dim_output, hidden_units, batch_array, learning_rate_init, type_learning_rate, alfa, v_lambda,
-                        fun, weight, early_stopping):
+                        fun, weight, early_stopping,num_training):
 
         self.type_problem="Regression"
         self.num_epoch = num_epoch
@@ -39,6 +39,7 @@ class Regression:
         self.top_models = []
         self.grid = list(itertools.product(self.early_stopping, self.batch_array, self.type_learning_rate, self.fun, self.fun_out, self.hidden_units, self.learning_rate_init, self.alfa, self.v_lambda,self.weight))
         self.dimension_grid = len(self.grid)
+        self.num_training=num_training
 
     ############
     # HOLD OUT #
@@ -53,7 +54,7 @@ class Regression:
                 print("batch.size out of bounded\n")
                 exit()
 
-        self.top_models = Hold_out(self.num_epoch, self.grid,training_set, validation_set, self.test_set, self.type_problem, self.dimension_grid)
+        self.top_models,self.num_training  = Hold_out(self.num_epoch, self.grid,training_set, validation_set, self.test_set, self.type_problem, self.dimension_grid,self.num_training)
         return self.top_models
     
     #############
@@ -69,7 +70,7 @@ class Regression:
                 print("batch.size out of bounded\n")
                 exit()
 
-        self.top_models = cv_k_fold(self.num_epoch, self.grid, self.devolopment_set, self.test_set, self.type_problem)
+        self.top_models,self.num_training = cv_k_fold(self.num_epoch, self.grid, self.devolopment_set, self.test_set, self.type_problem,self.num_training)
         return self.top_models
     
     ##############

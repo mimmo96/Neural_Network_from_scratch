@@ -3,8 +3,7 @@ import Ensemble
 import File_names as fn
 
 #return best K models
-def Hold_out(epochs, grid, training_set, validation_set, test_set, type_problem,tot):
-    num_training = 1
+def Hold_out(epochs, grid, training_set, validation_set, test_set, type_problem,tot,num_training):
     top_k_models = Ensemble.Ensemble()
     
     for hyperparameter in grid:
@@ -23,4 +22,4 @@ def Hold_out(epochs, grid, training_set, validation_set, test_set, type_problem,
     top_k_models.write_result(fn.top_general_results)
     top_k_models.loss_average(test_set,fn.top_result_test)
 
-    return top_k_models.getNN()
+    return top_k_models.getNN(),num_training

@@ -62,6 +62,7 @@ ensamble.write_result(fn.top_result_monk_1)
 num_epoch = 1
 dim_output = 2
 dim_input= 10
+num_training = -1
 
 hidden_units=[[dim_input, 10, 10, 10, dim_output]]
 batch_array=[16]
@@ -77,9 +78,10 @@ type_learning_rate = ["fixed"]
 ########################
 
 Regression= Task.Regression(fn.ML_cup, num_epoch, dim_output,hidden_units,batch_array,learning_rate_init, type_learning_rate, alfa,v_lambda,
-                                fun,weight,early_stopping)
+                                fun,weight,early_stopping,num_training)
 
 top_models  = Regression.startexecution_k_fold()
+num_training=Regression.num_training
 
 ######################################################################  RANDOMIZATION PHASE #############################################################################
 ensamble = Ensemble(top_models, 8)
@@ -102,15 +104,15 @@ for model in top_models:
 
     #execute perturbation on single model
     Regression = Task.Regression(fn.ML_cup, num_epoch, dim_output,hidden_units,batch_size,learning_rate_init, type_learning_rate, alfa,v_lambda,
-                                fun,weight,early_stopping)
+                                fun,weight,early_stopping,num_training)
 
     modello=Regression.startexecution_k_fold()
-
+    num_training=Regression.num_training
     #take the best model and 
     ensamble.insert_model(modello[0]) 
 
 #save all the precedent figure and create a new empty folder for write new graphs
-savefigure()
+#savefigure()
 
 #devolopment set prima del retraining
 ensamble.write_result(fn.top_result_ML_cup)

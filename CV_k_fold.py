@@ -3,8 +3,7 @@ import Ensemble
 from Model_Selection import ThreadPool_average
 import File_names as fn
 
-def cv_k_fold(epochs, grid, training_set, test_set, type_problem, k_fold = 5):
-    num_training = -1
+def cv_k_fold(epochs, grid, training_set, test_set, type_problem,num_training, k_fold = 5):
     #divide dataset into K distinct and equal D_1, ..., D_K
     size_validation = training_set.input().shape[0] // k_fold
     top_NN = Ensemble.Ensemble()
@@ -20,7 +19,6 @@ def cv_k_fold(epochs, grid, training_set, test_set, type_problem, k_fold = 5):
                 last_set = False
             #create training and validation set for Kth iteration of k_fold
             training_k, validation_k = training_set.create_fold(k*size_validation, (k+1)*size_validation, last_set)
-            
             #for each model, train "trials_for_model" times with different initialization type_weightshts
             model_stat = ThreadPool_average(type_problem, training_k, validation_k, epochs, num_training, hyperparameter)
             model_stat.write_result(fn.general_results)
@@ -33,4 +31,4 @@ def cv_k_fold(epochs, grid, training_set, test_set, type_problem, k_fold = 5):
         top_NN.insert_model(best_NN_k_fold)
 
     top_NN.write_result(fn.top_general_results)
-    return top_NN.getNN()
+    return top_NN.getNN(),num_training
