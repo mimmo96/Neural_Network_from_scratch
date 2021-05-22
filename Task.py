@@ -33,7 +33,7 @@ class Regression:
         self.alfa = alfa
         self.v_lambda = v_lambda
         self.fun = fun      
-        self.fun_out=["Regression"]
+        self.fun_out=["linear"]
         self.weight=weight
         self.early_stopping = early_stopping
         self.top_models = []
@@ -72,9 +72,10 @@ class Regression:
         self.top_models = cv_k_fold(self.num_epoch, self.grid, self.devolopment_set, self.test_set, self.type_problem)
         return self.top_models
     
-        ##############
-        # BLIND TEST #
-        ##############
+    ##############
+    # BLIND TEST #
+    ##############
+    
     def blind_test(self, file_name):
         blind_set = Read_write_file.read_csv("blind_test", file_name)
         output = np.zeros((blind_set.shape[0], self.dim_output ))

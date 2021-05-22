@@ -73,9 +73,9 @@ class Stat_model:
 
 class Ensemble:
     '''
-        class used to contains the top 10 NeuralNetwork and some function for compute mean,loss,etc
+        class used to contains the top 8 NeuralNetwork and some function for compute mean,loss,etc
     '''
-    #NN_array=array containing the top 10 Neural networks of type stat_model
+    #NN_array=array containing the top 8 Neural networks of type stat_model
     #data = data to test
     def __init__(self, NN_array =[], limit = 8, type_problem = "Regression"):
         self.NN_array=[]
@@ -177,5 +177,7 @@ class Ensemble:
     def print_top(self):
         return self.NN_array[0].MEE_vl
     
+    #return the top 8 model
     def getNN(self):
         return self.NN_array
+
