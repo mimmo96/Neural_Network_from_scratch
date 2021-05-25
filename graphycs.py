@@ -7,7 +7,7 @@ import os
 
 #file = patch of the file where I have to save the file
 def graph (title,label_y, array_tr, array_vl, file):
-    #grafico training
+    #training graph
     plt.title(title)
     plt.xlabel("Epoch")
     plt.ylabel(label_y)
@@ -18,7 +18,7 @@ def graph (title,label_y, array_tr, array_vl, file):
     plt.plot(array_vl, "r--")     
     plt.legend(["TRAINING", "TEST"])
     file=file+".png"
-    #plt.ylim(0, 20)
+    plt.ylim(0, 20)
     #overwrite the file if it already exists
     if os.path.exists(file):
         os.remove(file)

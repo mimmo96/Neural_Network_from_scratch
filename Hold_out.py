@@ -17,9 +17,9 @@ def Hold_out(epochs, grid, training_set, validation_set, test_set, type_problem,
         num_training += 1   
         print("----------------------------------------END-------------------------------")     
     
-    #top_k_models contiene Ensemble di 10 migliori modelli e write_result stampa nel file csv tutti i miglioir 10 modelli e i loro parametri
-    #Ensamble on 10 top models on test set
+    #top_k_models contains Ensemble of 8 best models and write_result prints in the csv file all the best 8 models and their parameters
     top_k_models.write_result(fn.top_general_results)
+    #Ensamble on 8 top models on test set
     top_k_models.loss_average(test_set,fn.top_result_test)
 
     return top_k_models.getNN(),num_training

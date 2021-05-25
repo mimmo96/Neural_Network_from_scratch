@@ -1,23 +1,14 @@
-from ast import ExtSlice
 from Ensemble import Ensemble
 from numpy import random
 from Model_Selection import task
 import Function
-import pandas
 import Task
 import numpy as np
-import shutil
-import os
 import File_names as fn
 import Backpropagation as bp
 import copy
 Function.setPandas()
 
-def savefigure():
-    shutil.rmtree("figure_prec")
-    os.makedirs("figure_prec")
-    shutil.move("figure","figure_prec")
-    os.makedirs("figure")
 
 '''
 ##########################
@@ -59,20 +50,20 @@ ensamble.write_result(fn.top_result_monk_1)
 # REGRESSION PROBLEM #
 ######################
 
-num_epoch = 1
+num_epoch = 500
 dim_output = 2
 dim_input= 10
 num_training = -1
 
-hidden_units=[[dim_input, 10, 10, 10, dim_output]]
-batch_array=[16]
-learning_rate_init = [0.0065465, 0.00035]
-alfa = [0.54]
-v_lambda = [0.00001]
-fun = ["sigmoidal", "tanh"]       
-weight=["random"]
-early_stopping = [True]
-type_learning_rate = ["fixed"]
+hidden_units=[[dim_input, 50,50, dim_output],[dim_input, 20,20, dim_output],[dim_input, 50, dim_output],[dim_input, 30, dim_output],[dim_input, 12, dim_output]]
+batch_array=[16,32,128]
+learning_rate_init = [0.002, 0.003156, 0.005, 0.007]
+alfa = [0.5, 0.64, 0.8]
+v_lambda = [0, 0.00001, 0.0000001]
+fun = ["sigmoidal", "tanh", "relu", "leaky_relu"]      
+weight=["uniform","random"]
+early_stopping = [True,False]
+type_learning_rate = ["fixed","variable"]
 ########################
 # EXECUTION REGRESSION #
 ########################
@@ -83,15 +74,16 @@ Regression= Task.Regression(fn.ML_cup, num_epoch, dim_output,hidden_units,batch_
 top_models  = Regression.startexecution_k_fold()
 num_training=Regression.num_training
 
-######################################################################  RANDOMIZATION PHASE #############################################################################
+########################
+#  RANDOMIZATION PHASE #
+########################
 ensamble = Ensemble(top_models, 8)
-##############################
-# HYPERPARAMETER PERTUBATION #
-##############################
+
 random_top_models=[]
 
 #take the best model and create a new_model for each with a perturbation of all hyperparameters
 for model in top_models:
+
     #save the hyperparameters of model
     alfa =[copy.deepcopy(model.NN.alfa)]
     v_lambda=[copy.deepcopy(model.NN.v_lambda)]
@@ -108,11 +100,9 @@ for model in top_models:
 
     modello=Regression.startexecution_k_fold()
     num_training=Regression.num_training
-    #take the best model and 
-    ensamble.insert_model(modello[0]) 
 
-#save all the precedent figure and create a new empty folder for write new graphs
-#savefigure()
+    #take the best model and insert it
+    ensamble.insert_model(modello[0]) 
 
 #devolopment set prima del retraining
 ensamble.write_result(fn.top_result_ML_cup)
@@ -121,23 +111,18 @@ ensamble.output_average(Regression.test_set, fn.top_result_test)
 
 #retraing 
 top_models, mee_result = Regression.retraining(ensamble.getNN())
-#scrivere mee_result in un file
+
 print("Risultati MEE sul devolpment set dopo il retraining:", mee_result)
 ensamble = Ensemble(top_models, 8)
 
+#compute average of development set and save it on top_result_test_retraing
 output,mse,mee=ensamble.output_average(Regression.devolopment_set, fn.top_result_test_retraing)
 print("MEE ENSEMBLE devolopment_set:",mee)
 
-#test set prima del retraining
+#compute average of test_set and save it on top_result_test_retraing
 output,mse,mee=ensamble.output_average(Regression.test_set, fn.top_result_test_retraing)
 print("MEE ENSEMBLE test_set:",mee)
 
-
-#BLIND TEST da fare dopo vediamo come va il retraing 
+#compute blind test result and save it in blind_test file
 Regression.top_models = ensamble.getNN()
 Regression.blind_test(fn.blind_test)
-#I FILE CHE CI INTERESSANO SONO:
-#TOP_RESULT_ml_CUP i migliori modelli dopo aver finito anche la random grid search cor MEE sul dev set
-#GENERAL_RESULT ci sono tutti i risultati (con la random search vengono sovrascritti i precedenti)
-#TOP_RESULT_TEST  i migliori modelli dopo aver finito anche la random grid search sul TEST SET
-#top_result_test_retraing i migliori modelli dopo il retraining con i relativi errori sul TEST SET (gli errori del devolopment set sono stampati a video)

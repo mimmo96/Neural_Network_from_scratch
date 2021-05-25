@@ -1,4 +1,3 @@
-from Read_write_file import print_result
 import Neural_network
 import numpy as np
 import os
@@ -23,8 +22,6 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
     weig=hyperparameter[9]
     num_layers = np.size(hidden) - 1
     
-    #hidden=sethidden(training_set,units)
-    #print("hidden:",hidden)
     NN = Neural_network.Neural_network(hidden, alfa, v_lambda, learning_rate, type_learning_rate, num_layers, function, fun_out, weig, type_problem, early_stopping)
     NN.trainig(training_set, validation_set, batch_size, epochs,num_training) 
     
@@ -57,40 +54,9 @@ def task(type_problem,training_set,validation_set, epochs,num_training, hyperpar
 #THREADPOOL FOR PARALLELIZATION OF 5 MODEL #
 ############################################
 def ThreadPool_average(type_problem,training_set,validation_set, epochs,num_training,hyperparameter):
-    #use your cpu core for parrallelize each operation and return the result of type [(loss1,mess1,nn1),(loss2,mess2,nn2),(loss3,mess3,nn3)]
+    #use your cpu core for parrallelize each operation
     trials = Parallel(n_jobs=os.cpu_count(), verbose=50)(delayed(task)(type_problem, training_set,validation_set,epochs,num_training+(i/10), hyperparameter) for i in range(5))
     
     best_trial = Ensemble.Ensemble(trials, np.size(trials)).best_neural_network()
     
     return best_trial
-
-################################
-# SAVE THE RESULT OF EXECUTION #
-################################
-def save_test_model(best_NN,test_set):
-    file = open("result/best_model/result.txt","w")
-    conta=1
-    losses = []
-
-    #print the results of the Neural_networks on the file
-    for neural in best_NN:
-        output_NN = np.zeros(test_set.output().shape)
-        neural.Forwarding(test_set.input(), output_NN, True)
-        loss_test = LOSS(output_NN, test_set.output(), 0)
-        print_result(file,"------------------------------MODEL "+str(conta)+"-----------------------------")
-        print_result(file,"PARAMETERS:  alfa:"+str(neural.alfa)+ "  lamda:"+ str(neural.v_lambda)+ "  learning_rate:"
-                +str(neural.learning_rate) +"  layer:"+str(neural.units)+ " function:"+str(neural.function)+ " weight:"+str(neural.type_weight))
-
-        print_result(file,"RESULT ON TEST SET "+str(loss_test))
-        print_result(file,"--------------------------------------------------------------------------------")
-        conta=conta+1
-        losses.append ( loss_test )
-    
-    print("deviazione standard:",np.std(losses))
-    print("varianza:",np.var(losses))
-    
-    #ensamble on test set
-    en=Ensemble.Ensemble(best_NN)
-    loss_Ensemble=en.loss_average(test_set, file)
-    print_result(file,"errore sui test:" +str(loss_Ensemble)) 
-    file.close()

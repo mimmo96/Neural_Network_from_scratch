@@ -16,7 +16,7 @@ def choose_weight_initialization(type_weight,fan_in,fan_out):
     #best for sigmoid activation function
     if type_weight=="random":
         #[-intervallo,intervallo]
-        return np.random.uniform(-0.1, 0.1)
+        return np.random.uniform(-0.7, 0.7)
 
     if type_weight=="uniform":
         #[-1/sqrt(fan-in),1/sqrt(fan-out)]
@@ -93,11 +93,6 @@ def _tanh (x):
     '''
     return np.tanh (x)
 
-def _zero_one_tanh (x):
-    '''
-        tanh activation function which output is from zero to one: _zero_one_tanh(x) = (1 + tanh(x))/2
-    '''
-    return (1 + np.tanh (x))/2
 
 def _leaky_relu (x):
     '''
@@ -135,12 +130,6 @@ def _tanh_derivative (x):
     '''
     return 1 - (np.tanh (x))**2
 
-def _zero_one_tanh_derivative (x):
-    '''
-        zero-one tanh activation function derivatives: tanh'(x) = 1/2 * ( 1 - (tanh(x))**2 )
-    '''
-    return 1/2 * ( 1 - (np.tanh (x))**2 )
-
 def _leaky_relu_derivative (x):
     '''
         zero-one tanh activation function derivatives: tanh'(x) = 1/2 * ( 1 - (tanh(x))**2 )
@@ -166,9 +155,6 @@ def choose_function(fun,net):
     
     if fun=="identity":
         return _identity(net)
-    
-    if fun=="zero_one_h":
-        return _zero_one_tanh(net)
 
     if fun=="leaky_relu":
         return _leaky_relu(net)
@@ -188,9 +174,6 @@ def choose_derivate_function(fun,net):
     
     if fun=="identity":
         return _identity_derivative(net)
-    
-    if fun=="zero_one_h":
-        return _zero_one_tanh_derivative(net)
     
     if fun=="leaky_relu":
         return _leaky_relu_derivative(net)
@@ -330,9 +313,9 @@ def divide_exaples_hold_out(matrix_input, columns_output):
 
    
 def divide_exaples_k_fold(matrix_input, columns_output):
-    #divide DV 85%, 15% TS
+    #divide DV 80%, 20% TS
     rows = matrix_input.shape[0]
-    training_size = rows *85 //100
+    training_size = rows *80 //100
     training = Matrix_io.Matrix_io(matrix_input[0:training_size, :], columns_output)
     test = Matrix_io.Matrix_io(matrix_input[training_size:, :], columns_output)
     return [training, test]
@@ -368,19 +351,26 @@ def setPandas():
     df.to_csv(fn.general_results)
     dp.to_csv(fn.top_result_test)
 
+##################################
+# PERTURBATION OF HYPERPARAMETES #
+##################################
 
 def pertubation (hidden_units , batch_array ,learning_rate_init , alfa, v_lambda ):
-    
+    #hidden_units [-5,5]
+    #batch_array[-25,25]
+    #learning_rate_init[-0.005,0.005]
+    #alfa[-0.15,0.15]
+    #v_lambda[-0.0000001,0.00001]
     for units in hidden_units:
         for i in range(1, len(units) -1 ):
-            units[i] += np.random.randint(-3, 3 + 1)
-    pertubation_batch = np.random.randint(-15, 15 + 1, len(batch_array))
+            units[i] += np.random.randint(-5, 5 + 1)
+    pertubation_batch = np.random.randint(-25, 25 + 1, len(batch_array))
     batch_array += pertubation_batch
-    pertubation_lr = np.random.normal(-0.0005, 0.0005, len(learning_rate_init))
+    pertubation_lr = np.random.normal(-0.005, 0.005, len(learning_rate_init))
     learning_rate_init += pertubation_lr
-    pertubation_alfa = np.random.normal(-0.1, 0.1, len(alfa))
+    pertubation_alfa = np.random.normal(-0.15, 0.15, len(alfa))
     alfa += pertubation_alfa
-    pertubation_lambda = np.random.normal(-0.000000001, 0.000000001, len(v_lambda))
+    pertubation_lambda = np.random.normal(-0.0000001, 0.00001, len(v_lambda))
     v_lambda += pertubation_lambda
 
     return hidden_units, batch_array, learning_rate_init, alfa, v_lambda

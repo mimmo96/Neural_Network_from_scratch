@@ -36,17 +36,3 @@ def read_csv(type_problem,file_name):
     #add new cases below..
 
     return matrix
-
-
-#####################
-## WRITING METHODS ##
-#####################
-
-
-def print_result(out_file,stampa):
-    print(stampa)
-    stampa=stampa+"\n"
-    out_file.write(stampa)
-    out_file.flush()
-
-

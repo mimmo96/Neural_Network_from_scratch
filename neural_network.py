@@ -143,9 +143,7 @@ class Neural_network:
                 break
         self.struct_layers = best_model
         
-        #########################
-        ######## GRAPHS #########
-        #########################
+        # PLOT GRAPHS 
         title = "epoch:"+str(epochs)+"; batch:"+str(batch_size)+"; alfa:"+str(self.alfa)+"; lamda:"+str(self.v_lambda)+"\n eta:"+str(self.learning_rate)+"; layer:"+str(self.units)+ "; function:"+str(self.function)+"; function Output_L:"+str(self.fun_out)+ "\nweight:"+str(self.type_weight)
         file_ls='figure/training'+str(num_training)
         file_acc='figure/accuracy'+str(num_training)
@@ -154,6 +152,10 @@ class Neural_network:
             title += "; acc: "+ str(int(acc_tr)) + "; acc_val: " + str(int(acc_vl))    
             graph (title,"Accuracy", accuracy_array_training,accuracy_array_validation,file_acc)
         graph(title,"Loss", loss_array_training,loss_array_validation,file_ls)
+
+    ####################
+    # RETRAINING PHASE #
+    ####################
 
     def retraining(self, training_set):
         
@@ -186,6 +188,7 @@ class Neural_network:
         output_NN = np.zeros(training_set.output().shape)
         output_NN = self.Forwarding(training_set.input(), output_NN, True)
         return MEE(output_NN, training_set.output())
+
     ###################
     # BACKPROPAGATION #
     ###################
@@ -234,8 +237,6 @@ class Neural_network:
         self.Forwarding(validation_set_input, output_NN, True)
         loss_validation = LOSS(output_NN, validation_set_output)
 
-        #mee = MEE(output_NN, validation_set_output, validation_set_output.shape[0])
-        
         return output_NN, loss_validation
 
     def penalty_NN(self):
