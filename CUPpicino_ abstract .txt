@@ -1,0 +1,2 @@
+This report represent the implementation of an Artificial Intelligence Neural Network from scratch using Python programming language. 
+We used k-fold cross validation, selected the 8 best models using a grid search and created an ensamble of them. 
